@@ -551,6 +551,16 @@ a:hover { color: var(--gold-light); }
   margin-top: 16px;
 }
 
+.btn-scholar {
+  color: var(--navy);
+  border-color: rgba(26, 39, 68, .25);
+}
+.btn-scholar:hover {
+  background: var(--navy);
+  color: var(--white);
+  border-color: var(--navy);
+}
+
 .abstract-panel {
   margin-top: 20px;
   padding: 20px 24px;
@@ -728,6 +738,100 @@ a:hover { color: var(--gold-light); }
   color: var(--white);
   border-color: var(--navy);
   transform: translateX(4px);
+}
+
+/* ---------- Scholar Badge ---------- */
+.scholar-badge-row {
+  margin-top: 1.5rem;
+}
+
+.scholar-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: var(--navy);
+  color: var(--white) !important;
+  border-radius: 20px;
+  font-size: .85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+
+.scholar-badge:hover {
+  background: var(--navy-light);
+  color: var(--white) !important;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.scholar-badge-row {
+  margin-top: 1.5rem;
+}
+
+/* ---------- Altmetric ---------- */
+.pub-meta .altmetric-embed {
+  margin-left: auto;
+}
+
+/* ---------- Grants ---------- */
+.grant-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.grant-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  transition: box-shadow var(--transition), transform var(--transition);
+  position: relative;
+}
+
+.grant-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px; height: 100%;
+  background: var(--gold);
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.grant-card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+
+.grant-card:hover::before {
+  opacity: 1;
+}
+
+.grant-funder {
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.grant-title {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--navy);
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.grant-role {
+  font-size: .88rem;
+  color: var(--text-light);
 }
 
 /* ---------- Footer ---------- */
