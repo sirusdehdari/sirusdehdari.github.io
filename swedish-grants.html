@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PRR49867C4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PRR49867C4');
+</script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Swedish Research Grants for Social Scientists | Sirus H. Dehdari</title>
+  <meta name="description" content="A curated table of Swedish research grants for social scientists, including project grants, travel grants, conference grants, and postdoctoral funding." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    /* ── Page hero ── */
+    .page-hero {
+      background: var(--white);
+      padding: calc(var(--nav-h) + 64px) 0 48px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .page-hero-inner { display: flex; flex-direction: column; gap: 12px; }
+    .page-eyebrow {
+      font-size: .75rem; font-weight: 600; letter-spacing: .15em;
+      text-transform: uppercase; color: var(--gold);
+    }
+    .page-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.85rem, 5vw, 3rem);
+      font-weight: 700; color: var(--text); line-height: 1.15;
+    }
+    .page-subtitle {
+      font-size: 1rem; color: var(--text-light);
+      max-width: 640px; line-height: 1.65;
+    }
+    .breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: .82rem; color: var(--gray-400); margin-bottom: 20px;
+    }
+    .breadcrumb a { color: var(--gray-400); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--gold); }
+    .breadcrumb-sep { color: var(--gray-200); }
+
+    /* ── Note ── */
+    .grants-note {
+      background: rgba(200,164,74,.09);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 14px 20px;
+      font-size: .88rem; color: var(--text-light); line-height: 1.65;
+      margin-bottom: 28px;
+    }
+    .grants-note strong { color: var(--text); }
+
+    /* ── Filter bar ── */
+    .filter-bar {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .filter-controls {
+      display: flex;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .filter-group label {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+    }
+    .filter-group select {
+      font-family: var(--font-sans);
+      font-size: .875rem;
+      color: var(--text);
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 8px 32px 8px 12px;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239aa3b2' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .filter-group select:focus {
+      outline: none;
+      border-color: var(--gold);
+      background-color: var(--white);
+    }
+    .clear-btn {
+      font-family: var(--font-sans);
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--gray-600);
+      background: var(--gray-100);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: all var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 18px;
+    }
+    .clear-btn:hover {
+      background: var(--navy);
+      color: var(--white);
+      border-color: var(--navy);
+    }
+    .filter-count {
+      font-size: .85rem;
+      color: var(--gray-400);
+      white-space: nowrap;
+    }
+    .filter-count strong { color: var(--text); }
+
+    /* ── Table ── */
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-sm);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .875rem;
+      line-height: 1.55;
+      min-width: 860px;
+    }
+    thead {
+      background: var(--navy);
+      color: var(--white);
+    }
+    thead th {
+      padding: 14px 18px;
+      text-align: left;
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    tbody tr {
+      border-bottom: 1px solid var(--gray-200);
+      transition: background var(--transition);
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:nth-child(even) { background: var(--gray-50); }
+    tbody tr:nth-child(odd)  { background: var(--white); }
+    tbody tr.grant-row { cursor: pointer; }
+    tbody tr.grant-row:hover { background: rgba(200,164,74,.08); }
+    tbody td {
+      padding: 14px 18px;
+      color: var(--text-light);
+      vertical-align: top;
+    }
+
+    /* Name column */
+    .td-name {
+      font-weight: 600;
+      color: var(--navy);
+      min-width: 170px;
+    }
+    .td-name a {
+      color: var(--navy);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: color var(--transition), border-color var(--transition);
+    }
+    .td-name a:hover {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+    .td-funder  { min-width: 190px; }
+    .td-type    { min-width: 155px; }
+    .td-who     { min-width: 200px; }
+    .td-deadline{ min-width: 130px; white-space: nowrap; }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      font-size: .7rem; font-weight: 600;
+      letter-spacing: .04em;
+      padding: 3px 10px; border-radius: 20px;
+      white-space: nowrap; line-height: 1.5;
+    }
+    .badge-project    { background: rgba(45,55,72,.10); color: var(--navy); }
+    .badge-postdoc    { background: rgba(200,164,74,.18); color: #7a5a00; }
+    .badge-starting   { background: rgba(251,146,60,.15); color: #92400e; }
+    .badge-conference { background: rgba(99,102,241,.12); color: #3730a3; }
+    .badge-travel     { background: rgba(72,187,120,.15); color: #276749; }
+    .badge-network    { background: rgba(239,68,68,.10); color: #991b1b; }
+    .badge-stipend    { background: rgba(156,163,175,.18); color: #374151; }
+
+    /* No-results */
+    .no-results {
+      text-align: center;
+      padding: 48px 24px;
+      font-size: .95rem;
+      color: var(--gray-400);
+    }
+
+    @media (max-width: 768px) {
+      .filter-bar { flex-direction: column; align-items: flex-start; }
+      .filter-controls { gap: 10px; }
+      .filter-group select { font-size: .82rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVIGATION ===== -->
+  <header id="navbar">
+    <nav class="nav-container">
+      <a href="index.html" class="nav-brand">Sirus Dehdari</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#working-papers">Work in Progress</a></li>
+        <li><a href="index.html#publications">Publications</a></li>
+        <li><a href="index.html#grants">Grants</a></li>
+        <li><a href="index.html#teaching">Teaching</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="other.html" class="active">Other</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ===== PAGE HERO ===== -->
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb fade-up">
+        <a href="index.html">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <a href="other.html">Other</a>
+        <span class="breadcrumb-sep">/</span>
+        <span>Swedish Grants</span>
+      </nav>
+      <div class="page-hero-inner fade-up">
+        <span class="page-eyebrow">Funding</span>
+        <h1 class="page-title">Swedish Research Grants<br>for Social Scientists</h1>
+        <p class="page-subtitle">An overview of Swedish grants that social scientists — political scientists, sociologists, economists, and others — can apply for. Covers project grants, postdoctoral funding, conference and travel grants, and more. Click any row to open the funder's website.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TABLE ===== -->
+  <section class="section">
+    <div class="container" style="max-width: 1120px;">
+
+      <div class="grants-note reveal">
+        <strong>Note:</strong> Deadlines are typical and shift from year to year — always verify on the funder's website before applying. Some grants have regional or institutional eligibility requirements (noted in the Who can apply column).
+      </div>
+
+      <!-- Filter bar -->
+      <div class="filter-bar reveal">
+        <div class="filter-controls">
+
+          <div class="filter-group">
+            <label for="filter-type">Type of grant</label>
+            <select id="filter-type">
+              <option value="">All types</option>
+              <option value="project">Project grant</option>
+              <option value="starting">Starting / junior grant</option>
+              <option value="postdoc">Postdoctoral grant</option>
+              <option value="conference">Conference grant</option>
+              <option value="travel">Travel grant</option>
+              <option value="network">Network grant</option>
+              <option value="stipend">Stipend</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="filter-org">Funder</label>
+            <select id="filter-org">
+              <option value="">All funders</option>
+              <option value="vr">Vetenskapsrådet</option>
+              <option value="rj">Riksbankens Jubileumsfond</option>
+              <option value="forte">Forte</option>
+              <option value="wallenberg">Wallenberg foundations</option>
+              <option value="ostersjostiftelsen">Östersjöstiftelsen</option>
+              <option value="other">Other foundations</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="filter-who">Career stage</label>
+            <select id="filter-who">
+              <option value="">All career stages</option>
+              <option value="phd">Open to PhD students</option>
+              <option value="earlycareer">Open to postdoc / early-career</option>
+              <option value="senior">Open to all researchers</option>
+            </select>
+          </div>
+
+          <button id="clear-filters" class="clear-btn" hidden>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Clear filters
+          </button>
+
+        </div>
+        <p class="filter-count">Showing <strong><span id="grant-count">29</span></strong> grants</p>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap reveal">
+        <table id="grants-table">
+          <thead>
+            <tr>
+              <th class="td-name">Name</th>
+              <th class="td-funder">Funding organization</th>
+              <th class="td-type">Type of grant</th>
+              <th class="td-who">Who can apply</th>
+              <th class="td-deadline">Usual deadline</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <!-- ── VETENSKAPSRÅDET ── -->
+            <tr class="grant-row"
+                data-type="project" data-org="vr" data-who="phd earlycareer senior"
+                data-url="https://www.vr.se/english/applying-for-funding/calls-and-decisions.html">
+              <td class="td-name"><a href="https://www.vr.se/english/applying-for-funding/calls-and-decisions.html" target="_blank" rel="noopener">Projektbidrag (Project Grant)</a></td>
+              <td class="td-funder">Vetenskapsrådet</td>
+              <td><span class="badge badge-project">Project grant</span><br><small>1–4 years</small></td>
+              <td>All researchers at Swedish institutions</td>
+              <td class="td-deadline">February</td>
+            </tr>
+
+            <tr class="grant-row"
+                data-type="postdoc" data-org="vr" data-who="earlycareer"
+                data-url="https://www.vr.se/english/applying-for-funding/calls-and-decisions.html">
+              <td class="td-name"><a href="https://www.vr.se/english/applying-for-funding/calls-and-decisions.html" target="_blank" rel="noopener">International Postdoc Grant</a></td>
+              <td class="td-funder">Vetenskapsrådet</td>
+              <td><span class="badge badge-postdoc">Postdoctoral grant</span><br><small>18–36 months abroad</small></td>
+              <td>Researchers max 2 years post-PhD</td>
+              <td class="td-deadline">September; spring call varies</td>
+            </tr>
+
+            <tr class="grant-row"
+                data-type="conference" data-org="vr" data-who="earlycareer senior"
+                data-url="https://www.vr.se/english/applying-for-funding/calls-and-decisions.html">
+              <td class="td-name"><a href="https://www.vr.se/english/applying-for-funding/calls-and-decisions.html" target="_blank" rel="noopener">Conference Grant</a></td>
+              <td class="td-funder">Vetenskapsrådet</td>
+              <td><span class="badge badge-conference">Conference grant</span><br><small>30,000–200,000 SEK</small></td>
+              <td>Active researchers at Swedish institutions</td>
+              <td class="td-deadline">Rolling (multiple/year)</td>
+            </tr>
+
+            <!-- ── RIKSBANKENS JUBILEUMSFOND ── -->
+            <tr class="grant-row"
+                data-type="project" data-org="rj" data-who="phd earlycareer senior"
+                data-url="https://www.rj.se/en/funding/">
+              <td class="td-name"><a href="https://www.rj.se/en/funding/" target="_blank" rel="noopener">RJ Projects</a></td>
+              <td class="td-funder">Riksbankens Jubileumsfond (RJ)</td>
+              <td><span class="badge badge-project">Project grant</span><br><small>Humanities &amp; social science</small></td>
+              <td>Individual researchers and smaller groups with Swedish institutional connection</td>
+              <td class="td-deadline">January</td>
+            </tr>
+
+            <tr class="grant-row"
+                data-type="conference" data-org="rj" data-who="phd earlycareer senior"
+                data-url="https://www.rj.se/en/funding/">
+              <td class="td-name"><a href="https://www.rj.se/en/funding/" target="_blank" rel="noopener">RJ Research Initiation</a></td>
+              <td class="td-funder">Riksbankens Jubileumsfond (RJ)</td>
+              <td><span class="badge badge-conference">Seminar / workshop grant</span><br><small>Min. 50,000 SEK; must include international participants</small></td>
+              <td>Researchers at Swedish universities</td>
+              <td class="td-deadline">Rolling</td>
+            </tr>
+
+            <!-- ── FORTE ── -->
+            <tr class="grant-row"
+                data-type="project" data-org="forte" data-who="earlycareer senior"
+                data-url="https://forte.se/en/funding/funding-opportunities/">
+              <td class="td-name"><a href="https://forte.se/en/funding/funding-opportunities/" target="_blank" rel="noopener">Project Grants</a></td>
+              <td class="td-funder">Forte (Research Council for Health, Working Life &amp; Welfare)</td>
+              <td><span class="badge badge-project">Project grant</span><br><small>3 years; health, welfare, working life</small></td>
+              <td>PhD holders; welfare/working-life relevance required</td>
+              <td class="td-deadline">Multiple per year</td>
+            </tr>
+
+            <tr class="grant-row"
+                data-type="starting" data-org="forte" data-who="earlycareer"
+                data-url="https://forte.se/en/funding/funding-opportunities/">
+              <td class="td-name"><a href="https://forte.se/en/funding/funding-opportunities/" target="_blank" rel="noopener">Starting Grants</a></td>
+              <td class="td-funder">Forte</td>
+              <td><span class="badge badge-starting">Starting grant</span><br><small>2–3 years; 2.5–3.75 MSEK</small></td>
+              <td>PhD holders, typically up to ~3 years post-PhD</td>
+              <td class="td-deadline">Multiple per year</td>
+            </tr>
+
+            <tr class="grant-row"
+                data-type="conference" data-org="forte" data-who="earlycareer senior"
+                data-url="https://forte.se/en/funding/funding-opportunities/">
+              <td class="td-name"><a href="https://forte.se/en/funding/funding-opportunities/" target="_blank" rel="noopener">Conference Grants</a></td>
+              <td class="td-funder">Forte</td>
+              <td><span class="badge badge-conference">Conference grant</span><br><small>Max 300,000 SEK; held in Sweden, 40+ participants</small></td>
+              <td>Researchers and institutions; conference must take place in Sweden</td>
+              <td class="td-deadline">Multiple per year</td>
+            </tr>
+
+            <!-- ── PRIVATE FOUNDATIONS ── -->
+            <tr class="grant-row"
+                data-type="project" data-org="other" data-who="earlycareer senior"
+                data-url="https://www.ifn.se/en/about-ifn/funding/jan-wallander-and-tom-hedelius-foundation/">
+              <td class="td-name"><a href="https://www.ifn.se/en/about-ifn/funding/jan-wallander-and-tom-hedelius-foundation/" target="_blank" rel="noopener">Jan Wallanders och Tom Hedelius stiftelse</a></td>
+              <td class="td-funder">Handelsbanken Research Foundations</td>
+              <td><span class="badge badge-project">Project grant</span><br><small>Economics, economic history, econometrics</small></td>
+              <td>Researchers at Swedish institutions in economics, economic history, economic geography, or econometrics</td>
+              <td class="td-deadline">February / March</td>
+            </tr>
+
+            <tr class="grant-row"
+                data-type="project" data-org="wallenberg" data-who="earlycareer senior"
+                data-url="https://mmw.wallenberg.org/en/">
+              <td class="td-name"><a href="https://mmw.wallenberg.org/en/" target="_blank" rel="noopener">Research Grants</a></td>
+              <td class="td-funder">Marianne och Marcus Wallenbergs Stiftelse</td>
+              <td><span class="badge badge-project">Project grant</span><br><small>3–5 years; law, economics, social science</small></td>
+              <td>Researchers in law, economics, and social science; interdisciplinary and frontier projects prioritized</td>
+              <td class="td-deadline">March – April</td>
+            </tr>
+
+            <tr class="grant-row"
+                data-type="starting" data-org="other" data-who="earlycareer"
+                data-url="https://ragnarsoderbergsstiftelse.se/">
+              <td class="td-name"><a href="https://ragnarsoderbergsstiftelse.se/" target="_blank" rel="noopener">Research Grants</a></td>
+              <td class="td-funder">Ragnar Söderbergs stiftelse</td>
+              <td><span class="badge badge-starting">Starting / junior grant</span><br><small>Economics, medicine, law</small></td>
+              <td>Postdoctoral and early-career researchers in economics, medicine, or law</td>
+              <td class="td-deadline">Autumn</td>
+            </tr>
+
+            <tr class="grant-row"
+                data-type="project" data-org="other" data-who="earlycareer senior"
+                data-url="https://ake-wiberg.se/en/humanities-social-sciences-grant">
+              <td class="td-name"><a href="https://ake-wiberg.se/en/humanities-social-sciences-grant" target="_blank" rel="noopener">Research Grants</a></td>
+              <td class="td-funder">Åke Wibergs stiftelse</td>
+              <td><span class="badge badge-project">Project grant</span><br><small>Humanities, social science, medicine</small></td>
+              <td>Researchers in humanities, social science, and medicine</td>
+              <td class="td-deadline">Varies</td>
+            </tr>
+
+            <tr class="grant-row"
+                data-type="project" data-org="other" data-who="phd earlycareer senior"
+                data-url="https://www.larshiertasminne.se/en/grants/research-grants-for-individual-researchers-and-organizations">
+              <td class="td-name"><a href="https://www.larshiertasminne.se/en/grants/research-grants-for-individual-researchers-and-organizations" target="_blank" rel="noopener">Research Grants</a></td>
+              <td class="td-funder">Stiftelsen Lars Hiertas minne</td>
+              <td><span class="badge badge-project">Project grant</span><br><small>All fields; individual researchers</small></td>
+              <td>Individual researchers in any field, including PhD students</td>
+              <td class="td-deadline">Autumn / Spring</td>
+            </tr>
+
+            <tr class="grant-row"
+                data-type="project" data-org="other" data-who="phd earlycareer senior"
+                data-url="https://apply.se/aner">
+              <td class="td-name"><a href="https://apply.se/aner" target="_blank" rel="noopener">Research and Conference Grants</a></td>
+              <td class="td-funder">Gunvor och Josef Anérs Stiftelse</td>
+              <td><span class="badge badge-project">Research / conference grant</span><br><small>Max 150,000 SEK; humanities &amp; social science</small></td>
+              <td>PhD students and researchers in humanities and social science</td>
+              <td class="td-deadline">April – June</td>
+            </tr>
+
+            <tr class="grant-row"
+                data-type="stipend" data-org="other" data-who="earlycareer">
+              <td class="td-name">Research Stipend</td>
+              <td class="td-funder">Widar Bagges stipendiestiftelse</td>
+              <td><span class="badge badge-stipend">Stipend</span><br><small>Political science, international politics, economics</small></td>
+              <td>Talented young researchers in economics, political science, or international politics; administered through Stockholm University</td>
+              <td class="td-deadline">Varies</td>
+            </tr>
+
+            <tr class="grant-row"
+                data-type="conference" data-org="wallenberg" data-who="earlycareer senior"
+                data-url="https://mws.wallenberg.org/en">
+              <td class="td-name"><a href="https://mws.wallenberg.org/en" target="_blank" rel="noopener">International Symposia Grant</a></td>
+              <td class="td-funder">Marcus Wallenbergs Stiftelse för Internationellt Vetenskapligt Samarbete</td>
+              <td><span class="badge badge-conference">Conference grant</span><br><small>International symposia organized in Sweden</small></td>
+              <td>Researchers organizing international scientific symposia in Sweden</td>
+              <td class="td-deadline">Varies</td>
+            </tr>
+
+            <tr class="grant-row"
+                data-type="project" data-org="other" data-who="earlycareer senior">
+              <td class="td-name">Research Grants</td>
+              <td class="td-funder">Jane och Dan Olssons Stiftelse för Vetenskapliga ändamål</td>
+              <td><span class="badge badge-project">Project grant</span><br><small>Equality, integration, social issues</small></td>
+              <td>Researchers working on social issues, equality, integration, and anti-discrimination; no independent website — apply through foundation databases</td>
+              <td class="td-deadline">Varies</td>
+            </tr>
+
+            <tr class="grant-row"
+                data-type="project" data-org="other" data-who="earlycareer senior"
+                data-url="https://www.torgnysegerstedt.se/stipendier/">
+              <td class="td-name"><a href="https://www.torgnysegerstedt.se/stipendier/" target="_blank" rel="noopener">Democracy Research Grant</a></td>
+              <td class="td-funder">Stiftelsen Torgny Segerstedts Minne</td>
+              <td><span class="badge badge-project">Project grant</span><br><small>Interdisciplinary; democracy values</small></td>
+              <td>Researchers for interdisciplinary projects strengthening democratic values (freedom of thought, speech, religion)</td>
+              <td class="td-deadline">Varies</td>
+            </tr>
+
+            <!-- ── POSTDOC & INTERNATIONAL MOBILITY ── -->
+            <tr class="grant-row"
+                data-type="postdoc" data-org="other" data-who="earlycareer"
+                data-url="https://www.stint.se/en/">
+              <td class="td-name"><a href="https://www.stint.se/en/" target="_blank" rel="noopener">International Postdoc</a></td>
+              <td class="td-funder">STINT (Swedish Foundation for International Cooperation in Research &amp; Higher Education)</td>
+              <td><span class="badge badge-postdoc">Postdoctoral grant</span><br><small>Research stays at foreign institutions</small></td>
+              <td>Postdoctoral researchers at Swedish institutions</td>
+              <td class="td-deadline">Autumn</td>
+            </tr>
+
+            <tr class="grant-row"
+                data-type="starting" data-org="other" data-who="earlycareer"
+                data-url="https://startinggrant.se/">
+              <td class="td-name"><a href="https://startinggrant.se/" target="_blank" rel="noopener">Swedish Foundations' Starting Grant (SFSG)</a></td>
+              <td class="td-funder">Consortium of 7 foundations (incl. RJ, Ragnar Söderbergs stiftelse, KK-stiftelsen)</td>
+              <td><span class="badge badge-starting">Starting grant</span><br><small>For ERC "A"-rated applicants who narrowly missed ERC funding</small></td>
+              <td>Early-career researchers at Swedish institutions who received an "A" grade in an ERC Starting Grant evaluation but were not funded</td>
+              <td class="td-deadline">Based on ERC deadlines (autumn)</td>
+            </tr>
+
+            <tr class="grant-row"
+                data-type="travel" data-org="other" data-who="phd earlycareer senior"
+                data-url="https://sweamfound.org/">
+              <td class="td-name"><a href="https://sweamfound.org/" target="_blank" rel="noopener">Research and Study Grant (USA)</a></td>
+              <td class="td-funder">Sverige-Amerika Stiftelsen</td>
+              <td><span class="badge badge-travel">Travel / research grant</span><br><small>Academic stays in the USA</small></td>
+              <td>Academics and students for research, study, or work in the USA</td>
+              <td class="td-deadline">October / November</td>
+            </tr>
+
+            <tr class="grant-row"
+                data-type="travel" data-org="other" data-who="earlycareer senior"
+                data-url="https://www.wennergrenfoundations.org/">
+              <td class="td-name"><a href="https://www.wennergrenfoundations.org/" target="_blank" rel="noopener">International Exchange Grant</a></td>
+              <td class="td-funder">Wenner-Gren Stiftelserna</td>
+              <td><span class="badge badge-travel">International exchange</span><br><small>Scientific exchange between countries</small></td>
+              <td>Researchers (international scientific exchange)</td>
+              <td class="td-deadline">Varies</td>
+            </tr>
+
+            <!-- ── ÖSTERSJÖSTIFTELSEN ── -->
+            <tr class="grant-row"
+                data-type="project" data-org="ostersjostiftelsen" data-who="phd earlycareer senior"
+                data-url="https://ostersjostiftelsen.se/en/">
+              <td class="td-name"><a href="https://ostersjostiftelsen.se/en/" target="_blank" rel="noopener">Project Grants</a></td>
+              <td class="td-funder">Östersjöstiftelsen (Foundation for Baltic &amp; East European Studies)</td>
+              <td><span class="badge badge-project">Project grant</span><br><small>2–3 years; max 6 MSEK</small></td>
+              <td>Researchers inside and outside Sweden; research must concern the Baltic Sea region or Eastern Europe</td>
+              <td class="td-deadline">Autumn</td>
+            </tr>
+
+            <tr class="grant-row"
+                data-type="postdoc" data-org="ostersjostiftelsen" data-who="earlycareer"
+                data-url="https://ostersjostiftelsen.se/en/">
+              <td class="td-name"><a href="https://ostersjostiftelsen.se/en/" target="_blank" rel="noopener">Postdoctoral Grants</a></td>
+              <td class="td-funder">Östersjöstiftelsen</td>
+              <td><span class="badge badge-postdoc">Postdoctoral grant</span><br><small>Baltic &amp; Eastern Europe focus</small></td>
+              <td>Postdoctoral researchers in humanities and social sciences</td>
+              <td class="td-deadline">Autumn</td>
+            </tr>
+
+            <tr class="grant-row"
+                data-type="conference" data-org="ostersjostiftelsen" data-who="earlycareer senior"
+                data-url="https://ostersjostiftelsen.se/en/">
+              <td class="td-name"><a href="https://ostersjostiftelsen.se/en/" target="_blank" rel="noopener">Conference Grants</a></td>
+              <td class="td-funder">Östersjöstiftelsen</td>
+              <td><span class="badge badge-conference">Conference grant</span><br><small>Max 250,000 SEK</small></td>
+              <td>Researchers organizing conferences on Baltic/Eastern European topics</td>
+              <td class="td-deadline">Autumn</td>
+            </tr>
+
+            <!-- ── NORDFORSK ── -->
+            <tr class="grant-row"
+                data-type="network" data-org="other" data-who="earlycareer"
+                data-url="https://www.nordforsk.org/calls/call-proposals-nordic-exploratory-networks-within-humanities-and-social-sciences">
+              <td class="td-name"><a href="https://www.nordforsk.org/calls/call-proposals-nordic-exploratory-networks-within-humanities-and-social-sciences" target="_blank" rel="noopener">Nordic Exploratory Networks</a></td>
+              <td class="td-funder">Nordforsk / Vetenskapsrådet</td>
+              <td><span class="badge badge-network">Network grant</span><br><small>3 years; max 1.5 MNOK; humanities &amp; social science</small></td>
+              <td>Early-career researchers (2–7 years post-PhD); minimum 4 Nordic countries must be represented</td>
+              <td class="td-deadline">April</td>
+            </tr>
+
+            <!-- ── STIPENDS & SMALLER GRANTS (SU) ── -->
+            <tr class="grant-row"
+                data-type="stipend" data-org="other" data-who="phd earlycareer"
+                data-url="https://www.su.se/utbildning/studera-vid-universitetet/stipendier/riktlinjer-for-stipendier-fran-anna-ahlstroms-och--ellen-terserus-stiftelse">
+              <td class="td-name"><a href="https://www.su.se/utbildning/studera-vid-universitetet/stipendier/riktlinjer-for-stipendier-fran-anna-ahlstroms-och--ellen-terserus-stiftelse" target="_blank" rel="noopener">2-Year Stipend</a></td>
+              <td class="td-funder">Anna Ahlströms och Ellen Terserus stiftelse</td>
+              <td><span class="badge badge-stipend">Stipend</span><br><small>2 years; humanities &amp; social science</small></td>
+              <td>Female PhD students and PhDs at the humanities and social science faculties at Stockholm University</td>
+              <td class="td-deadline">Annual (spring)</td>
+            </tr>
+
+            <tr class="grant-row"
+                data-type="stipend" data-org="other" data-who="earlycareer senior"
+                data-url="https://www.su.se/utbildning/studera-vid-universitetet/stipendier/donationsstipendier---stiftelser-vid-samhallsvetenskapliga-fakulteten">
+              <td class="td-name"><a href="https://www.su.se/utbildning/studera-vid-universitetet/stipendier/donationsstipendier---stiftelser-vid-samhallsvetenskapliga-fakulteten" target="_blank" rel="noopener">Research Stipend in Economics</a></td>
+              <td class="td-funder">Ingrid Hammars minnesfond</td>
+              <td><span class="badge badge-stipend">Stipend</span><br><small>50,000–75,000 SEK; economics at SU</small></td>
+              <td>Female researchers at Stockholm University in economics</td>
+              <td class="td-deadline">Annual</td>
+            </tr>
+
+            <tr class="grant-row"
+                data-type="travel" data-org="other" data-who="phd"
+                data-url="https://www.su.se/utbildning/studera-vid-universitetet/stipendier/donationsstipendier---stiftelser-vid-juridiska-fakulteten">
+              <td class="td-name"><a href="https://www.su.se/utbildning/studera-vid-universitetet/stipendier/donationsstipendier---stiftelser-vid-juridiska-fakulteten" target="_blank" rel="noopener">Travel Stipend</a></td>
+              <td class="td-funder">Karin Kocks och Hugo Lindbergs resestipendier</td>
+              <td><span class="badge badge-travel">Travel grant</span></td>
+              <td>PhD students in economics or statistics, or in criminal law or criminology; Stockholm University</td>
+              <td class="td-deadline">Varies</td>
+            </tr>
+
+          </tbody>
+        </table>
+        <p class="no-results" id="no-results" hidden>No grants match your current filters. Try broadening your search.</p>
+      </div><!-- /.table-wrap -->
+
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; <span id="year"></span> Sirus Dehdari &mdash; Associate Professor, Stockholm University</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    (function () {
+      const filterType  = document.getElementById('filter-type');
+      const filterOrg   = document.getElementById('filter-org');
+      const filterWho   = document.getElementById('filter-who');
+      const clearBtn    = document.getElementById('clear-filters');
+      const countEl     = document.getElementById('grant-count');
+      const noResults   = document.getElementById('no-results');
+      const rows        = [...document.querySelectorAll('tbody tr.grant-row')];
+
+      function applyFilters() {
+        const type = filterType.value;
+        const org  = filterOrg.value;
+        const who  = filterWho.value;
+        const anyActive = type || org || who;
+
+        clearBtn.hidden = !anyActive;
+
+        let visible = 0;
+        rows.forEach(row => {
+          const matchType = !type || row.dataset.type === type;
+          const matchOrg  = !org  || row.dataset.org  === org;
+          const matchWho  = !who  || (row.dataset.who || '').split(' ').includes(who);
+          const show = matchType && matchOrg && matchWho;
+          row.hidden = !show;
+          if (show) visible++;
+        });
+
+        countEl.textContent = visible;
+        noResults.hidden = visible > 0;
+      }
+
+      filterType.addEventListener('change', applyFilters);
+      filterOrg .addEventListener('change', applyFilters);
+      filterWho .addEventListener('change', applyFilters);
+
+      clearBtn.addEventListener('click', () => {
+        filterType.value = '';
+        filterOrg.value  = '';
+        filterWho.value  = '';
+        applyFilters();
+      });
+
+      // Row-click: open link in new tab when clicking anywhere except the name <a>
+      rows.forEach(row => {
+        const url = row.dataset.url;
+        if (!url) return;
+        row.addEventListener('click', e => {
+          if (!e.target.closest('a')) {
+            window.open(url, '_blank', 'noopener,noreferrer');
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

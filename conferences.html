@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PRR49867C4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PRR49867C4');
+</script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Academic Conferences for Social Scientists | Sirus H. Dehdari</title>
+  <meta name="description" content="A curated table of well-established academic conferences for social scientists in political science, economics, sociology, economic history, and related fields." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    /* ── Page hero ── */
+    .page-hero {
+      background: var(--white);
+      padding: calc(var(--nav-h) + 64px) 0 48px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .page-hero-inner { display: flex; flex-direction: column; gap: 12px; }
+    .page-eyebrow {
+      font-size: .75rem; font-weight: 600; letter-spacing: .15em;
+      text-transform: uppercase; color: var(--gold);
+    }
+    .page-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.85rem, 5vw, 3rem);
+      font-weight: 700; color: var(--text); line-height: 1.15;
+    }
+    .page-subtitle {
+      font-size: 1rem; color: var(--text-light);
+      max-width: 640px; line-height: 1.65;
+    }
+    .breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: .82rem; color: var(--gray-400); margin-bottom: 20px;
+    }
+    .breadcrumb a { color: var(--gray-400); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--gold); }
+    .breadcrumb-sep { color: var(--gray-200); }
+
+    /* ── Note ── */
+    .grants-note {
+      background: rgba(200,164,74,.09);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 14px 20px;
+      font-size: .88rem; color: var(--text-light); line-height: 1.65;
+      margin-bottom: 28px;
+    }
+    .grants-note strong { color: var(--text); }
+
+    /* ── Filter bar ── */
+    .filter-bar {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .filter-controls { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 12px; }
+    .filter-group { display: flex; flex-direction: column; gap: 5px; }
+    .filter-group label {
+      font-size: .72rem; font-weight: 600; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--gray-400);
+    }
+    .filter-group select {
+      font-family: var(--font-sans); font-size: .875rem; color: var(--text);
+      background: var(--gray-50); border: 1px solid var(--gray-200);
+      border-radius: var(--radius); padding: 8px 32px 8px 12px;
+      cursor: pointer; appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239aa3b2' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 10px center;
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .filter-group select:focus { outline: none; border-color: var(--gold); background-color: var(--white); }
+    .clear-btn {
+      font-family: var(--font-sans); font-size: .82rem; font-weight: 600;
+      color: var(--gray-600); background: var(--gray-100);
+      border: 1px solid var(--gray-200); border-radius: var(--radius);
+      padding: 8px 16px; cursor: pointer;
+      transition: all var(--transition); display: flex; align-items: center; gap: 6px;
+      margin-top: 18px;
+    }
+    .clear-btn:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
+    .filter-count { font-size: .85rem; color: var(--gray-400); white-space: nowrap; }
+    .filter-count strong { color: var(--text); }
+
+    /* ── Table ── */
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-sm);
+    }
+    table { width: 100%; border-collapse: collapse; font-size: .875rem; line-height: 1.55; min-width: 860px; }
+    thead { background: var(--navy); color: var(--white); }
+    thead th {
+      padding: 14px 18px; text-align: left;
+      font-size: .72rem; font-weight: 600; letter-spacing: .09em;
+      text-transform: uppercase; white-space: nowrap;
+    }
+    tbody tr { border-bottom: 1px solid var(--gray-200); transition: background var(--transition); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:nth-child(even) { background: var(--gray-50); }
+    tbody tr:nth-child(odd)  { background: var(--white); }
+    tbody tr.conf-row { cursor: pointer; }
+    tbody tr.conf-row:hover { background: rgba(200,164,74,.08); }
+    tbody td { padding: 14px 18px; color: var(--text-light); vertical-align: top; }
+
+    .td-name { min-width: 175px; }
+    .td-name a {
+      font-weight: 700; font-size: .95rem; color: var(--navy);
+      text-decoration: none; border-bottom: 1px solid transparent;
+      transition: color var(--transition), border-color var(--transition);
+    }
+    .td-name a:hover { color: var(--gold); border-bottom-color: var(--gold); }
+    .td-name small { font-weight: 400; color: var(--gray-400); font-size: .78rem; }
+    .td-disc   { min-width: 155px; }
+    .td-loc    { min-width: 160px; color: var(--text-light); }
+    .td-who    { min-width: 170px; }
+    .td-when   { min-width: 130px; }
+
+    /* Discipline badges */
+    .badge {
+      display: inline-block; font-size: .7rem; font-weight: 600;
+      letter-spacing: .04em; padding: 3px 10px; border-radius: 20px;
+      white-space: nowrap; line-height: 1.5;
+    }
+    .badge-polisci    { background: rgba(45,55,72,.12);   color: var(--navy); }
+    .badge-economics  { background: rgba(200,164,74,.18); color: #7a5a00; }
+    .badge-sociology  { background: rgba(99,102,241,.12); color: #3730a3; }
+    .badge-econhist   { background: rgba(72,187,120,.15); color: #276749; }
+    .badge-poleconomy { background: rgba(251,146,60,.15); color: #92400e; }
+
+    /* Who badge */
+    .who-all        { color: var(--text-light); }
+    .who-phd        { font-weight: 600; color: #276749; }
+    .who-invitation { font-style: italic; color: var(--gray-400); }
+
+    .no-results {
+      text-align: center; padding: 48px 24px;
+      font-size: .95rem; color: var(--gray-400);
+    }
+
+    @media (max-width: 768px) {
+      .filter-bar { flex-direction: column; align-items: flex-start; }
+      .filter-controls { gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVIGATION ===== -->
+  <header id="navbar">
+    <nav class="nav-container">
+      <a href="index.html" class="nav-brand">Sirus Dehdari</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#working-papers">Work in Progress</a></li>
+        <li><a href="index.html#publications">Publications</a></li>
+        <li><a href="index.html#grants">Grants</a></li>
+        <li><a href="index.html#teaching">Teaching</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="other.html" class="active">Other</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ===== PAGE HERO ===== -->
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb fade-up">
+        <a href="index.html">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <a href="other.html">Other</a>
+        <span class="breadcrumb-sep">/</span>
+        <span>Conferences</span>
+      </nav>
+      <div class="page-hero-inner fade-up">
+        <span class="page-eyebrow">Events</span>
+        <h1 class="page-title">Academic Conferences<br>for Social Scientists</h1>
+        <p class="page-subtitle">Well-established conferences in political science, economics, sociology, economic history, and related fields. Click any row to visit the conference website.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TABLE ===== -->
+  <section class="section">
+    <div class="container" style="max-width: 1120px;">
+
+      <div class="grants-note reveal">
+        <strong>Note:</strong> Dates and locations shift year to year — always check the conference website for the current call for papers. Conferences marked <strong style="color:#276749">PhD-focused</strong> are specifically designed for early-career researchers. Biennial and triennial conferences are noted in the When column.
+      </div>
+
+      <!-- Filter bar -->
+      <div class="filter-bar reveal">
+        <div class="filter-controls">
+
+          <div class="filter-group">
+            <label for="filter-disc">Discipline</label>
+            <select id="filter-disc">
+              <option value="">All disciplines</option>
+              <option value="polisci">Political Science</option>
+              <option value="economics">Economics</option>
+              <option value="sociology">Sociology</option>
+              <option value="econhist">Economic History</option>
+              <option value="poleconomy">Political Economy</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="filter-cont">Continent</label>
+            <select id="filter-cont">
+              <option value="">All locations</option>
+              <option value="europe">Europe (incl. Nordic)</option>
+              <option value="nordic">Nordic countries</option>
+              <option value="namerica">North America</option>
+              <option value="global">Global / rotates continents</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="filter-who">Who can attend</label>
+            <select id="filter-who">
+              <option value="">All</option>
+              <option value="opentophd">Open to PhD students</option>
+              <option value="phd">PhD / early-career focused</option>
+              <option value="invitation">By invitation</option>
+            </select>
+          </div>
+
+          <button id="clear-filters" class="clear-btn" hidden>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Clear filters
+          </button>
+
+        </div>
+        <p class="filter-count">Showing <strong><span id="conf-count">38</span></strong> conferences</p>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap reveal">
+        <table id="conf-table">
+          <thead>
+            <tr>
+              <th class="td-name">Conference</th>
+              <th class="td-disc">Discipline</th>
+              <th class="td-loc">Location</th>
+              <th class="td-who">Who can attend</th>
+              <th class="td-when">When</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <!-- ══ POLITICAL SCIENCE ══ -->
+
+            <tr class="conf-row" data-disc="polisci" data-cont="namerica" data-who="all"
+                data-url="https://apsanet.org/events/annual-meeting-exhibition/">
+              <td class="td-name">
+                <a href="https://apsanet.org/events/annual-meeting-exhibition/" target="_blank" rel="noopener">APSA</a><br>
+                <small>American Political Science Association Annual Meeting</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-polisci">Political Science</span></td>
+              <td class="td-loc">Rotates, USA</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">September<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="polisci" data-cont="namerica" data-who="all"
+                data-url="https://www.mpsanet.org/">
+              <td class="td-name">
+                <a href="https://www.mpsanet.org/" target="_blank" rel="noopener">MPSA</a><br>
+                <small>Midwest Political Science Association Annual Conference</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-polisci">Political Science</span></td>
+              <td class="td-loc">Chicago, USA</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">April<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="polisci" data-cont="namerica" data-who="all"
+                data-url="https://spsa.net/annual-meeting/">
+              <td class="td-name">
+                <a href="https://spsa.net/annual-meeting/" target="_blank" rel="noopener">SPSA</a><br>
+                <small>Southern Political Science Association Annual Meeting</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-polisci">Political Science</span></td>
+              <td class="td-loc">Rotates, US South</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">January<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="polisci" data-cont="namerica" data-who="all"
+                data-url="https://www.wpsanet.org/">
+              <td class="td-name">
+                <a href="https://www.wpsanet.org/" target="_blank" rel="noopener">WPSA</a><br>
+                <small>Western Political Science Association Annual Conference</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-polisci">Political Science</span></td>
+              <td class="td-loc">Rotates, western USA</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">March – April<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="polisci" data-cont="namerica" data-who="all"
+                data-url="https://www.isanet.org/Conferences">
+              <td class="td-name">
+                <a href="https://www.isanet.org/Conferences" target="_blank" rel="noopener">ISA</a><br>
+                <small>International Studies Association Annual Convention</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-polisci">Political Science</span></td>
+              <td class="td-loc">Rotates, USA</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">March<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="polisci" data-cont="global" data-who="all"
+                data-url="https://www.ipsa.org/">
+              <td class="td-name">
+                <a href="https://www.ipsa.org/" target="_blank" rel="noopener">IPSA</a><br>
+                <small>International Political Science Association World Congress</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-polisci">Political Science</span></td>
+              <td class="td-loc">Global (rotates)</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">July<br><small>Biennial</small></td>
+            </tr>
+			<!-- EPSS -->
+            <tr class="conf-row" data-disc="polisci" data-cont="europe" data-who="all"
+                data-url="https://epssnet.org/sign-up/#join">
+              <td class="td-name">
+                <a href="https://epssnet.org/sign-up/#join" target="_blank" rel="noopener">EPSS</a><br>
+                <small>European Political Science Society</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-polisci">Political Science</span></td>
+              <td class="td-loc">Europe (rotates)</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">June – July<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="polisci" data-cont="europe" data-who="all"
+                data-url="https://ecpr.eu/GeneralConference">
+              <td class="td-name">
+                <a href="https://ecpr.eu/GeneralConference" target="_blank" rel="noopener">ECPR General Conference</a><br>
+                <small>European Consortium for Political Research</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-polisci">Political Science</span></td>
+              <td class="td-loc">Europe (rotates)</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">August – September<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="polisci" data-cont="europe" data-who="all"
+                data-url="https://ecpr.eu/JointSessions">
+              <td class="td-name">
+                <a href="https://ecpr.eu/JointSessions" target="_blank" rel="noopener">ECPR Joint Sessions</a><br>
+                <small>European Consortium for Political Research — thematic workshops</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-polisci">Political Science</span></td>
+              <td class="td-loc">Europe (rotates)</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">April – May<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="polisci" data-cont="europe" data-who="all"
+                data-url="https://www.psa.ac.uk/conference/">
+              <td class="td-name">
+                <a href="https://www.psa.ac.uk/conference/" target="_blank" rel="noopener">PSA</a><br>
+                <small>Political Studies Association Annual Conference (UK)</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-polisci">Political Science</span></td>
+              <td class="td-loc">UK (rotates)</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">March – April<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="polisci" data-cont="nordic" data-who="all"
+                data-url="https://swepsa.org/">
+              <td class="td-name">
+                <a href="https://swepsa.org/" target="_blank" rel="noopener">SWEPSA</a><br>
+                <small>Swedish Political Science Association Annual Meeting</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-polisci">Political Science</span></td>
+              <td class="td-loc">Sweden (rotates)</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">October<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="polisci" data-cont="nordic" data-who="all"
+                data-url="https://nopsa.net/">
+              <td class="td-name">
+                <a href="https://nopsa.net/" target="_blank" rel="noopener">NOPSA</a><br>
+                <small>Nordic Political Science Association Congress</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-polisci">Political Science</span></td>
+              <td class="td-loc">Nordic countries (rotates)</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">June<br><small>Triennial</small></td>
+            </tr>
+
+            <!-- ══ ECONOMICS ══ -->
+
+            <tr class="conf-row" data-disc="economics" data-cont="namerica" data-who="all"
+                data-url="https://www.aeaweb.org/conference/">
+              <td class="td-name">
+                <a href="https://www.aeaweb.org/conference/" target="_blank" rel="noopener">AEA / ASSA</a><br>
+                <small>American Economic Association — Allied Social Science Associations Annual Meeting</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-economics">Economics</span></td>
+              <td class="td-loc">Rotates, USA</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">January<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="economics" data-cont="europe" data-who="all"
+                data-url="https://eeassoc.org/congress">
+              <td class="td-name">
+                <a href="https://eeassoc.org/congress" target="_blank" rel="noopener">EEA–ESEM</a><br>
+                <small>European Economic Association Congress / Econometric Society European Meeting</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-economics">Economics</span></td>
+              <td class="td-loc">Europe (rotates)</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">August<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="economics" data-cont="europe" data-who="all"
+                data-url="https://res.org.uk/">
+              <td class="td-name">
+                <a href="https://res.org.uk/" target="_blank" rel="noopener">RES</a><br>
+                <small>Royal Economic Society Annual Conference (UK)</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-economics">Economics</span></td>
+              <td class="td-loc">UK (rotates)</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">July<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="economics" data-cont="namerica" data-who="all"
+                data-url="https://www.sole-jole.org/">
+              <td class="td-name">
+                <a href="https://www.sole-jole.org/" target="_blank" rel="noopener">SOLE</a><br>
+                <small>Society of Labor Economists Annual Meeting</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-economics">Economics</span></td>
+              <td class="td-loc">Rotates, North America</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">May<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="economics" data-cont="europe" data-who="all"
+                data-url="https://eale.nl/">
+              <td class="td-name">
+                <a href="https://eale.nl/" target="_blank" rel="noopener">EALE</a><br>
+                <small>European Association of Labour Economists Annual Conference</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-economics">Economics</span></td>
+              <td class="td-loc">Europe (rotates)</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">August – September<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="economics" data-cont="europe" data-who="all"
+                data-url="https://www.espe.org/">
+              <td class="td-name">
+                <a href="https://www.espe.org/" target="_blank" rel="noopener">ESPE</a><br>
+                <small>European Society for Population Economics Annual Conference</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-economics">Economics</span></td>
+              <td class="td-loc">Europe (rotates)</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">June<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="economics" data-cont="namerica" data-who="all"
+                data-url="https://www.econometricsociety.org/meetings/listing">
+              <td class="td-name">
+                <a href="https://www.econometricsociety.org/meetings/listing" target="_blank" rel="noopener">ES NASM</a><br>
+                <small>Econometric Society North American Summer Meeting</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-economics">Economics</span></td>
+              <td class="td-loc">Rotates, North America</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">June<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="economics" data-cont="europe" data-who="all"
+                data-url="https://scotecon.org/">
+              <td class="td-name">
+                <a href="https://scotecon.org/" target="_blank" rel="noopener">SES</a><br>
+                <small>Scottish Economic Society Annual Conference</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-economics">Economics</span></td>
+              <td class="td-loc">Glasgow, Scotland</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">April<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="economics" data-cont="global" data-who="all"
+                data-url="https://www.iea-world.org/">
+              <td class="td-name">
+                <a href="https://www.iea-world.org/" target="_blank" rel="noopener">IEA World Congress</a><br>
+                <small>International Economic Association World Congress</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-economics">Economics</span></td>
+              <td class="td-loc">Global (rotates)</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">June – July<br><small>Triennial</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="economics" data-cont="namerica" data-who="invitation"
+                data-url="https://www.nber.org/summer-institute">
+              <td class="td-name">
+                <a href="https://www.nber.org/summer-institute" target="_blank" rel="noopener">NBER Summer Institute</a><br>
+                <small>National Bureau of Economic Research — ~50 specialist mini-conferences</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-economics">Economics</span></td>
+              <td class="td-loc">Cambridge, MA, USA</td>
+              <td class="who-invitation">By invitation (NBER affiliates and invitees)</td>
+              <td class="td-when">July<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="economics" data-cont="europe" data-who="phd"
+                data-url="https://economics.ed.ac.uk/study-with-us/postgraduate/scottish-graduate-programme-economics/sgpe-residential-conference">
+              <td class="td-name">
+                <a href="https://economics.ed.ac.uk/study-with-us/postgraduate/scottish-graduate-programme-economics/sgpe-residential-conference" target="_blank" rel="noopener">SGPE Residential Conference</a><br>
+                <small>Scottish Graduate Programme in Economics</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-economics">Economics</span></td>
+              <td class="td-loc">Crieff, Scotland</td>
+              <td class="who-phd">PhD students only (enrolled in SGPE partner universities)</td>
+              <td class="td-when">January<br><small>Annual</small></td>
+            </tr>
+
+            <!-- ══ SOCIOLOGY ══ -->
+
+            <tr class="conf-row" data-disc="sociology" data-cont="namerica" data-who="all"
+                data-url="https://www.asanet.org/annual-meeting/annual-meeting-overview/">
+              <td class="td-name">
+                <a href="https://www.asanet.org/annual-meeting/annual-meeting-overview/" target="_blank" rel="noopener">ASA</a><br>
+                <small>American Sociological Association Annual Meeting</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-sociology">Sociology</span></td>
+              <td class="td-loc">Rotates, USA</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">August<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="sociology" data-cont="europe" data-who="all"
+                data-url="https://www.europeansociology.org/conferences">
+              <td class="td-name">
+                <a href="https://www.europeansociology.org/conferences" target="_blank" rel="noopener">ESA</a><br>
+                <small>European Sociological Association Conference</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-sociology">Sociology</span></td>
+              <td class="td-loc">Europe (rotates)</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">August<br><small>Biennial</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="sociology" data-cont="global" data-who="all"
+                data-url="https://www.isa-sociology.org/en/conferences/world-congress">
+              <td class="td-name">
+                <a href="https://www.isa-sociology.org/en/conferences/world-congress" target="_blank" rel="noopener">ISA World Congress of Sociology</a><br>
+                <small>International Sociological Association</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-sociology">Sociology</span></td>
+              <td class="td-loc">Global (rotates)</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">Summer<br><small>Quadrennial</small></td>
+            </tr>
+
+            <!-- ══ ECONOMIC HISTORY ══ -->
+
+            <tr class="conf-row" data-disc="econhist" data-cont="europe" data-who="all"
+                data-url="https://ehs.org.uk/conference/">
+              <td class="td-name">
+                <a href="https://ehs.org.uk/conference/" target="_blank" rel="noopener">EHS Annual Conference</a><br>
+                <small>Economic History Society (UK)</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-econhist">Economic History</span></td>
+              <td class="td-loc">UK (rotates)</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">April<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="econhist" data-cont="europe" data-who="all"
+                data-url="https://ehes.org/">
+              <td class="td-name">
+                <a href="https://ehes.org/" target="_blank" rel="noopener">EHES Conference</a><br>
+                <small>European Historical Economics Society</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-econhist">Economic History</span></td>
+              <td class="td-loc">Europe (rotates)</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">September<br><small>Biennial</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="econhist" data-cont="global" data-who="all"
+                data-url="https://www.ieha-wehc.org/">
+              <td class="td-name">
+                <a href="https://www.ieha-wehc.org/" target="_blank" rel="noopener">WEHC</a><br>
+                <small>World Economic History Congress</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-econhist">Economic History</span></td>
+              <td class="td-loc">Global (rotates)</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">Summer<br><small>Triennial</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="econhist" data-cont="europe" data-who="all"
+                data-url="https://esshc.iisg.amsterdam/en">
+              <td class="td-name">
+                <a href="https://esshc.iisg.amsterdam/en" target="_blank" rel="noopener">ESSHC</a><br>
+                <small>European Social Science History Conference</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-econhist">Economic History</span></td>
+              <td class="td-loc">Europe (rotates)</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">April<br><small>Biennial</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="econhist" data-cont="global" data-who="phd"
+                data-url="https://ehes.org/fresh-meetings/">
+              <td class="td-name">
+                <a href="https://ehes.org/fresh-meetings/" target="_blank" rel="noopener">FRESH Meetings</a><br>
+                <small>Frontier Research in Economic and Social History</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-econhist">Economic History</span></td>
+              <td class="td-loc">No fixed venue</td>
+              <td class="who-phd">PhD / early-career focused; small workshop format (~12–24 participants)</td>
+              <td class="td-when">Varies<br><small>Multiple per year</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="econhist" data-cont="nordic" data-who="all"
+                data-url="https://sites.google.com/view/ssesh">
+              <td class="td-name">
+                <a href="https://sites.google.com/view/ssesh" target="_blank" rel="noopener">SSESH</a><br>
+                <small>Scandinavian Society for Economic and Social History Annual Conference</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-econhist">Economic History</span></td>
+              <td class="td-loc">Nordic countries (rotates)</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">June<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="econhist" data-cont="nordic" data-who="all"
+                data-url="https://ekonomiskhistoria.org/">
+              <td class="td-name">
+                <a href="https://ekonomiskhistoria.org/" target="_blank" rel="noopener">Nordic Economic History Meeting</a><br>
+                <small>All-Nordic conference organized by the Nordic economic history societies</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-econhist">Economic History</span></td>
+              <td class="td-loc">Nordic countries (rotates)</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">Spring<br><small>Biennial</small></td>
+            </tr>
+
+            <!-- ══ POLITICAL ECONOMY / CROSS-DISCIPLINARY ══ -->
+
+            <tr class="conf-row" data-disc="poleconomy" data-cont="global" data-who="all"
+                data-url="https://www.peio.me/">
+              <td class="td-name">
+                <a href="https://www.peio.me/" target="_blank" rel="noopener">PEIO</a><br>
+                <small>Political Economy of International Organizations Annual Conference</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-poleconomy">Political Economy</span></td>
+              <td class="td-loc">Global (rotates)</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">January<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="poleconomy" data-cont="global" data-who="all"
+                data-url="https://sase.org/">
+              <td class="td-name">
+                <a href="https://sase.org/" target="_blank" rel="noopener">SASE</a><br>
+                <small>Society for the Advancement of Socio-Economics Annual Conference</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-poleconomy">Political Economy</span></td>
+              <td class="td-loc">Global (rotates)</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">July<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="poleconomy" data-cont="global" data-who="all"
+                data-url="https://councilforeuropeanstudies.org/conferences/">
+              <td class="td-name">
+                <a href="https://councilforeuropeanstudies.org/conferences/" target="_blank" rel="noopener">CES</a><br>
+                <small>Council for European Studies International Conference of Europeanists</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-poleconomy">Political Economy</span></td>
+              <td class="td-loc">Europe / North America (alternates)</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">June<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="poleconomy" data-cont="namerica" data-who="all"
+                data-url="https://www.publicchoicesociety.org/">
+              <td class="td-name">
+                <a href="https://www.publicchoicesociety.org/" target="_blank" rel="noopener">PCS</a><br>
+                <small>Public Choice Society Annual Conference</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-poleconomy">Political Economy</span></td>
+              <td class="td-loc">Rotates, USA</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">March<br><small>Annual</small></td>
+            </tr>
+
+            <tr class="conf-row" data-disc="poleconomy" data-cont="europe" data-who="all"
+                data-url="http://www.epcs-home.org/">
+              <td class="td-name">
+                <a href="http://www.epcs-home.org/" target="_blank" rel="noopener">EPCS</a><br>
+                <small>European Public Choice Society Annual Meeting</small>
+              </td>
+              <td class="td-disc"><span class="badge badge-poleconomy">Political Economy</span></td>
+              <td class="td-loc">Europe (rotates)</td>
+              <td class="who-all">All researchers, incl. PhD students</td>
+              <td class="td-when">March – April<br><small>Annual</small></td>
+            </tr>
+
+          </tbody>
+        </table>
+        <p class="no-results" id="no-results" hidden>No conferences match your current filters. Try broadening your search.</p>
+      </div><!-- /.table-wrap -->
+
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; <span id="year"></span> Sirus Dehdari &mdash; Associate Professor, Stockholm University</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    (function () {
+      const filterDisc  = document.getElementById('filter-disc');
+      const filterCont  = document.getElementById('filter-cont');
+      const filterWho   = document.getElementById('filter-who');
+      const clearBtn    = document.getElementById('clear-filters');
+      const countEl     = document.getElementById('conf-count');
+      const noResults   = document.getElementById('no-results');
+      const rows        = [...document.querySelectorAll('tbody tr.conf-row')];
+
+      function applyFilters() {
+        const disc = filterDisc.value;
+        const cont = filterCont.value;
+        const who  = filterWho.value;
+        const anyActive = disc || cont || who;
+
+        clearBtn.hidden = !anyActive;
+
+        let visible = 0;
+        rows.forEach(row => {
+          const rowDisc = row.dataset.disc || '';
+          const rowCont = row.dataset.cont || '';
+          const rowWho  = row.dataset.who  || '';
+
+          const matchDisc = !disc || rowDisc === disc;
+
+          // "europe" in filter shows both "europe" and "nordic" rows
+          const matchCont = !cont ||
+            (cont === 'europe' ? (rowCont === 'europe' || rowCont === 'nordic') : rowCont === cont);
+
+          // "opentophd" shows "all" and "phd" rows
+          const matchWho = !who ||
+            (who === 'opentophd' ? (rowWho === 'all' || rowWho === 'phd') : rowWho === who);
+
+          const show = matchDisc && matchCont && matchWho;
+          row.hidden = !show;
+          if (show) visible++;
+        });
+
+        countEl.textContent = visible;
+        noResults.hidden = visible > 0;
+      }
+
+      filterDisc.addEventListener('change', applyFilters);
+      filterCont.addEventListener('change', applyFilters);
+      filterWho .addEventListener('change', applyFilters);
+
+      clearBtn.addEventListener('click', () => {
+        filterDisc.value = '';
+        filterCont.value = '';
+        filterWho.value  = '';
+        applyFilters();
+      });
+
+      // Row-click: open link in new tab (unless clicking the name <a> directly)
+      rows.forEach(row => {
+        const url = row.dataset.url;
+        if (!url) return;
+        row.addEventListener('click', e => {
+          if (!e.target.closest('a')) {
+            window.open(url, '_blank', 'noopener,noreferrer');
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
