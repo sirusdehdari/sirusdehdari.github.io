@@ -122,6 +122,43 @@
     .link-card:hover .link-card-arrow {
       transform: translateX(4px);
     }
+    .links-section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .links-section + .links-section {
+      margin-top: 56px;
+    }
+    .links-section-heading {
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--gray-200);
+    }
+    .links-section-heading h2 {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+    .links-section-heading p {
+      font-size: .85rem;
+      color: var(--text-light);
+    }
+    .badge-wip {
+      display: inline-block;
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(180,140,60,.1);
+      border: 1px solid var(--gold);
+      border-radius: 4px;
+      padding: 2px 7px;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
   </style>
 </head>
 <body>
@@ -151,7 +188,7 @@
       <div class="page-hero-inner fade-up">
         <span class="page-eyebrow">Resources &amp; Links</span>
         <h1 class="page-title">Other</h1>
-        <p class="page-subtitle">A collection of resources and links that I find useful or think others might benefit from.</p>
+        <p class="page-subtitle">A collection of resources and links that I find useful or think others might benefit from — spanning academic tools for researchers as well as personal interests and hobbies outside academia.</p>
       </div>
     </div>
   </section>
@@ -159,8 +196,15 @@
   <!-- ===== LINKS ===== -->
   <section class="section">
     <div class="container">
-      <div class="links-list">
+      <!-- ===== SCHOLARLY RESOURCES ===== -->
+      <div class="links-section">
+        <div class="links-section-heading reveal">
+          <h2>Scholarly Resources</h2>
+          <p>Academic tools and reference pages for researchers.</p>
+        </div>
 
+      <!-- ===== Grants ===== -->
+	
         <a href="swedish-grants.html" class="link-card reveal">
           <div class="link-card-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -171,13 +215,14 @@
           </div>
           <div class="link-card-body">
             <p class="link-card-title">Swedish Research Grants for Social Scientists</p>
-            <p class="link-card-desc">A curated overview of Swedish research grants that social scientists can apply for — from travel grants and conference organization grants to postdoctoral and project grants. Covers major funding bodies such as Vetenskapsrådet, Riksbankens Jubileumsfond, Forte, and many others.</p>
+            <p class="link-card-desc">A curated overview of Swedish research grants that social scientists can apply for — from travel grants and conference organization grants to postdoctoral and project grants. Covers major funding bodies such as Vetenskapsrådet, Forte, and many others.</p>
           </div>
           <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
             <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
           </svg>
         </a>
 
+      <!-- ===== Conferences ===== -->
         <a href="conferences.html" class="link-card reveal">
           <div class="link-card-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -193,6 +238,69 @@
           <div class="link-card-body">
             <p class="link-card-title">Academic Conferences for Social Scientists</p>
             <p class="link-card-desc">A non-exhaustive list of well-established academic conferences in political science, economics, sociology, economic history, and political economy. Filterable by discipline, continent, and who can attend — with typical timing and links to each conference website.</p>
+          </div>
+          <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+
+       <a href="https://osf.io/preprints/socarxiv/43xs2_v1" class="link-card reveal">
+          <div class="link-card-icon">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+  <polyline points="14 2 14 8 20 8"></polyline>
+  <line x1="16" y1="13" x2="8" y2="13"></line>
+  <line x1="16" y1="17" x2="8" y2="17"></line>
+  <polyline points="10 9 9 9 8 9"></polyline>
+</svg>
+          </div>
+          <div class="link-card-body">
+            <p class="link-card-title">Writing a Political Science Paper</p>
+            <p class="link-card-desc">My brilliant colleague Kåre Vernby has written a guide on how to draft the introductions to political science papers.</p>
+          </div>
+          <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+
+
+      </div>
+
+      <!-- ===== LIFE BEYOND ACADEMIA ===== -->
+      <div class="links-section">
+        <div class="links-section-heading reveal">
+          <h2>Life Beyond Academia</h2>
+          <p>Personal interests, hobbies, and things I enjoy outside of work.</p>
+        </div>
+
+      <!-- ===== Instagram ===== -->
+        <a href="https://www.instagram.com/prof_pizza/" target="_blank" rel="noopener noreferrer" class="link-card reveal">
+          <div class="link-card-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </div>
+          <div class="link-card-body">
+            <p class="link-card-title">@prof_pizza on Instagram</p>
+            <p class="link-card-desc">My Instagram where I share my baking and cooking adventures — mostly Neapolitan-style pizzas and sourdough bread, along with various high-protein desserts.</p>
+          </div>
+          <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+
+      <!-- ===== Ninja Creami ===== -->
+        <a href="https://proteinninja.netlify.app/" target="_blank" rel="noopener noreferrer" class="link-card reveal">
+          <div class="link-card-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+          </div>
+          <div class="link-card-body">
+            <p class="link-card-title">Protein Ninja Creami Recipes<span class="badge-wip">Under Construction</span></p>
+            <p class="link-card-desc">A dedicated site for my protein ice cream recipes — high-protein frozen desserts that actually taste good. The site is currently a work in progress, but feel free to check back as more recipes go up.</p>
           </div>
           <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
             <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
