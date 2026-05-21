@@ -67,38 +67,65 @@
       padding: 20px 24px;
       margin-bottom: 20px;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
+      flex-direction: column;
+      gap: 14px;
     }
-    .filter-controls { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 12px; }
-    .filter-group { display: flex; flex-direction: column; gap: 5px; }
-    .filter-group label {
+    .filter-top-row {
+      display: flex; align-items: flex-end;
+      justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    }
+    .filter-chip-section { display: flex; flex-direction: column; gap: 6px; }
+    .filter-chip-section > label {
       font-size: .72rem; font-weight: 600; letter-spacing: .1em;
       text-transform: uppercase; color: var(--gray-400);
     }
-    .filter-group select {
-      font-family: var(--font-sans); font-size: .875rem; color: var(--text);
-      background: var(--gray-50); border: 1px solid var(--gray-200);
-      border-radius: var(--radius); padding: 8px 32px 8px 12px;
-      cursor: pointer; appearance: none; -webkit-appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239aa3b2' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 10px center;
-      transition: border-color var(--transition), background var(--transition);
-    }
-    .filter-group select:focus { outline: none; border-color: var(--gold); background-color: var(--white); }
+    .filter-bottom-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .filter-count { font-size: .85rem; color: var(--gray-400); white-space: nowrap; }
+    .filter-count strong { color: var(--text); }
     .clear-btn {
       font-family: var(--font-sans); font-size: .82rem; font-weight: 600;
       color: var(--gray-600); background: var(--gray-100);
       border: 1px solid var(--gray-200); border-radius: var(--radius);
-      padding: 8px 16px; cursor: pointer;
+      padding: 7px 14px; cursor: pointer;
       transition: all var(--transition); display: flex; align-items: center; gap: 6px;
-      margin-top: 18px;
     }
     .clear-btn:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
-    .filter-count { font-size: .85rem; color: var(--gray-400); white-space: nowrap; }
-    .filter-count strong { color: var(--text); }
+
+    /* ── Search ── */
+    .search-wrap { position: relative; display: flex; align-items: center; }
+    .search-icon {
+      position: absolute; left: 10px; color: var(--gray-400); pointer-events: none;
+    }
+    #conf-search {
+      font-family: var(--font-sans); font-size: .875rem; color: var(--text);
+      background: var(--gray-50); border: 1px solid var(--gray-200);
+      border-radius: var(--radius); padding: 8px 32px 8px 34px;
+      width: 280px; max-width: 100%;
+      transition: border-color var(--transition), background var(--transition);
+    }
+    #conf-search:focus { outline: none; border-color: var(--gold); background: var(--white); }
+    #conf-search::placeholder { color: var(--gray-400); }
+    .search-clear {
+      position: absolute; right: 8px;
+      background: none; border: none; cursor: pointer;
+      color: var(--gray-400); padding: 2px; line-height: 0;
+      border-radius: 50%; transition: color var(--transition);
+    }
+    .search-clear:hover { color: var(--text); }
+
+    /* ── Chips ── */
+    .chip-group { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip {
+      font-family: var(--font-sans); font-size: .78rem; font-weight: 500;
+      padding: 4px 12px; border-radius: 20px;
+      border: 1.5px solid var(--gray-200);
+      background: var(--white); color: var(--text-light);
+      cursor: pointer; transition: all var(--transition);
+      line-height: 1.5; white-space: nowrap;
+    }
+    .chip:hover { border-color: var(--gold); color: var(--text); }
+    .chip.chip-active { background: var(--navy); color: var(--white); border-color: var(--navy); }
+    .chip.chip-active:hover { background: var(--gold); border-color: var(--gold); }
 
     /* ── Table ── */
     .table-wrap {
@@ -162,8 +189,8 @@
     }
 
     @media (max-width: 768px) {
-      .filter-bar { flex-direction: column; align-items: flex-start; }
-      .filter-controls { gap: 10px; }
+      #conf-search { width: 100%; }
+      .filter-top-row { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
@@ -216,51 +243,69 @@
 
       <!-- Filter bar -->
       <div class="filter-bar reveal">
-        <div class="filter-controls">
 
-          <div class="filter-group">
-            <label for="filter-disc">Discipline</label>
-            <select id="filter-disc">
-              <option value="">All disciplines</option>
-              <option value="polisci">Political Science</option>
-              <option value="economics">Economics</option>
-              <option value="sociology">Sociology</option>
-              <option value="econhist">Economic History</option>
-              <option value="poleconomy">Political Economy</option>
-            </select>
+        <!-- Search + count -->
+        <div class="filter-top-row">
+          <div class="filter-chip-section">
+            <label for="conf-search">Search</label>
+            <div class="search-wrap">
+              <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="conf-search" placeholder="Conference name or location…" autocomplete="off">
+              <button class="search-clear" id="search-clear" hidden aria-label="Clear search">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
           </div>
+          <p class="filter-count">Showing <strong><span id="conf-count">53</span></strong> conferences</p>
+        </div>
 
-          <div class="filter-group">
-            <label for="filter-cont">Continent</label>
-            <select id="filter-cont">
-              <option value="">All locations</option>
-              <option value="europe">Europe (incl. Nordic)</option>
-              <option value="nordic">Nordic countries</option>
-              <option value="namerica">North America</option>
-              <option value="latam">Latin America</option>
-              <option value="asia">Asia</option>
-              <option value="australia">Australia / Oceania</option>
-              <option value="global">Global / rotates continents</option>
-            </select>
+        <!-- Discipline -->
+        <div class="filter-chip-section">
+          <label>Discipline</label>
+          <div class="chip-group" id="chips-disc">
+            <button class="chip chip-active" data-value="">All disciplines</button>
+            <button class="chip" data-value="polisci">Political Science</button>
+            <button class="chip" data-value="economics">Economics</button>
+            <button class="chip" data-value="sociology">Sociology</button>
+            <button class="chip" data-value="econhist">Economic History</button>
+            <button class="chip" data-value="poleconomy">Political Economy</button>
           </div>
+        </div>
 
-          <div class="filter-group">
-            <label for="filter-who">Who can attend</label>
-            <select id="filter-who">
-              <option value="">All</option>
-              <option value="opentophd">Open to PhD students</option>
-              <option value="phd">PhD / early-career focused</option>
-              <option value="invitation">By invitation</option>
-            </select>
+        <!-- Location -->
+        <div class="filter-chip-section">
+          <label>Location</label>
+          <div class="chip-group" id="chips-cont">
+            <button class="chip chip-active" data-value="">All locations</button>
+            <button class="chip" data-value="europe">Europe</button>
+            <button class="chip" data-value="nordic">Nordic</button>
+            <button class="chip" data-value="namerica">North America</button>
+            <button class="chip" data-value="latam">Latin America</button>
+            <button class="chip" data-value="asia">Asia</button>
+            <button class="chip" data-value="australia">Australia / Oceania</button>
+            <button class="chip" data-value="global">Global / rotates</button>
           </div>
+        </div>
 
+        <!-- Who -->
+        <div class="filter-chip-section">
+          <label>Who can attend</label>
+          <div class="chip-group" id="chips-who">
+            <button class="chip chip-active" data-value="">All</button>
+            <button class="chip" data-value="all">Open to all</button>
+            <button class="chip" data-value="phd">PhD-focused</button>
+            <button class="chip" data-value="invitation">By invitation</button>
+          </div>
+        </div>
+
+        <!-- Clear -->
+        <div class="filter-bottom-row">
           <button id="clear-filters" class="clear-btn" hidden>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            Clear filters
+            Clear all filters
           </button>
-
         </div>
-        <p class="filter-count">Showing <strong><span id="conf-count">53</span></strong> conferences</p>
+
       </div>
 
       <!-- Table -->
@@ -941,55 +986,102 @@
   <script src="js/main.js"></script>
   <script>
     (function () {
-      const filterDisc  = document.getElementById('filter-disc');
-      const filterCont  = document.getElementById('filter-cont');
-      const filterWho   = document.getElementById('filter-who');
+      const searchInput = document.getElementById('conf-search');
+      const searchClear = document.getElementById('search-clear');
+      const chipsDisc   = document.getElementById('chips-disc');
+      const chipsCont   = document.getElementById('chips-cont');
+      const chipsWho    = document.getElementById('chips-who');
       const clearBtn    = document.getElementById('clear-filters');
       const countEl     = document.getElementById('conf-count');
       const noResults   = document.getElementById('no-results');
       const rows        = [...document.querySelectorAll('tbody tr.conf-row')];
 
+      const selDisc = new Set();
+      const selCont = new Set();
+      const selWho  = new Set();
+
+      // Pre-cache searchable text per row (short name + full name + location)
+      rows.forEach(row => {
+        const shortName = (row.querySelector('.td-name a')?.textContent   || '').toLowerCase();
+        const fullName  = (row.querySelector('.td-name small')?.textContent || '').toLowerCase();
+        const loc       = (row.querySelector('.td-loc')?.textContent       || '').toLowerCase();
+        row._searchText = shortName + ' ' + fullName + ' ' + loc;
+      });
+
       function applyFilters() {
-        const disc = filterDisc.value;
-        const cont = filterCont.value;
-        const who  = filterWho.value;
-        const anyActive = disc || cont || who;
-
-        clearBtn.hidden = !anyActive;
-
+        const q = searchInput.value.trim().toLowerCase();
         let visible = 0;
+
         rows.forEach(row => {
-          const rowDisc = row.dataset.disc || '';
-          const rowCont = row.dataset.cont || '';
-          const rowWho  = row.dataset.who  || '';
+          const matchDisc   = selDisc.size === 0 || selDisc.has(row.dataset.disc);
+          const matchCont   = selCont.size === 0 || selCont.has(row.dataset.cont);
+          const matchWho    = selWho.size  === 0 || selWho.has(row.dataset.who);
+          const matchSearch = !q || row._searchText.includes(q);
 
-          const matchDisc = !disc || rowDisc === disc;
-
-          // "europe" in filter shows both "europe" and "nordic" rows
-          const matchCont = !cont ||
-            (cont === 'europe' ? (rowCont === 'europe' || rowCont === 'nordic') : rowCont === cont);
-
-          // "opentophd" shows "all" and "phd" rows
-          const matchWho = !who ||
-            (who === 'opentophd' ? (rowWho === 'all' || rowWho === 'phd') : rowWho === who);
-
-          const show = matchDisc && matchCont && matchWho;
+          const show = matchDisc && matchCont && matchWho && matchSearch;
           row.hidden = !show;
           if (show) visible++;
         });
 
         countEl.textContent = visible;
         noResults.hidden = visible > 0;
+
+        const anyActive = selDisc.size > 0 || selCont.size > 0 || selWho.size > 0 || q;
+        clearBtn.hidden  = !anyActive;
+        searchClear.hidden = !q;
       }
 
-      filterDisc.addEventListener('change', applyFilters);
-      filterCont.addEventListener('change', applyFilters);
-      filterWho .addEventListener('change', applyFilters);
+      function syncChips(groupEl, selSet) {
+        groupEl.querySelectorAll('.chip').forEach(chip => {
+          const val = chip.dataset.value;
+          chip.classList.toggle('chip-active',
+            val === '' ? selSet.size === 0 : selSet.has(val));
+        });
+      }
 
+      function setupChipGroup(groupEl, selSet) {
+        groupEl.addEventListener('click', e => {
+          const chip = e.target.closest('.chip');
+          if (!chip) return;
+          const val = chip.dataset.value;
+          if (val === '') {
+            selSet.clear();
+          } else {
+            selSet.has(val) ? selSet.delete(val) : selSet.add(val);
+          }
+          syncChips(groupEl, selSet);
+          applyFilters();
+        });
+      }
+
+      setupChipGroup(chipsDisc, selDisc);
+      setupChipGroup(chipsCont, selCont);
+      setupChipGroup(chipsWho,  selWho);
+
+      // Search
+      searchInput.addEventListener('input', applyFilters);
+
+      searchInput.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+          searchInput.value = '';
+          searchInput.blur();
+          applyFilters();
+        }
+      });
+
+      searchClear.addEventListener('click', () => {
+        searchInput.value = '';
+        searchInput.focus();
+        applyFilters();
+      });
+
+      // Clear all
       clearBtn.addEventListener('click', () => {
-        filterDisc.value = '';
-        filterCont.value = '';
-        filterWho.value  = '';
+        selDisc.clear(); selCont.clear(); selWho.clear();
+        searchInput.value = '';
+        syncChips(chipsDisc, selDisc);
+        syncChips(chipsCont, selCont);
+        syncChips(chipsWho,  selWho);
         applyFilters();
       });
 
