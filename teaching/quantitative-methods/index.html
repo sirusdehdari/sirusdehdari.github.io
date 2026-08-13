@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PRR49867C4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PRR49867C4');
+</script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quantitative Methods | Sirus H. Dehdari</title>
+  <meta name="description" content="Lecture slides for Quantitative Methods, a course for political science students at Stockholm University, available in Swedish and English." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/styles.css" />
+  <style>
+    .page-hero {
+      background: var(--white);
+      padding: calc(var(--nav-h) + 64px) 0 48px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .page-hero-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .page-eyebrow {
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .page-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.15;
+    }
+    .page-subtitle {
+      font-size: 1rem;
+      color: var(--text-light);
+      max-width: 620px;
+      line-height: 1.65;
+    }
+    .links-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .link-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 32px 36px;
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+      transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
+      position: relative;
+      text-decoration: none;
+    }
+    .link-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+      background: var(--gold);
+      border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+    .link-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+      border-color: var(--gray-200);
+    }
+    .link-card:hover::before {
+      opacity: 1;
+    }
+    .link-card-icon {
+      flex-shrink: 0;
+      width: 48px;
+      height: 48px;
+      background: var(--gray-100);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--navy);
+      margin-top: 2px;
+    }
+    .link-card-body {
+      flex: 1;
+    }
+    .link-card-title {
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+    .link-card-desc {
+      font-size: .95rem;
+      color: var(--text-light);
+      line-height: 1.65;
+    }
+    .link-card-arrow {
+      flex-shrink: 0;
+      color: var(--gold);
+      margin-top: 4px;
+      transition: transform var(--transition);
+    }
+    .link-card:hover .link-card-arrow {
+      transform: translateX(4px);
+    }
+    .links-section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .links-section + .links-section {
+      margin-top: 56px;
+    }
+    .links-section-heading {
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--gray-200);
+    }
+    .links-section-heading h2 {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+    .links-section-heading p {
+      font-size: .85rem;
+      color: var(--text-light);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVIGATION ===== -->
+  <header id="navbar">
+    <nav class="nav-container">
+      <a href="../../index.html" class="nav-brand">Sirus Dehdari</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../../index.html#about">About</a></li>
+        <li><a href="../../index.html#working-papers">Work in Progress</a></li>
+        <li><a href="../../index.html#publications">Publications</a></li>
+        <li><a href="../../index.html#grants">Grants</a></li>
+        <li><a href="../../index.html#teaching">Teaching</a></li>
+        <li><a href="../../index.html#contact">Contact</a></li>
+        <li><a href="../../other.html">Other</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ===== PAGE HERO ===== -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="page-hero-inner fade-up">
+        <span class="page-eyebrow">Department of Political Science &middot; Stockholm University</span>
+        <h1 class="page-title">Quantitative Methods</h1>
+        <p class="page-subtitle">Graduate-level instruction in quantitative research methods for political scientists, covering descriptive statistics, statistical inference, and bivariate and multiple regression analysis. Lecture slides are available in Swedish and English below. Assignments, readings, and exam information remain on Canvas.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== LECTURE SLIDES ===== -->
+  <section class="section">
+    <div class="container">
+
+      <!-- ===== SWEDISH ===== -->
+      <div class="links-section">
+        <div class="links-section-heading reveal">
+          <h2>Svenska föreläsningar</h2>
+          <p>Interaktiva föreläsningsslides. Öppnas i webbläsaren.</p>
+        </div>
+
+        <a href="sv/L1_sv.html" target="_blank" rel="noopener" class="link-card reveal">
+          <div class="link-card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
+          </div>
+          <div class="link-card-body">
+            <p class="link-card-title">Föreläsning 1 — Statistiska metoder</p>
+            <p class="link-card-desc">Datastruktur, beskrivande statistik, sannolikhetsfördelningar och statistisk inferens.</p>
+          </div>
+          <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+
+        <a href="sv/L2_sv.html" target="_blank" rel="noopener" class="link-card reveal">
+          <div class="link-card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
+          </div>
+          <div class="link-card-body">
+            <p class="link-card-title">Föreläsning 2 — Regressionsanalys</p>
+            <p class="link-card-desc">Bivariat regressionsmodell, minsta-kvadratmetoden, modellens passform och statistisk signifikans.</p>
+          </div>
+          <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+
+        <a href="sv/L3_sv.html" target="_blank" rel="noopener" class="link-card reveal">
+          <div class="link-card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
+          </div>
+          <div class="link-card-body">
+            <p class="link-card-title">Föreläsning 3 — Multipel regressionsanalys</p>
+            <p class="link-card-desc">Multipla regressionsmodeller, störfaktorer, kausala samband och tolkning av koefficienter.</p>
+          </div>
+          <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- ===== ENGLISH ===== -->
+      <div class="links-section">
+        <div class="links-section-heading reveal">
+          <h2>English Lecture Slides</h2>
+          <p>Interactive lecture slides. Open in your browser.</p>
+        </div>
+
+        <a href="en/L1_eng.html" target="_blank" rel="noopener" class="link-card reveal">
+          <div class="link-card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
+          </div>
+          <div class="link-card-body">
+            <p class="link-card-title">Lecture 1 — Statistical Methods</p>
+            <p class="link-card-desc">Data structure, descriptive statistics, probability distributions, and statistical inference.</p>
+          </div>
+          <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+
+        <a href="en/L2_eng.html" target="_blank" rel="noopener" class="link-card reveal">
+          <div class="link-card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
+          </div>
+          <div class="link-card-body">
+            <p class="link-card-title">Lecture 2 — Regression Analysis</p>
+            <p class="link-card-desc">Bivariate regression, ordinary least squares, model fit, and statistical significance.</p>
+          </div>
+          <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+
+        <a href="en/L3_eng.html" target="_blank" rel="noopener" class="link-card reveal">
+          <div class="link-card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
+          </div>
+          <div class="link-card-body">
+            <p class="link-card-title">Lecture 3 — Multiple Regression Analysis</p>
+            <p class="link-card-desc">Multiple regression models, confounders, causal inference, and interpreting coefficients.</p>
+          </div>
+          <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; <span id="year"></span> Sirus Dehdari &mdash; Associate Professor, Stockholm University</p>
+    </div>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+</body>
+</html>

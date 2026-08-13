@@ -622,6 +622,27 @@ a.pub-award:hover {
   transform: translateY(-4px);
 }
 
+a.teaching-card {
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.badge-wip {
+  display: inline-block;
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(180,140,60,.1);
+  border: 1px solid var(--gold);
+  border-radius: 4px;
+  padding: 2px 7px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
 .teaching-icon {
   display: inline-flex;
   align-items: center;

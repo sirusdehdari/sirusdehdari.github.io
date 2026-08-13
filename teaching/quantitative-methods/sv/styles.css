@@ -1,0 +1,1061 @@
+/* Overall type scale: Quarto/revealjs defaults to a fairly large base
+   font-size (~40px). Reveal.js sizes almost everything in em/rem units
+   relative to this, so lowering it here shrinks headings, body text,
+   lists, and math consistently across all slides. */
+.reveal {
+  font-size: 30px;
+}
+
+.reveal h2 {
+  font-size: 1.4em;
+  margin-bottom: 0.4em;
+}
+
+/* Make each slide a vertical flex container so its bullet list (or
+   numbered list) can stretch to fill the leftover space below the
+   title. The list itself becomes a flex column with space-evenly,
+   which spreads bullets across the full available height -- fewer
+   bullets means more air between them, more bullets means the gaps
+   automatically shrink, since the same leftover space is divided
+   among more items. */
+/* Reveal.js ships its own rule that toggles slide visibility via an
+   extra ".present" class (".reveal .slides section.present"). That
+   selector is MORE specific than a plain ".reveal .slides section"
+   rule, so without !important here our flex layout was being silently
+   overridden the moment a slide actually became visible -- which is
+   why content collapsed back to plain top-aligned block flow. */
+.reveal .slides section {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.reveal .slides section > h1,
+.reveal .slides section > h2,
+.reveal .slides section > h3 {
+  flex: 0 0 auto;
+}
+
+.reveal .slides section > ul,
+.reveal .slides section > ol {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  margin: 0.2em 0;
+  width: 100%;
+}
+
+.reveal .slides section > ul > li,
+.reveal .slides section > ol > li {
+  margin: 0;
+}
+
+/* Shrinks just the nested sub-bullets on a specific slide (added via
+   `{.small-sublist}` on that slide's heading) when the sub-list is too
+   long to fit comfortably at full size next to its parent bullets. */
+.reveal .slides section.small-sublist ul ul {
+  font-size: 0.8em;
+}
+
+/* Shrinks the top-level bullets on the confounder DAG slide (added via
+   `{.dag-slide}` on that slide's heading), freeing up room for the
+   much bigger interactive figure below them. */
+.reveal .slides section.dag-slide > ul {
+  font-size: 0.8em;
+}
+
+/* Exception: when a bullet list is immediately followed by a tabset
+   (e.g. a "Histogram" / "Data" toggle), do NOT let it flex-grow.
+   Growing would make its height -- and therefore its position --
+   depend on how tall the *currently active tab* happens to be, so the
+   bullets visibly jump every time a student switches tabs. Instead
+   the list keeps its natural height and stays anchored right above
+   the tabset; the section's own justify-content:center then centers
+   the whole (list + tabset) block as one fixed-size unit. */
+.reveal .slides section > ul:has(+ .panel-tabset),
+.reveal .slides section > ol:has(+ .panel-tabset) {
+  flex: 0 0 auto;
+  justify-content: flex-start;
+  row-gap: 0.5em;
+  margin-bottom: 0.6em;
+}
+
+/* Same fix, scoped to the "Regressionstabeller" / "Regressionstabeller,
+   flera modeller" slide pair (added via `{.regtable-slide}` on each
+   heading): their bullets are identical, only the table below differs
+   in height (the two-model table has extra rows) -- without this, the
+   bullets would visibly shift position between the two slides since
+   the shorter table leaves more room for the list to stretch into. */
+.reveal .slides section.regtable-slide > ul {
+  flex: 0 0 auto;
+  justify-content: flex-start;
+  row-gap: 0.5em;
+  margin-bottom: 0.6em;
+}
+
+/* The fix above stops the *bullets themselves* from stretching, but
+   the section as a whole still centers the combined (bullets + table)
+   block vertically -- so the taller two-model table still pushed the
+   whole block, bullets included, further up than the shorter table
+   did. Anchoring both slides to the top instead (rather than centering)
+   means their content starts at the same fixed position regardless of
+   which table follows, so the extra two rows on the second slide just
+   add a bit more space at the bottom instead of shifting anything
+   above it -- a seamless transition between the two. */
+.reveal .slides section.regtable-slide {
+  justify-content: flex-start !important;
+  padding-top: 1.4em;
+}
+
+/* Bigger than the deck's default shrink-to-fit table size (0.62em),
+   since these two are short/simple enough to afford it -- but not as
+   large as before, so it still fits comfortably above the fold. */
+.reveal .slides section.regtable-slide table {
+  font-size: 0.72em;
+}
+
+/* Everything else (paragraphs, images, math, tables, raw html blocks,
+   tabsets) keeps its natural size and just gets vertically centered
+   by the section's own justify-content instead of being stretched. */
+.reveal .slides section > p,
+.reveal .slides section > img,
+.reveal .slides section > .math,
+.reveal .slides section > table,
+.reveal .slides section > div.columns,
+.reveal .slides section > div.panel-tabset {
+  flex: 0 0 auto;
+}
+
+/* Side-by-side image comparisons: keep both images vertically
+   centered on the same row and the same height, regardless of their
+   native aspect ratio, so they line up on the same baseline. */
+.reveal .columns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+}
+
+.reveal .columns .column {
+  display: flex;
+  justify-content: center;
+}
+
+.reveal .columns .column img {
+  max-height: 520px;
+  width: auto;
+  max-width: 100%;
+}
+
+/* Shrink wide tables so they fit comfortably on a slide. */
+.reveal table {
+  font-size: 0.62em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Tabsets (Data vs. Histogram etc.). Quarto renders these with the
+   "tabby" library, not Bootstrap nav-tabs, so target its markup. */
+.reveal .panel-tabset {
+  width: 100%;
+  text-align: center;
+}
+
+.reveal .panel-tabset-tabby {
+  display: flex;
+  justify-content: center;
+  gap: 0.6em;
+  list-style: none;
+  margin: 0 0 0.4em 0;
+  padding: 0;
+  font-size: 0.75em;
+}
+
+.reveal .panel-tabset-tabby li a {
+  display: inline-block;
+  padding: 0.25em 0.9em;
+  border: 1px solid #bbb;
+  border-radius: 6px 6px 0 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.reveal .panel-tabset-tabby li a[aria-selected="true"] {
+  background: rgba(0, 0, 0, 0.08);
+  font-weight: bold;
+}
+
+.reveal .panel-tabset .tab-content img {
+  margin-top: 0.3em;
+}
+
+/* Give the pane area a fixed minimum height so the tabset itself does
+   not resize (and therefore doesn't shift the bullets above it) when
+   switching between a short pane (image) and a tall pane (table). */
+.reveal .panel-tabset .tab-content {
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reveal .panel-tabset .tab-content > div {
+  width: 100%;
+}
+
+.reveal .panel-tabset table {
+  font-size: 0.55em;
+}
+
+/* Click-to-reveal "spoiler" text: covers the answer with a black box
+   labelled "Spoiler" until clicked, then reveals the real text. */
+.spoiler {
+  position: relative;
+  background: black;
+  color: black;
+  border-radius: 4px;
+  padding: 0 0.5em;
+  cursor: pointer;
+  user-select: none;
+}
+
+.spoiler::before {
+  content: "Spoiler";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.85em;
+  border-radius: 4px;
+}
+
+.spoiler.revealed {
+  background: transparent;
+  color: inherit;
+  cursor: default;
+}
+
+.spoiler.revealed::before {
+  content: none;
+}
+
+/* A table that should be shown larger/more prominently than the
+   default shrink-to-fit table styling. */
+.reveal .big-table table {
+  font-size: 1.15em;
+  width: 92%;
+}
+
+/* Dice-icon buttons in the interactive confidence-interval demo: a
+   small round button showing only the dice emoji, with its
+   explanation as plain text to the right. A two-column grid (button
+   column, text column) keeps all three buttons' left edges aligned
+   and all three captions aligned in their own column, instead of
+   each row being independently centered (which made the buttons
+   drift left/right relative to each other depending on caption
+   length). */
+.dice-rows {
+  display: inline-grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  column-gap: 0.35em;
+  row-gap: 0.2em;
+  margin: 0.3em auto;
+  font-size: 0.6em;
+  line-height: 1;
+}
+
+.dice-rows form {
+  /* Observable's own bundled Inputs stylesheet forces every form to
+     width: calc(240px + 120px) = 360px on screens wider than 30em
+     (see form.inputs-3a86ea in @observablehq/inputs' CSS) -- so even
+     with column-gap:0 the button sat flush-left in an invisible
+     360px-wide box, leaving ~326px of dead space before the text.
+     Forcing the form back down to its content width is the actual
+     fix; column-gap was never the problem. */
+  width: auto !important;
+  max-width: none !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  line-height: 1;
+}
+
+.dice-rows button {
+  font-size: 1.15em;
+  line-height: 1;
+  padding: 0.05em 0.15em 0.05em 0.25em;
+  border-radius: 8px;
+  border: 1px solid #999;
+  background: #f5f5f5;
+  cursor: pointer;
+}
+
+.dice-rows button:hover {
+  background: #e5e5e5;
+}
+
+.dice-rows span {
+  text-align: left;
+  justify-self: start;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* Center all OJS cell output (sliders, forms, plots) horizontally on
+   the slide, and keep each slider's label from overlapping the
+   number box next to it. */
+.reveal .cell-output-display {
+  width: 100%;
+  text-align: center;
+}
+
+.reveal .cell-output-display svg,
+.reveal .cell-output-display figure {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.reveal .cell-output-display form {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  white-space: nowrap;
+  margin: 0.15em auto;
+}
+
+.reveal .cell-output-display form label {
+  flex: 0 0 auto;
+}
+
+/* Compact µ/σ slider: shrinks the whole widget and puts its short
+   label (just "μ" or "σ", no parenthetical) after the slider/number
+   box instead of Inputs' default position before it. */
+.small-slider {
+  display: inline-flex !important;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 0.4em;
+  font-size: 0.65em;
+  margin: 0.1em auto !important;
+}
+
+.small-slider input[type="range"] {
+  width: 130px;
+}
+
+.small-slider output,
+.small-slider input[type="number"] {
+  width: 3.4em;
+  font-size: 0.85em;
+  padding: 0 2px;
+  box-sizing: border-box;
+  display: inline-block;
+  border: 1px solid #999;
+  border-radius: 4px;
+  background: #fff;
+  color: inherit;
+}
+
+/* Explanatory pop-up text under the CI demo plot: smaller than body text. */
+.ci-demo-note {
+  font-size: 0.62em;
+  max-width: 85%;
+  margin: 0.3em auto 0 auto;
+  line-height: 1.35;
+  /* Reserve space for two lines up front (the longest of the three
+     possible messages), so the box is already this tall even before
+     any realisation is drawn. Otherwise it grows the moment real text
+     replaces the short placeholder, and since the slide centers its
+     content vertically, that growth pushes everything above it
+     upward. */
+  min-height: 2.8em;
+}
+
+/* Manual axis labels drawn outside the Plot SVG (kept deliberately
+   independent of Observable Plot's own label/labelArrow options,
+   whose exact rendering depends on the Plot version fetched from the
+   CDN at runtime) -- this way "Täthet" always sits horizontal above
+   the y-axis and "x" always sits centered below the x-axis. */
+.ojs-plot-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Stacks the Plot figure and the falling-dots SVG exactly on top of
+   each other so the dots line up with the curve's x-axis below them. */
+.ojs-plot-overlay {
+  position: relative;
+}
+
+.ojs-plot-overlay svg.ojs-dots-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.ojs-plot-ylabel {
+  align-self: flex-start;
+  margin-left: 3.2em;
+  font-size: 0.7em;
+  margin-bottom: -6px;
+}
+
+.ojs-plot-xlabel {
+  font-size: 0.75em;
+  margin-top: -8px;
+}
+
+/* Plot + side caption laid out next to each other, so annotations
+   (like the 95%-interval readout) never have to be squeezed into the
+   chart itself where they could collide with other marks. */
+.ojs-plot-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2em;
+}
+
+.ojs-plot-caption {
+  font-size: 0.65em;
+  color: #7e22ce;
+  text-align: left;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+/* Row of short sigma-interval buttons (1σ/2σ/3σ/reset), with a small
+   label in front instead of a separate line of explanatory text
+   after each button. */
+.sd-buttons-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  font-size: 0.65em;
+  margin: 0.2em 0;
+}
+
+.sd-buttons-label {
+  font-weight: bold;
+}
+
+.sd-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.sd-buttons span {
+  white-space: nowrap;
+  margin-right: 0.4em;
+}
+
+.sd-buttons form {
+  width: auto !important;
+  max-width: none !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+}
+
+.sd-buttons button {
+  font-size: 1.15em;
+  line-height: 1;
+  padding: 0.15em 0.5em;
+  border-radius: 8px;
+  border: 1px solid #999;
+  background: #f5f5f5;
+  cursor: pointer;
+}
+
+.sd-buttons button:hover {
+  background: #e5e5e5;
+}
+
+/* "Samband" buttons (Positivt/Negativt/Inget) for the linear-relationship
+   demo: a title sitting above the button row, rather than beside it like
+   .sd-buttons-wrap. Reuses .sd-buttons/.sd-buttons button for the row
+   itself so the buttons look identical to the rest of the deck. */
+.rel-buttons-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25em;
+  font-size: 0.65em;
+  margin: 0.2em 0;
+}
+
+.rel-buttons-title {
+  font-weight: bold;
+}
+
+/* Equation readout below the Samband buttons, sized to match the
+   button labels themselves (0.65em wrap font-size * 1.15em button
+   font-size = 0.7475em), not the smaller 0.65em wrapper font-size.
+   min-height reserves a line up front so the figure below doesn't
+   shift when the text appears after the first click. */
+.rel-equation {
+  font-style: italic;
+  text-align: center;
+  font-size: 0.7475em;
+  min-height: 1.3em;
+  margin: 0.1em 0 0 0;
+}
+
+/* Regression-prediction readout below the household scatter plot.
+   min-height reserves the line up front (same fix as .ci-demo-note and
+   .rel-equation elsewhere in this deck) so the graph and title above it
+   don't shift when the text appears after the button is clicked. */
+.hh-reg-note {
+  font-size: 0.6em;
+  text-align: center;
+  min-height: 1.3em;
+  margin: 0.15em 0 0 0;
+}
+
+/* Clickable household data table (Data tab of the interactive
+   temperature/income scatter): faint border highlight + a hand cursor
+   on hover, signalling that a row jumps to the Graf tab when clicked. */
+.hh-table-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+/* The generic .panel-tabset .tab-content rule forces a 420px floor
+   (sized for L1's histogram image, so both its tabs stay the same
+   height when switching) -- that floor doesn't help here and, worse,
+   min-height never *caps* anything: if the table itself were taller
+   than 420px it would just keep growing past it. Drop the floor for
+   this tabset specifically so the box is exactly as tall as the
+   16-row table actually needs. */
+.reveal .panel-tabset.hh-graph-tabset .tab-content {
+  min-height: 0;
+}
+
+/* !important is required here: Quarto's own bundled quarto-ojs.css
+   ships ".observablehq table { font-size: 0.9em !important; }", and
+   every OJS cell's output (including this table) is wrapped in a
+   ".observablehq" div by the runtime -- no selector, however specific,
+   beats an !important rule without also using !important itself. The
+   extra specificity here (".reveal .panel-tabset ... .hh-data-table")
+   is what then wins the tie-break between the two !important rules. */
+.reveal .panel-tabset table.hh-data-table {
+  border-collapse: collapse;
+  font-size: 0.58em !important;
+}
+
+.hh-data-table th,
+.hh-data-table td {
+  padding: 0.22em 0.65em;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.hh-data-table thead {
+  font-weight: bold;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.hh-data-table tbody tr {
+  cursor: pointer;
+}
+
+.hh-data-table tbody tr:hover {
+  outline: 1.5px solid #888;
+  outline-offset: -1px;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Intercept (a) / slope (b) sliders on the "Avvikelser från
+   regressionslinjen" slide -- hand-built (not Inputs.range) so the
+   readout is a plain <span> we control directly, not dependent on
+   guessing Observable Inputs' internal markup for a value display. */
+.resid-sliders-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4em;
+  font-size: 0.65em;
+  margin: 0.2em 0;
+}
+
+.resid-slider {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.resid-slider input[type="range"] {
+  width: 160px;
+}
+
+.resid-slider-value {
+  display: inline-block;
+  min-width: 3.8em;
+  text-align: center;
+  font-size: 0.9em;
+  padding: 0.1em 3px;
+  box-sizing: border-box;
+  border: 1px solid #999;
+  border-radius: 4px;
+  background: #fff;
+  color: #222;
+}
+
+.resid-slider-label {
+  white-space: nowrap;
+}
+
+/* Same 420px-floor removal as the "Utforska data" tabset -- this
+   table's natural height should decide the box, not an artificial
+   minimum sized for an old histogram image. */
+.reveal .panel-tabset.resid-tabset .tab-content {
+  min-height: 0;
+}
+
+.resid-table-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+/* !important required for the same reason as .hh-data-table: Quarto's
+   own quarto-ojs.css ships ".observablehq table { font-size: 0.9em
+   !important; }", which wraps every OJS-rendered table regardless of
+   this rule's specificity unless it's also !important. */
+.reveal .panel-tabset table.resid-data-table {
+  border-collapse: collapse;
+  font-size: 0.58em !important;
+}
+
+.resid-data-table th,
+.resid-data-table td {
+  padding: 0.22em 0.65em;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.resid-data-table thead {
+  font-weight: bold;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.resid-data-table tbody tr:hover {
+  outline: 1.5px solid #888;
+  outline-offset: -1px;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.resid-data-table tfoot td {
+  border-top: 2px solid #666;
+  font-weight: bold;
+}
+
+.resid-sum-label {
+  text-align: right;
+}
+
+/* Small button-styled internal navigation link (reveal.js #/slide-id
+   anchors), used to jump between a topic slide and its "extra" demo. */
+.inline-nav-btn {
+  display: inline-block;
+  font-size: 0.6em;
+  padding: 0.2em 0.7em;
+  border-radius: 8px;
+  border: 1px solid #999;
+  background: #f5f5f5;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.inline-nav-btn:hover {
+  background: #e5e5e5;
+}
+
+/* Compact single-line intro text on the CLT simulation slide, so the
+   figure below gets as much vertical room as possible. */
+.clt-intro {
+  font-size: 0.7em;
+  text-align: center;
+  margin: 0.2em 0;
+}
+
+/* Pins the "back" link to the bottom-left corner of the figure area
+   instead of it taking up its own line above the plot. */
+.clt-figure-row {
+  position: relative;
+  display: inline-block;
+}
+
+.clt-back-link {
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+}
+
+/* A reference/appendix "page" living inside the deck as an uncounted
+   slide, but styled like an ordinary scrollable document rather than
+   a normal presentation slide: smaller text, steps laid out side by
+   side, and its own scrollbar so it never gets cut off regardless of
+   how much content it holds. */
+.ci-example-page {
+  display: flex;
+  gap: 1em;
+  align-items: stretch;
+  max-height: 72vh;
+  overflow-y: auto;
+  text-align: left;
+  font-size: 0.55em;
+  padding: 0.3em;
+  margin: 0.4em 0;
+}
+
+.ci-example-step {
+  flex: 1 1 0;
+  min-width: 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.7em 1em;
+  background: rgba(127, 127, 127, 0.06);
+}
+
+.ci-example-step ul {
+  margin: 0.5em 0;
+  padding-left: 1.1em;
+}
+
+.ci-example-step li {
+  margin-bottom: 0.5em;
+}
+
+/* Belt-and-braces against long equations poking out of the narrow
+   column: force block display with a constrained, scrollable width.
+   Covers both MathJax v2 (.MathJax_Display / .MathJax_SVG_Display,
+   used by this deck) and v3 (mjx-container) output wrappers, plus
+   pandoc's own pre-render .math.display span. */
+.ci-example-step .math.display,
+.ci-example-step .MathJax_Display,
+.ci-example-step .MathJax_SVG_Display,
+.ci-example-step mjx-container {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  font-size: 0.92em;
+}
+
+/* Bivariate/multivariate toggle regression table ("Uppåt- och
+   nedåtbiaser" slide). !important is required for the same reason as
+   the other OJS-rendered tables in this deck: Quarto's own
+   quarto-ojs.css ships ".observablehq table { font-size: 0.9em
+   !important; }", which wins over any non-important rule regardless
+   of specificity. */
+.biasreg-table-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.reveal table.biasreg-table {
+  border-collapse: collapse;
+  font-size: 0.65em !important;
+  table-layout: fixed;
+}
+
+.biasreg-table th,
+.biasreg-table td {
+  padding: 0.3em 0.9em;
+  text-align: center;
+}
+
+/* Fixed column widths (independent of table-layout: fixed's own
+   automatic sizing) so column (2) occupies exactly the same space
+   whether it's empty (bivariate) or filled in (multivariate) --
+   otherwise the whole table visibly resized/shifted when toggling. */
+.biasreg-table th:first-child,
+.biasreg-table td:first-child {
+  width: 7em;
+}
+
+.biasreg-table th:nth-child(2),
+.biasreg-table td:nth-child(2),
+.biasreg-table th:nth-child(3),
+.biasreg-table td:nth-child(3) {
+  width: 5.5em;
+}
+
+.biasreg-table thead th {
+  border-bottom: 1px solid #999;
+  font-weight: bold;
+}
+
+/* Highlights the income coefficient row in both columns once the
+   multivariate model is shown, so the jump in the estimate is easy to
+   spot side by side rather than something you have to hunt for. Just
+   shading, deliberately no font-weight change -- bold text is wider,
+   which was making the highlighted cells (and therefore the whole
+   column) subtly resize. */
+.biasreg-highlight {
+  background: rgba(37, 99, 235, 0.12);
+  color: #1e3a8a;
+  border-radius: 4px;
+}
+
+/* Gives the bullets on the "Andra exempel" slide a bit more breathing
+   room than the deck default, but as a *fixed* gap rather than letting
+   them stretch to fill whatever space happens to be left above the
+   table -- otherwise the amount of stretch (and therefore how far
+   down the table sits) would depend on exactly how tall the table
+   ends up being. */
+.reveal .slides section.bias-example-slide > ul {
+  flex: 0 0 auto;
+  justify-content: flex-start;
+  row-gap: 0.9em;
+  margin-bottom: 1.2em;
+}
+
+/* Bias-direction 2x2 table ("Andra exempel" slide) -- made deliberately
+   large since it's such a small (3x3) grid. !important is required for
+   the same reason as the other OJS-rendered tables in this deck. */
+.bias-dir-outer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.reveal table.bias-dir-table {
+  border-collapse: collapse;
+  border: 1px solid #999;
+  font-size: 1.3em !important;
+}
+
+.bias-dir-table th,
+.bias-dir-table td {
+  padding: 0.5em 1em;
+  border: 1px solid #999;
+  text-align: center;
+}
+
+.bias-dir-table thead th {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* Only the four result cells (not the plain row/column headers) are
+   interactive -- give them a pointer cursor and a hover highlight so
+   that's discoverable. */
+.bias-dir-cell {
+  cursor: pointer;
+}
+
+.bias-dir-cell:hover {
+  background: rgba(37, 99, 235, 0.18) !important;
+}
+
+.bias-dir-note {
+  font-size: 1em;
+  text-align: center;
+  min-height: 2.4em;
+  color: #1e3a8a;
+  font-weight: bold;
+  margin-top: 0.3em;
+}
+
+/* Bigger than the deck's default shrink-to-fit table size (0.62em) for
+   the three plain (non-interactive) reference tables on "Stor/liten
+   förändring...", "Omfång av X och Y", and "Hur mycket är en enhet?". */
+.reveal .slides section.l3-bigtable table {
+  font-size: 0.85em;
+}
+
+/* "Stor/liten förändring..." slide's 2x2 table, hand-written as raw
+   HTML (colspan/rowspan) rather than a markdown table, so "Förändring
+   i X"/"Förändring i Y" each only need to be written once instead of
+   repeated per column/row -- the HTML equivalent of LaTeX's
+   \multicolumn/\multirow, since this deck renders to HTML, not PDF. */
+.coefsize-table {
+  border-collapse: collapse;
+  border: 1px solid #999;
+  margin: 0 auto;
+}
+
+.coefsize-table th,
+.coefsize-table td {
+  border: 1px solid #999;
+  padding: 0.4em 0.9em;
+  text-align: center;
+}
+
+.coefsize-table th {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* Reusable regression-table lookup (shared by "Exempel på tentafråga"
+   and "Tolka resultaten: inga kontroller"). !important is required for
+   the same reason as the other OJS-rendered tables in this deck. */
+.tenta-table-outer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.reveal table.tenta-table {
+  border-collapse: collapse;
+  border: 1px solid #999;
+  font-size: 0.85em !important;
+}
+
+.tenta-table th,
+.tenta-table td {
+  padding: 0.3em 0.7em;
+  border: 1px solid #999;
+  text-align: center;
+}
+
+.tenta-table thead th {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.tenta-label {
+  text-align: left !important;
+}
+
+/* Positioning context for the floating tooltip below. */
+.tenta-table-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+/* Small floating box near the hovered/tapped cell, instead of a fixed
+   text line under the table. pointer-events: none so it never itself
+   blocks the pointerleave on the cell underneath. */
+.tenta-tip {
+  position: absolute;
+  z-index: 10;
+  max-width: 14em;
+  padding: 0.4em 0.7em;
+  border-radius: 6px;
+  border: 1.5px solid #2563eb;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  font-size: 0.55em;
+  font-weight: bold;
+  color: #1e3a8a;
+  text-align: center;
+  pointer-events: none;
+}
+
+/* Any cell with its own hover/click explanation. */
+.tenta-interactive {
+  cursor: pointer;
+}
+
+.tenta-interactive:hover {
+  background: rgba(37, 99, 235, 0.15);
+}
+
+/* Step-driven highlight (from the step list on "Tolka resultaten: inga
+   kontroller") -- light green, shading only (no bold, which would
+   otherwise widen the cell). */
+.tenta-highlight {
+  background: rgba(34, 197, 94, 0.25) !important;
+}
+
+/* Two-column layout: step list on the left, table + CI equation on the
+   right ("Tolka resultaten: inga kontroller"). Explicit flex: 0 0 auto
+   (matching the pattern used for .columns/.panel-tabset elsewhere)
+   since this custom wrapper isn't one of the element types the
+   general "everything else keeps its natural size" rule already
+   covers. */
+.reveal .slides section > div.tenta-steps-layout {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 1.5em;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.tenta-steps-col {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.tenta-steps-list {
+  font-size: 0.58em;
+  text-align: left;
+  padding-left: 1.2em;
+  margin: 0.4em 0;
+}
+
+.tenta-steps-list li {
+  margin-bottom: 0.4em;
+  opacity: 0.55;
+}
+
+.tenta-step-active {
+  opacity: 1 !important;
+  color: #1e3a8a;
+}
+
+/* Reserves space up front for four equation lines (step 4) so the
+   column doesn't jump when they appear. */
+.tenta-ci-eq {
+  font-size: 0.85em;
+  text-align: center;
+  min-height: 7em;
+  margin-top: 0.5em;
+}
+
+.tenta-ci-eq-line {
+  line-height: 1.5;
+}
+
+.tenta-ci-eq-note {
+  margin-top: 0.5em;
+  font-style: italic;
+  color: #555;
+}
+
+/* "Illustration: slumpmässiga och systematiska urvalsfel" -- positioning
+   context for the floating hover/click tooltip on the income
+   stick-figure population (same pattern as .tenta-table-wrap/.tenta-tip). */
+/* Anchors this slide's content to the top instead of vertically
+   centering it -- the swarm figure is tall enough (own dedicated
+   slide, sized to fill most of the page) that centering would risk
+   pushing its top edge, and the intro caption above it, off-slide. */
+.reveal .slides section.income-pop-slide {
+  justify-content: flex-start !important;
+  padding-top: 0.6em;
+}
+
+.income-pop-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.income-pop-svg {
+  max-width: 100%;
+  display: block;
+}
+
+.income-tip {
+  position: absolute;
+  z-index: 10;
+  padding: 0.3em 0.6em;
+  border-radius: 6px;
+  border: 1.5px solid #2563eb;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  font-size: 0.55em;
+  font-weight: bold;
+  color: #1e3a8a;
+  white-space: nowrap;
+  pointer-events: none;
+}

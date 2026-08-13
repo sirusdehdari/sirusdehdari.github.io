@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PRR49867C4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PRR49867C4');
+</script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Research Fields I | Sirus H. Dehdari</title>
+  <meta name="description" content="Course materials for Research Fields I — a PhD seminar at the Department of Political Science, Stockholm University." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .page-hero {
+      background: var(--white);
+      padding: calc(var(--nav-h) + 64px) 0 48px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .page-hero-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .page-eyebrow {
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .page-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.15;
+    }
+    .page-subtitle {
+      font-size: 1rem;
+      color: var(--text-light);
+      max-width: 620px;
+      line-height: 1.65;
+    }
+    .links-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .link-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 32px 36px;
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+      transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
+      position: relative;
+      text-decoration: none;
+    }
+    .link-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+      background: var(--gold);
+      border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+    .link-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+      border-color: var(--gray-200);
+    }
+    .link-card:hover::before {
+      opacity: 1;
+    }
+    .link-card-icon {
+      flex-shrink: 0;
+      width: 48px;
+      height: 48px;
+      background: var(--gray-100);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--navy);
+      margin-top: 2px;
+    }
+    .link-card-body {
+      flex: 1;
+    }
+    .link-card-title {
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+    .link-card-desc {
+      font-size: .95rem;
+      color: var(--text-light);
+      line-height: 1.65;
+    }
+    .link-card-arrow {
+      flex-shrink: 0;
+      color: var(--gold);
+      margin-top: 4px;
+      transition: transform var(--transition);
+    }
+    .link-card:hover .link-card-arrow {
+      transform: translateX(4px);
+    }
+    .links-section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .links-section + .links-section {
+      margin-top: 56px;
+    }
+    .links-section-heading {
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--gray-200);
+    }
+    .links-section-heading h2 {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+    .links-section-heading p {
+      font-size: .85rem;
+      color: var(--text-light);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVIGATION ===== -->
+  <header id="navbar">
+    <nav class="nav-container">
+      <a href="index.html" class="nav-brand">Sirus Dehdari</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#working-papers">Work in Progress</a></li>
+        <li><a href="index.html#publications">Publications</a></li>
+        <li><a href="index.html#grants">Grants</a></li>
+        <li><a href="index.html#teaching">Teaching</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="other.html">Other</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ===== PAGE HERO ===== -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="page-hero-inner fade-up">
+        <span class="page-eyebrow">PhD Course &middot; Department of Political Science</span>
+        <h1 class="page-title">Research Fields I</h1>
+        <p class="page-subtitle">A short course on identifying a research field in political science, mapping its debates and gaps, and situating a doctoral project within it — the first step toward a full literature review. Syllabus, seminar slides, and readings below.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MATERIALS ===== -->
+  <section class="section">
+    <div class="container">
+
+      <!-- ===== COURSE MATERIALS ===== -->
+      <div class="links-section">
+        <div class="links-section-heading reveal">
+          <h2>Course Materials</h2>
+          <p>Syllabus and seminar slides.</p>
+        </div>
+
+        <!-- ===== Syllabus ===== -->
+        <a href="teaching/research-fields-i/syllabus.html" class="link-card reveal">
+          <div class="link-card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+          </div>
+          <div class="link-card-body">
+            <p class="link-card-title">Syllabus</p>
+            <p class="link-card-desc">Course content, learning outcomes, examination requirements, and the full seminar schedule.</p>
+          </div>
+          <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+
+        <!-- ===== Seminar 1 slides ===== -->
+        <a href="teaching/research-fields-i/seminar1.html" class="link-card reveal">
+          <div class="link-card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
+          </div>
+          <div class="link-card-body">
+            <p class="link-card-title">Seminar 1 — What Is a Research Field?</p>
+            <p class="link-card-desc">Course introduction: what constitutes a research field, why it matters, and the seven questions an annotated bibliography should answer.</p>
+          </div>
+          <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+
+      </div>
+
+      <!-- ===== READINGS ===== -->
+      <div class="links-section">
+        <div class="links-section-heading reveal">
+          <h2>Readings</h2>
+          <p>Example papers discussed in seminar.</p>
+        </div>
+
+        <!-- ===== Dancygier et al. ===== -->
+        <a href="teaching/research-fields-i/dancygier-et-al-emigration-radical-right-populism.pdf" target="_blank" rel="noopener" class="link-card reveal">
+          <div class="link-card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
+          </div>
+          <div class="link-card-body">
+            <p class="link-card-title">Dancygier, Dehdari, Laitin, Marbach &amp; Vernby — Emigration and Radical Right Populism</p>
+            <p class="link-card-desc">Used as a worked example of situating a paper's contribution against previous research and theory.</p>
+          </div>
+          <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; <span id="year"></span> Sirus Dehdari &mdash; Associate Professor, Stockholm University</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
