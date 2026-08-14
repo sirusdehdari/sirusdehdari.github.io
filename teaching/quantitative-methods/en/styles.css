@@ -400,6 +400,16 @@
   pointer-events: none;
 }
 
+/* Same stacking as .ojs-dots-overlay, but deliberately interactive
+   (used for the "click/hover under the curve" P(X<x) figure) --
+   kept as a separate class so it never inherits the decorative
+   pointer-events: none above. */
+.ojs-plot-overlay svg.ojs-click-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .ojs-plot-ylabel {
   align-self: flex-start;
   margin-left: 3.2em;
@@ -698,6 +708,27 @@
   position: absolute;
   left: 4px;
   bottom: 4px;
+}
+
+/* "Urvalsmedelvärdet som slumpmässig dragning" -- the two-panel
+   population/clusters figure. */
+.xbar-svg {
+  max-width: 100%;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Shrinks a single long display-math block that otherwise runs into
+   the slide margin (the spelled-out 13-term mean calculation on
+   "Typvärde, medelvärdet, medianen"). Covers both MathJax v2
+   (.MathJax_Display / .MathJax_SVG_Display, used by this deck) and v3
+   (mjx-container) output wrappers, plus pandoc's own pre-render
+   .math.display span -- same belt-and-braces list as .ci-example-step. */
+.small-formula .math.display,
+.small-formula .MathJax_Display,
+.small-formula .MathJax_SVG_Display,
+.small-formula mjx-container {
+  font-size: 0.8em;
 }
 
 /* A reference/appendix "page" living inside the deck as an uncounted
@@ -1058,4 +1089,119 @@
   color: #1e3a8a;
   white-space: nowrap;
   pointer-events: none;
+}
+
+/* Clickable formula parts (mean/std-dev formula slides): plain static
+   MathJax math ($...$) split into separate spans and wired up with a
+   small vanilla-JS click/hover handler (see the <script> next to the
+   first use) rather than OJS -- OJS-injected content never gets
+   reprocessed by MathJax's initial typeset pass, but this raw HTML is
+   present in the page from the start, so MathJax renders it normally. */
+.formula-interactive {
+  position: relative;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  column-gap: 0.5em;
+  width: 100%;
+  margin: 0.4em 0;
+}
+
+.formula-eq {
+  font-size: 1.3em;
+}
+
+.formula-part {
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 0.15em 0.4em;
+  transition: background 0.15s;
+}
+
+.formula-part:hover,
+.formula-part.active {
+  background: rgba(37, 99, 235, 0.15);
+}
+
+.formula-tip {
+  position: absolute;
+  z-index: 10;
+  display: none;
+  max-width: 18em;
+  padding: 0.4em 0.7em;
+  border-radius: 6px;
+  border: 1.5px solid #2563eb;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  font-size: 0.5em;
+  font-weight: bold;
+  color: #1e3a8a;
+  text-align: left;
+  line-height: 1.4;
+  pointer-events: none;
+}
+
+/* Clickable data-type list ("När observerar vi en variabel?"): click a
+   list item to swap in its matching example table beside it. Side by
+   side (not stacked) so the example table is never pushed below the
+   fold -- the list's font-size is shrunk to make room for both columns. */
+.datatype-interactive {
+  margin-top: 0.5em;
+  display: flex;
+  align-items: center;
+  gap: 1.5em;
+}
+
+.datatype-list {
+  flex: 1 1 48%;
+  min-width: 0;
+  margin: 0;
+  padding-left: 1.2em;
+  font-size: 0.72em;
+}
+
+.datatype-item {
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 0.15em 0.4em;
+  margin: 0.15em 0;
+  transition: background 0.15s;
+}
+
+.datatype-item:hover,
+.datatype-item.active {
+  background: rgba(37, 99, 235, 0.12);
+}
+
+.datatype-examples {
+  flex: 1 1 48%;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.datatype-example {
+  display: none;
+}
+
+.datatype-example.active {
+  display: block;
+}
+
+.datatype-table {
+  border-collapse: collapse;
+  font-size: 0.6em;
+  margin: 0 auto;
+}
+
+.datatype-table th,
+.datatype-table td {
+  border: 1px solid #999;
+  padding: 0.3em 0.8em;
+  text-align: center;
+}
+
+.datatype-table th {
+  background: rgba(0, 0, 0, 0.04);
 }
