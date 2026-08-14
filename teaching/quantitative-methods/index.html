@@ -14,7 +14,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quantitative Methods | Sirus H. Dehdari</title>
-  <meta name="description" content="Lecture slides for Quantitative Methods, a course for political science students at Stockholm University, available in Swedish and English." />
+  <meta name="description" content="Lecture slides and written assignments for Quantitative Methods, a course for political science students at Stockholm University, available in Swedish and English." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -122,21 +122,35 @@
     .link-card:hover .link-card-arrow {
       transform: translateX(4px);
     }
+    /* Top-level grouping by material type (Lecture Slides / Written
+       Assignments), each containing one links-section per language. */
+    .content-group + .content-group {
+      margin-top: 72px;
+    }
+    .content-group-title {
+      font-family: var(--font-serif);
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 28px;
+      padding-bottom: 12px;
+      border-bottom: 3px solid var(--gold);
+    }
     .links-section {
       display: flex;
       flex-direction: column;
       gap: 20px;
     }
     .links-section + .links-section {
-      margin-top: 56px;
+      margin-top: 40px;
     }
     .links-section-heading {
-      padding-bottom: 16px;
+      padding-bottom: 12px;
       border-bottom: 2px solid var(--gray-200);
     }
-    .links-section-heading h2 {
+    .links-section-heading h3 {
       font-family: var(--font-serif);
-      font-size: 1.35rem;
+      font-size: 1.15rem;
       font-weight: 600;
       color: var(--navy);
       margin-bottom: 4px;
@@ -174,107 +188,211 @@
       <div class="page-hero-inner fade-up">
         <span class="page-eyebrow">Department of Political Science &middot; Stockholm University</span>
         <h1 class="page-title">Quantitative Methods</h1>
-        <p class="page-subtitle">Bachelor-level instruction in quantitative research methods for political scientists, covering descriptive statistics, statistical inference, and bivariate and multiple regression analysis. Lecture slides are available in Swedish and English below. Assignments, readings, and exam information remain on Canvas.</p>
+        <p class="page-subtitle">Bachelor-level instruction in quantitative research methods for political scientists, covering descriptive statistics, statistical inference, and bivariate and multiple regression analysis. Lecture slides and written assignments are available in Swedish and English below. Readings and exam information remain on Canvas.</p>
       </div>
     </div>
   </section>
 
-  <!-- ===== LECTURE SLIDES ===== -->
+  <!-- ===== MATERIALS ===== -->
   <section class="section">
     <div class="container">
 
-      <!-- ===== SWEDISH ===== -->
-      <div class="links-section">
-        <div class="links-section-heading reveal">
-          <h2>Svenska föreläsningar</h2>
-          <p>Interaktiva föreläsningsslides. Öppnas i webbläsaren.</p>
+      <!-- ===== LECTURE SLIDES ===== -->
+      <div class="content-group">
+        <h2 class="content-group-title">Lecture Slides</h2>
+
+        <!-- Swedish -->
+        <div class="links-section">
+          <div class="links-section-heading reveal">
+            <h3>Svenska</h3>
+            <p>Interaktiva föreläsningsslides. Öppnas i webbläsaren.</p>
+          </div>
+
+          <a href="sv/L1_sv.html" target="_blank" rel="noopener" class="link-card reveal">
+            <div class="link-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
+            </div>
+            <div class="link-card-body">
+              <p class="link-card-title">Föreläsning 1 — Statistiska metoder</p>
+              <p class="link-card-desc">Datastruktur, beskrivande statistik, sannolikhetsfördelningar och statistisk inferens.</p>
+            </div>
+            <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+
+          <a href="sv/L2_sv.html" target="_blank" rel="noopener" class="link-card reveal">
+            <div class="link-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
+            </div>
+            <div class="link-card-body">
+              <p class="link-card-title">Föreläsning 2 — Regressionsanalys</p>
+              <p class="link-card-desc">Bivariat regressionsmodell, minsta-kvadratmetoden, modellens passform och statistisk signifikans.</p>
+            </div>
+            <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+
+          <a href="sv/L3_sv.html" target="_blank" rel="noopener" class="link-card reveal">
+            <div class="link-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
+            </div>
+            <div class="link-card-body">
+              <p class="link-card-title">Föreläsning 3 — Multipel regressionsanalys</p>
+              <p class="link-card-desc">Multipla regressionsmodeller, störfaktorer, kausala samband och tolkning av koefficienter.</p>
+            </div>
+            <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
         </div>
 
-        <a href="sv/L1_sv.html" target="_blank" rel="noopener" class="link-card reveal">
-          <div class="link-card-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
+        <!-- English -->
+        <div class="links-section">
+          <div class="links-section-heading reveal">
+            <h3>English</h3>
+            <p>Interactive lecture slides. Open in your browser.</p>
           </div>
-          <div class="link-card-body">
-            <p class="link-card-title">Föreläsning 1 — Statistiska metoder</p>
-            <p class="link-card-desc">Datastruktur, beskrivande statistik, sannolikhetsfördelningar och statistisk inferens.</p>
-          </div>
-          <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-          </svg>
-        </a>
 
-        <a href="sv/L2_sv.html" target="_blank" rel="noopener" class="link-card reveal">
-          <div class="link-card-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
-          </div>
-          <div class="link-card-body">
-            <p class="link-card-title">Föreläsning 2 — Regressionsanalys</p>
-            <p class="link-card-desc">Bivariat regressionsmodell, minsta-kvadratmetoden, modellens passform och statistisk signifikans.</p>
-          </div>
-          <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-          </svg>
-        </a>
+          <a href="en/L1_eng.html" target="_blank" rel="noopener" class="link-card reveal">
+            <div class="link-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
+            </div>
+            <div class="link-card-body">
+              <p class="link-card-title">Lecture 1 — Statistical Methods</p>
+              <p class="link-card-desc">Data structure, descriptive statistics, probability distributions, and statistical inference.</p>
+            </div>
+            <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
 
-        <a href="sv/L3_sv.html" target="_blank" rel="noopener" class="link-card reveal">
-          <div class="link-card-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
-          </div>
-          <div class="link-card-body">
-            <p class="link-card-title">Föreläsning 3 — Multipel regressionsanalys</p>
-            <p class="link-card-desc">Multipla regressionsmodeller, störfaktorer, kausala samband och tolkning av koefficienter.</p>
-          </div>
-          <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-          </svg>
-        </a>
+          <a href="en/L2_eng.html" target="_blank" rel="noopener" class="link-card reveal">
+            <div class="link-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
+            </div>
+            <div class="link-card-body">
+              <p class="link-card-title">Lecture 2 — Regression Analysis</p>
+              <p class="link-card-desc">Bivariate regression, ordinary least squares, model fit, and statistical significance.</p>
+            </div>
+            <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+
+          <a href="en/L3_eng.html" target="_blank" rel="noopener" class="link-card reveal">
+            <div class="link-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
+            </div>
+            <div class="link-card-body">
+              <p class="link-card-title">Lecture 3 — Multiple Regression Analysis</p>
+              <p class="link-card-desc">Multiple regression models, confounders, causal inference, and interpreting coefficients.</p>
+            </div>
+            <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+        </div>
       </div>
 
-      <!-- ===== ENGLISH ===== -->
-      <div class="links-section">
-        <div class="links-section-heading reveal">
-          <h2>English Lecture Slides</h2>
-          <p>Interactive lecture slides. Open in your browser.</p>
+      <!-- ===== WRITTEN ASSIGNMENTS ===== -->
+      <div class="content-group">
+        <h2 class="content-group-title">Written Assignments</h2>
+
+        <!-- Swedish -->
+        <div class="links-section">
+          <div class="links-section-heading reveal">
+            <h3>Svenska</h3>
+            <p>Öppnas i webbläsaren.</p>
+          </div>
+
+          <a href="sv/WA3_sv.html" target="_blank" rel="noopener" class="link-card reveal">
+            <div class="link-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+            </div>
+            <div class="link-card-body">
+              <p class="link-card-title">Written Assignment 3</p>
+              <p class="link-card-desc">Beskrivande statistik, villkorade medelvärden och slumpmässiga urval med enkätdata.</p>
+            </div>
+            <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+
+          <a href="sv/WA4_sv.html" target="_blank" rel="noopener" class="link-card reveal">
+            <div class="link-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+            </div>
+            <div class="link-card-body">
+              <p class="link-card-title">Written Assignment 4</p>
+              <p class="link-card-desc">Bivariat regressionsanalys: demokrati och offentliga nyttigheter, samt högerradikalt röstande.</p>
+            </div>
+            <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+
+          <a href="sv/WA5_sv.html" target="_blank" rel="noopener" class="link-card reveal">
+            <div class="link-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+            </div>
+            <div class="link-card-body">
+              <p class="link-card-title">Written Assignment 5</p>
+              <p class="link-card-desc">Multipel regressionsanalys: demokrati, korruption och störfaktorer.</p>
+            </div>
+            <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
         </div>
 
-        <a href="en/L1_eng.html" target="_blank" rel="noopener" class="link-card reveal">
-          <div class="link-card-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
+        <!-- English -->
+        <div class="links-section">
+          <div class="links-section-heading reveal">
+            <h3>English</h3>
+            <p>Open in your browser.</p>
           </div>
-          <div class="link-card-body">
-            <p class="link-card-title">Lecture 1 — Statistical Methods</p>
-            <p class="link-card-desc">Data structure, descriptive statistics, probability distributions, and statistical inference.</p>
-          </div>
-          <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-          </svg>
-        </a>
 
-        <a href="en/L2_eng.html" target="_blank" rel="noopener" class="link-card reveal">
-          <div class="link-card-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
-          </div>
-          <div class="link-card-body">
-            <p class="link-card-title">Lecture 2 — Regression Analysis</p>
-            <p class="link-card-desc">Bivariate regression, ordinary least squares, model fit, and statistical significance.</p>
-          </div>
-          <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-          </svg>
-        </a>
+          <a href="en/WA3_eng.html" target="_blank" rel="noopener" class="link-card reveal">
+            <div class="link-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+            </div>
+            <div class="link-card-body">
+              <p class="link-card-title">Written Assignment 3</p>
+              <p class="link-card-desc">Descriptive statistics, conditional means, and random sampling with survey data.</p>
+            </div>
+            <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
 
-        <a href="en/L3_eng.html" target="_blank" rel="noopener" class="link-card reveal">
-          <div class="link-card-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
-          </div>
-          <div class="link-card-body">
-            <p class="link-card-title">Lecture 3 — Multiple Regression Analysis</p>
-            <p class="link-card-desc">Multiple regression models, confounders, causal inference, and interpreting coefficients.</p>
-          </div>
-          <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-          </svg>
-        </a>
+          <a href="en/WA4_eng.html" target="_blank" rel="noopener" class="link-card reveal">
+            <div class="link-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+            </div>
+            <div class="link-card-body">
+              <p class="link-card-title">Written Assignment 4</p>
+              <p class="link-card-desc">Bivariate regression: democracy and public goods, and radical right voting.</p>
+            </div>
+            <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+
+          <a href="en/WA5_eng.html" target="_blank" rel="noopener" class="link-card reveal">
+            <div class="link-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+            </div>
+            <div class="link-card-body">
+              <p class="link-card-title">Written Assignment 5</p>
+              <p class="link-card-desc">Multiple regression: democracy, corruption, and confounders.</p>
+            </div>
+            <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+        </div>
       </div>
 
     </div>
