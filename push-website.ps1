@@ -16,7 +16,7 @@ $changes = git status --porcelain
 if (-not $changes) {
     Write-Host ""
     Write-Host "No changes to commit -- nothing to push." -ForegroundColor Yellow
-    Read-Host "Press Enter to close"
+    Start-Sleep -Seconds 2
     exit
 }
 
@@ -26,10 +26,22 @@ git add -A
 
 Write-Host "Committing..." -ForegroundColor Cyan
 git commit -m "update website"
+if ($LASTEXITCODE -ne 0) {
+    Write-Host ""
+    Write-Host "FAILED: git commit exited with code $LASTEXITCODE." -ForegroundColor Red
+    Read-Host "Press Enter to close"
+    exit 1
+}
 
 Write-Host "Pushing to GitHub..." -ForegroundColor Cyan
 git push
+if ($LASTEXITCODE -ne 0) {
+    Write-Host ""
+    Write-Host "FAILED: git push exited with code $LASTEXITCODE." -ForegroundColor Red
+    Read-Host "Press Enter to close"
+    exit 1
+}
 
 Write-Host ""
-Write-Host "Done." -ForegroundColor Green
-Read-Host "Press Enter to close"
+Write-Host "Done. Closing..." -ForegroundColor Green
+Start-Sleep -Seconds 2
