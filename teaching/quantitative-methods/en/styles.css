@@ -1211,3 +1211,223 @@
 .datatype-table th {
   background: rgba(0, 0, 0, 0.04);
 }
+
+/* Omitted-variable-bias walkthrough ("Illustration: upward bias") --
+   anchors to the top since content height varies a lot across its 14
+   steps (a scrollable 100-row table vs. a single equation), and
+   vertical centering would make that jump distracting. */
+.reveal .slides section.ovb-slide {
+  justify-content: flex-start !important;
+  padding-top: 0.5em;
+}
+
+/* Fixed height reserved up front, sized to the tallest step (step 12:
+   equation + explanatory caption + R code + R output) -- otherwise the
+   figure/table/plot/buttons below visibly jump position every time a
+   step with more or less content replaces the previous one. Measured
+   directly (with real MathJax-typeset equations, not estimated) at
+   ~451px for step 12; 460px leaves a small safety margin. */
+.ovb-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  width: 100%;
+  min-height: 460px;
+}
+
+.ovb-step-indicator {
+  font-size: 0.5em;
+  color: #777;
+  margin: 0.1em 0 0 0;
+}
+
+.ovb-step-caption {
+  font-size: 0.62em;
+  max-width: 80%;
+  text-align: center;
+  line-height: 1.4;
+  margin: 0.2em 0;
+}
+
+.ovb-pop-wrap {
+  display: inline-block;
+}
+
+.ovb-pop-svg {
+  max-width: 100%;
+  display: block;
+}
+
+.ovb-legend {
+  display: flex;
+  gap: 1.2em;
+  font-size: 0.55em;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ovb-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+}
+
+.ovb-legend-dot {
+  width: 0.8em;
+  height: 0.8em;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Wrapped row of the 100 randomly-drawn ParentEdu values -- scrolls
+   internally rather than growing the slide, same reasoning as
+   .ovb-table-wrap below. */
+.ovb-numrow {
+  max-width: 90%;
+  max-height: 260px;
+  overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35em 0.7em;
+  justify-content: center;
+  font-size: 0.55em;
+  font-family: "SF Mono", Consolas, monospace;
+  padding: 0.5em;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.ovb-eq {
+  font-size: 1.05em;
+  text-align: center;
+  margin: 0.3em 0;
+}
+
+/* Scrollable data table (100 rows), styled like an R data-viewer pane
+   rather than a printed regression table. Sticky header so the column
+   labels stay visible while scrolling through all 100 rows. */
+.ovb-table-wrap {
+  max-height: 320px;
+  overflow-y: auto;
+  border: 1px solid #999;
+  border-radius: 4px;
+}
+
+.reveal table.ovb-table {
+  border-collapse: collapse;
+  font-size: 0.55em !important;
+}
+
+.ovb-table th,
+.ovb-table td {
+  padding: 0.25em 0.9em;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+.ovb-table thead th {
+  position: sticky;
+  top: 0;
+  background: #f0f0f0;
+  border-bottom: 1px solid #999;
+}
+
+/* Fake-R code/output panels: a light "script editor" block with a copy
+   button (for pasting into a real R session), and a console-style
+   output block below it showing real computed numbers formatted to
+   look like actual R output. */
+.ovb-r-code-wrap {
+  position: relative;
+  width: 90%;
+  max-width: 620px;
+}
+
+.ovb-r-code {
+  background: #f7f7f7;
+  border: 1px solid #ccc;
+  border-left: 4px solid #2563eb;
+  border-radius: 4px;
+  padding: 0.6em 0.8em;
+  font-size: 0.6em;
+  font-family: "SF Mono", Consolas, monospace;
+  white-space: pre-wrap;
+  text-align: left;
+  margin: 0;
+}
+
+.ovb-copy-btn {
+  position: absolute;
+  top: 0.3em;
+  right: 0.3em;
+  font-size: 0.55em;
+  padding: 0.15em 0.5em;
+  border-radius: 6px;
+  border: 1px solid #999;
+  background: white;
+  cursor: pointer;
+}
+
+.ovb-copy-btn:hover {
+  background: #eee;
+}
+
+.ovb-r-output {
+  background: #fbfbfb;
+  color: #222;
+  border: 1px solid #ccc;
+  border-left: 4px solid #16a34a;
+  border-radius: 4px;
+  padding: 0.6em 0.8em;
+  font-size: 0.58em;
+  font-family: "SF Mono", Consolas, monospace;
+  white-space: pre-wrap;
+  text-align: left;
+  width: 90%;
+  max-width: 620px;
+  margin: 0;
+}
+
+.ovb-plot-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.ovb-scatter-svg {
+  max-width: 100%;
+}
+
+/* Booktabs-style comparison table (step 14) -- only a top rule, a rule
+   under the header, and a bottom rule, no vertical lines and no lines
+   between body rows, matching how a regression table is typeset in a
+   LaTeX paper rather than a gridded on-screen table. */
+.ovb-compare-table-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.reveal table.ovb-compare-table {
+  border-collapse: collapse;
+  font-size: 0.68em !important;
+}
+
+.ovb-compare-table th,
+.ovb-compare-table td {
+  padding: 0.3em 1.1em;
+  text-align: center;
+  border: none;
+}
+
+.ovb-compare-table thead tr {
+  border-top: 1.5px solid #333;
+  border-bottom: 1px solid #333;
+}
+
+.ovb-compare-table tbody tr.ovb-compare-lastrow {
+  border-bottom: 1.5px solid #333;
+}
+
+.ovb-compare-label {
+  text-align: left !important;
+}

@@ -2287,65 +2287,16 @@ text-decoration: none;
 
 <p><em>Submit your answer through Canvas.</em></p>
 <p>Researchers as well as students are often interested in the relationship between two variables. Are economically unequal countries less likely to be democratic? Do people with higher incomes or education participate more in politics? Do women experience more discrimination in the labor market than do men? In this homework you will engage with such questions; questions of the general form “is <em>X</em> related to <em>Y</em>?” The idea is that you should start getting accustomed to interpreting results from bivariate regression analysis and learn to perform and interpret such analyses using Stata.</p>
-<p><strong>1.</strong> The relationship between democracy and the provision of public goods has long been of interest to social scientists. One common hypothesis is that we should expect nondemocratic rule to be accompanied by low public good provision. We are going to use some data from various international databases (The World Bank and the WHO) to explore this issue using bivariate regression. The independent variable <strong>Democracy</strong> is measured on a scale that ranges from 0-10, where 0 is least democratic and 10 most democratic. There are four indicators of public goods provision that are each used as dependent variables. <strong>Education expenditures</strong> measures total government expenditure on education expressed as a percentage of total general government expenditure on all sectors. <strong>Access to electricity</strong> measures the percentage of the population that has access to electricity. <strong>Basic sanitation</strong> measures the percentage of the population using safely managed sanitation services (toilets and latrines). Finally, <strong>CO2 emissions</strong> is measured in metric tons per capita. Table 1 contains descriptive statistics for these variables.</p>
-<p><strong>Table 1: Descriptive statistics</strong></p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Variable</th>
-<th>Observations</th>
-<th>Mean</th>
-<th>Sd</th>
-<th>Min</th>
-<th>Max</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Democracy</td>
-<td>194</td>
-<td>6.742</td>
-<td>3.072</td>
-<td>0</td>
-<td>10</td>
-</tr>
-<tr class="even">
-<td>Education expenditures</td>
-<td>138</td>
-<td>4.639</td>
-<td>1.723</td>
-<td>1.371</td>
-<td>12.459</td>
-</tr>
-<tr class="odd">
-<td>Access to electricity</td>
-<td>192</td>
-<td>81.530</td>
-<td>28.501</td>
-<td>7.252</td>
-<td>100</td>
-</tr>
-<tr class="even">
-<td>Basic sanitation</td>
-<td>192</td>
-<td>73.708</td>
-<td>29.284</td>
-<td>7</td>
-<td>100</td>
-</tr>
-<tr class="odd">
-<td>CO2 emissions</td>
-<td>189</td>
-<td>4.507</td>
-<td>6.099</td>
-<td>0.044</td>
-<td>45.423</td>
-</tr>
-</tbody>
-</table>
-<p>Table 2 shows the results from four bivariate regression analyses. Each column shows the results from one of these. As explained above, they all have the same independent variable (<strong>Democracy</strong>) but the dependent variable varies. So, for example, in the first column the dependent variable is <strong>Education expenditures</strong>.</p>
-<p><strong><em>Question</em></strong>: Is the hypothesis about democracy and public goods supported by the analysis? Specifically: (1) How should the regression coefficients (<em>b</em> coefficients) for democracy be interpreted? (2) Are the relationships between democracy and the various indicators of public goods provision statistically different from 0? Motivate! (3) What conclusion can be drawn about the relationship between democracy and public goods provision based on the answers to (1) and (2)? (4) Comment on the measures of goodness of fit!</p>
-<p><strong>Table 2: Democracy and Public Goods Provision</strong></p>
+<p><strong>1.</strong> The relationship between democracy and the provision of public goods has long been of interest to social scientists. One common hypothesis is that we should expect nondemocratic rule to be accompanied by low public good provision. We are going to use some data from various international databases (The World Bank and the WHO) to explore this issue using bivariate regression. The independent variable <strong>Democracy</strong> is measured on a scale that ranges from 0-10, where 0 is least democratic and 10 most democratic. There are four indicators of public goods provision that are each used as dependent variables. <strong>Education expenditures</strong> measures total government expenditure on education expressed as a percentage of total general government expenditure on all sectors. <strong>Access to electricity</strong> measures the percentage of the population that has access to electricity. <strong>Basic sanitation</strong> measures the percentage of the population using safely managed sanitation services (toilets and latrines). Finally, <strong>CO2 emissions</strong> is measured in metric tons per capita.</p>
+<p>Table 1 shows the results from four bivariate regression analyses. Each column shows the results from one of these. As explained above, they all have the same independent variable (<strong>Democracy</strong>) but the dependent variable varies. So, for example, in the first column the dependent variable is <strong>Education expenditures</strong>.</p>
+<p><strong><em>Question</em></strong>: Is the hypothesis about democracy and public goods supported by the analysis? Specifically:</p>
+<ol type="1">
+<li><p>How should the regression coefficients (<em>b</em> coefficients) for democracy be interpreted?</p></li>
+<li><p>Are the relationships between democracy and the various indicators of public goods provision statistically different from 0? Motivate!</p></li>
+<li><p>What conclusion can be drawn about the relationship between democracy and public goods provision based on the answers to (1) and (2)?</p></li>
+<li><p>Comment on the measures of goodness of fit!</p></li>
+</ol>
+<p><strong>Table 1: Democracy and Public Goods Provision</strong></p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 20%">
