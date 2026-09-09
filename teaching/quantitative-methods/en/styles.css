@@ -24,10 +24,16 @@
    rule, so without !important here our flex layout was being silently
    overridden the moment a slide actually became visible -- which is
    why content collapsed back to plain top-aligned block flow. */
+/* Anchored to the top (not vertically centered) so every slide's
+   heading sits at the same fixed position regardless of how much
+   content follows it -- otherwise slides with more content below the
+   heading push the whole (heading + content) block further up as a
+   unit, making the heading visibly jump between slides. */
 .reveal .slides section {
   display: flex !important;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-top: 0.6em;
   height: 100%;
 }
 
