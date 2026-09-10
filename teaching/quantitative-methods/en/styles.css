@@ -761,6 +761,14 @@
   border-radius: 8px;
   padding: 0.7em 1em;
   background: rgba(127, 127, 127, 0.06);
+  /* Own compositing layer: without this, Chrome/Edge can fail to
+     repaint a bordered/backgrounded box's clipping correctly while its
+     ancestor (.ci-example-page, overflow-y:auto) is scrolled inside
+     reveal.js's own scaled (CSS transform) slide container -- content
+     visibly spills past the box edge mid-scroll until the next full
+     repaint. */
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .ci-example-step ul {

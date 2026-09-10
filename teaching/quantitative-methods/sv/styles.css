@@ -764,6 +764,14 @@
   border-radius: 8px;
   padding: 0.7em 1em;
   background: rgba(127, 127, 127, 0.06);
+  /* Own compositing layer: without this, Chrome/Edge can fail to
+     repaint a bordered/backgrounded box's clipping correctly while its
+     ancestor (.ci-example-page, overflow-y:auto) is scrolled inside
+     reveal.js's own scaled (CSS transform) slide container -- content
+     visibly spills past the box edge mid-scroll until the next full
+     repaint. */
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .ci-example-step ul {
@@ -1740,32 +1748,4 @@
 .rovb-run--armed:not(:disabled) {
   background: #dcfce7;
   border-color: #16a34a;
-}
-
-/* Normal-vs-t-distribution comparison plot on the t-distribution
-   deep-dive slide -- a compact legend since the chart itself lives in
-   one narrow .ci-example-step card, not a full-width slide. */
-.tdist-legend {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2em;
-  font-size: 0.85em;
-  margin-top: 0.3em;
-}
-
-.tdist-swatch {
-  display: inline-block;
-  width: 1em;
-  height: 0.3em;
-  margin-right: 0.4em;
-  vertical-align: middle;
-  border-radius: 2px;
-}
-
-.tdist-swatch-normal {
-  background: #2563eb;
-}
-
-.tdist-swatch-t {
-  background: #dc2626;
 }

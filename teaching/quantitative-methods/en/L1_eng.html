@@ -2423,10 +2423,10 @@ document.addEventListener("DOMContentLoaded", function () {
 </div>
 </div>
 </section>
-<section id="barx-roughly-follows-a-normal-distribution" class="slide level2">
+<section id="xbar-normal-summary" class="slide level2">
 <h2><span class="math inline">\(\bar{X}\)</span> (roughly) follows a normal distribution</h2>
 <ul>
-<li>Again: the Central Limit Theorem shows that the sample mean (roughly) follows a normal distribution</li>
+<li>Again: the Central Limit Theorem shows that the sample mean (roughly) follows a normal distribution (actually a <span class="math inline">\(t\)</span>-distribution, <a href="#/t-distribution-detail" class="inline-nav-btn">Read more</a>)</li>
 <li>Moreover, we know that <span class="math inline">\(\bar{X}\)</span> for the random variable <span class="math inline">\(X\)</span> computed from our sample comes from a normal distribution whose <span class="math inline">\(\mu\)</span> equals the population mean of <span class="math inline">\(X\)</span></li>
 <li>But we don’t know the values of <span class="math inline">\(\mu\)</span> or <span class="math inline">\(\sigma\)</span> (called the <strong>standard error</strong> in a sampling distribution)</li>
 <li>We do know, however, that about 95 percent of all possible random samples will give a sample mean within the <em>interval</em> <span class="math inline">\(\mu - 2 \times \sigma\)</span> and <span class="math inline">\(\mu + 2 \times \sigma\)</span></li>
@@ -3726,6 +3726,40 @@ document.addEventListener("DOMContentLoaded", function () {
 <div id="ojs-cell-92" data-nodetype="expression">
 
 </div>
+</div>
+</div>
+</section>
+<section id="t-distribution-detail" class="slide level2" data-visibility="uncounted">
+<h2>X̄’s true distribution: the <span class="math inline">\(t\)</span>-distribution (advanced)</h2>
+<p><a href="#/xbar-normal-summary" class="inline-nav-btn">← Back</a></p>
+<div class="ci-example-page">
+<div class="ci-example-step">
+<p><strong>1. Actually a <span class="math inline">\(t\)</span>-distribution</strong></p>
+<ul>
+<li>In this course we’ve said that <span class="math inline">\(\bar{X}\)</span>’s sampling distribution is <em>approximately</em> a normal distribution — but it actually follows a <strong><span class="math inline">\(t\)</span>-distribution</strong></li>
+<li>The reason: we estimate <span class="math inline">\(\sigma\)</span> with the sample’s standard deviation <span class="math inline">\(s_X\)</span>, which adds uncertainty</li>
+</ul>
+</div>
+<div class="ci-example-step">
+<p><strong>2. Looks like normal, but converges to it</strong></p>
+<ul>
+<li><p>The <span class="math inline">\(t\)</span>-distribution is symmetric and bell-shaped, but has <strong>fatter tails</strong> — its shape depends on the <strong>degrees of freedom</strong> (<span class="math inline">\(n-1\)</span>)</p></li>
+<li><p>The larger <span class="math inline">\(n\)</span>, the more it resembles the normal distribution — as <span class="math inline">\(n \to \infty\)</span> they <strong>coincide</strong> completely</p></li>
+</ul>
+</div>
+<div class="ci-example-step">
+<p><strong>3. Fixed values are a simplification</strong></p>
+<ul>
+<li>In this course we use fixed values (<span class="math inline">\(1.65\)</span>/<span class="math inline">\(1.96\)</span>/<span class="math inline">\(2.58\)</span>) — actually the normal distribution’s values, not the <span class="math inline">\(t\)</span>-distribution’s</li>
+<li>The exact <span class="math inline">\(t\)</span>-value depends on <strong>both</strong> the confidence level <strong>and</strong> the degrees of freedom (<span class="math inline">\(n-1\)</span>)</li>
+</ul>
+</div>
+<div class="ci-example-step">
+<p><strong>4. Finding the exact value</strong></p>
+<ul>
+<li>Look it up in a <strong><span class="math inline">\(t\)</span>-table</strong>, or run e.g.&nbsp;<code>qt(0.975, df=n-1)</code> in R</li>
+<li>Small sample ⇒ wider (more correct) interval than if you used the normal distribution’s values</li>
+</ul>
 </div>
 </div>
 
