@@ -267,13 +267,20 @@
    length). */
 .dice-rows {
   display: inline-grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: auto auto auto auto;
   align-items: center;
   column-gap: 0.35em;
-  row-gap: 0.2em;
+  row-gap: 0.3em;
   margin: 0.3em auto;
   font-size: 0.6em;
   line-height: 1;
+}
+
+/* Breathing room between the left pair (button+caption) and the right
+   pair on the same row -- targets the caption that sits right before
+   the next pair's button (1st and 3rd span, in DOM/column order). */
+.dice-rows span:nth-of-type(odd) {
+  margin-right: 1em;
 }
 
 .dice-rows form {
@@ -1050,16 +1057,19 @@
 }
 
 /* Reserves space up front for four equation lines (step 4) so the
-   column doesn't jump when they appear. */
+   column doesn't jump when they appear. Sized small enough that all
+   four lines plus the table above them fit inside the slide -- at the
+   original 0.85em/line-height 1.5 the last line ran off the bottom of
+   the slide on the "with control variables" step-by-step slide. */
 .tenta-ci-eq {
-  font-size: 0.85em;
+  font-size: 0.72em;
   text-align: center;
-  min-height: 7em;
-  margin-top: 0.5em;
+  min-height: 5.2em;
+  margin-top: 0.2em;
 }
 
 .tenta-ci-eq-line {
-  line-height: 1.5;
+  line-height: 1.2;
 }
 
 .tenta-ci-eq-note {
