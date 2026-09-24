@@ -57,17 +57,17 @@ textarea.freetext{width:100%;min-height:70px;font-family:var(--sans);font-size:0
 [hidden]{display:none!important;}
 
 /* ---- shell ---- */
-.shell{height:100vh;max-width:1500px;margin:0 auto;display:flex;flex-direction:column;overflow:hidden;}
+.shell{height:100vh;max-width:1900px;margin:0 auto;display:flex;flex-direction:column;overflow:hidden;}
 .topbar{flex:0 0 auto;padding:18px clamp(14px,3vw,34px) 10px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;}
 .topbar .meta{font-family:var(--mono);font-size:12px;color:var(--ink-soft);}
 .badge{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:999px;margin-bottom:6px;}
 .body{flex:1 1 auto;min-height:0;display:flex;gap:20px;padding:0 clamp(14px,3vw,34px) 18px;}
-.left{flex:1 1 auto;min-width:0;overflow-y:auto;padding-right:4px;}
-.right{flex:0 0 560px;min-height:0;display:flex;flex-direction:column;}
+.left{flex:1 1 0;min-width:420px;overflow-y:auto;padding-right:4px;}
+.right{flex:1 1 0;min-width:520px;min-height:0;display:flex;flex-direction:column;}
 .right .card{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;margin-bottom:0;}
 @media (max-width:980px){
   body{overflow:visible;} .shell{height:auto;overflow:visible;}
-  .body{flex-direction:column;} .left{overflow-y:visible;} .right{flex:0 0 auto;height:64vh;}
+  .body{flex-direction:column;} .left{overflow-y:visible;min-width:0;} .right{flex:0 0 auto;height:90vh;min-width:0;}
 }
 
 .card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px 18px;margin-bottom:14px;}
@@ -93,9 +93,13 @@ textarea.freetext{width:100%;min-height:70px;font-family:var(--sans);font-size:0
 .console{display:flex;flex-direction:column;border:1px solid #8a8a8a;border-radius:0;overflow:hidden;background:#ffffff;flex:1 1 auto;min-height:0;}
 .c-out{flex:1 1 auto;font-family:var(--mono);font-size:13px;line-height:1.35;color:#000;background:#fff;padding:6px 8px 0;overflow-y:auto;white-space:pre-wrap;}
 .line-err{color:#cc0000;}
-.line-note{color:#767676;font-style:italic;}
 .c-plot{display:block;margin:6px 0;max-width:100%;background:#fff;border:1px solid #ccc;}
-.c-inrow{flex:0 0 auto;display:flex;align-items:flex-start;gap:0;background:#fff;padding:0 8px 6px;}
+.script-pane{flex:0 0 38%;min-height:0;display:flex;flex-direction:column;margin-bottom:10px;}
+.script-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;font-size:0.85rem;font-weight:600;}
+.script-head .hint{font-weight:400;color:var(--ink-faint);font-size:0.78rem;margin-left:8px;}
+#s-in{flex:1 1 auto;min-height:0;width:100%;font-family:var(--mono);font-size:13px;line-height:1.35;background:#fff;color:#000;border:1px solid #8a8a8a;border-radius:0;padding:6px 8px;resize:none;outline:none;white-space:pre;overflow:auto;}
+.console-pane{flex:1 1 0;min-height:0;display:flex;flex-direction:column;}
+.c-inrow{flex:0 0 auto;display:flex;align-items:flex-start;gap:0;background:#fff;padding:6px 8px 6px;border-top:1px solid #b5b5b5;}
 .c-prompt{font-family:var(--mono);font-size:13px;color:#000;line-height:1.35;padding:1px 2px 0 0;user-select:none;}
 .c-inrow textarea{flex:1;font-family:var(--mono);font-size:13px;line-height:1.35;background:#fff;color:#000;border:none;outline:none;min-height:20px;padding:1px 0 0;resize:none;}
 .c-inrow button{flex:0 0 auto;align-self:flex-start;padding:2px 8px;font-size:11px;font-weight:400;}
@@ -153,6 +157,12 @@ footer.done-footer{text-align:center;padding:20px 0 40px;color:var(--ink-faint);
             <button type="button" id="c-download">Ladda ner min kod hittills</button>
           </div>
         </div>
+        <div class="script-pane">
+          <div class="script-head"><span>Skript<span class="hint">Ctrl+Enter kör markerad text, eller raden där markören står</span></span>
+            <button type="button" id="s-run" disabled>Kör</button></div>
+          <textarea id="s-in" spellcheck="false" autocapitalize="off" autocorrect="off" wrap="off" placeholder="# Skriv din kod här"></textarea>
+        </div>
+        <div class="console-pane">
         <p class="c-status-line" id="c-status">Laddar R (webR) …</p>
         <div class="console">
           <div class="c-out" id="c-out" aria-live="polite"></div>
@@ -161,6 +171,7 @@ footer.done-footer{text-align:center;padding:20px 0 40px;color:var(--ink-faint);
             <textarea id="c-in" rows="1" spellcheck="false" autocapitalize="off" autocorrect="off"></textarea>
             <button type="button" id="c-run" disabled>Kör</button>
           </div>
+        </div>
         </div>
       </div>
     </div>
@@ -292,6 +303,8 @@ const els = {
   cOut: document.getElementById("c-out"),
   cIn: document.getElementById("c-in"),
   cRun: document.getElementById("c-run"),
+  sIn: document.getElementById("s-in"),
+  sRun: document.getElementById("s-run"),
   cClear: document.getElementById("c-clear"),
   cReset: document.getElementById("c-reset"),
   cDownload: document.getElementById("c-download"),
@@ -303,11 +316,12 @@ function setStatus(kind, text){
   els.cStatus.className = "c-status-line" + (kind ? " " + kind : "");
   els.cStatus.textContent = text;
   if (kind === "ready") lastReadyText = text;
-  if (!running) els.cRun.disabled = kind !== "ready";
+  if (!running) { els.cRun.disabled = kind !== "ready"; els.sRun.disabled = kind !== "ready"; }
 }
 function setRunning(v){
   running = v;
-  els.cRun.disabled = v || !rReady; // no interrupt support — just wait for it to finish
+  els.cRun.disabled = v || !rReady;
+  els.sRun.disabled = v || !rReady; // no interrupt support — just wait for it to finish
 }
 function scrollOut(){ els.cOut.scrollTop = els.cOut.scrollHeight; }
 // No colour distinction between input and output -- a real R console
@@ -321,9 +335,9 @@ function appendLine(text, cls){
 }
 // Echoes a typed command the way R itself does: "> " on the first line,
 // "+ " on any continuation line, in the same plain colour as everything else.
-function appendEcho(code){
-  const lines = code.split("\n");
-  appendLine(lines.map((l, i) => (i === 0 ? "> " : "+ ") + l).join("\n"));
+function appendEcho(code, eachLine){
+  const lines = code.split(String.fromCharCode(10));
+  appendLine(lines.map((l, i) => (i === 0 || eachLine ? "> " : "+ ") + l).join(String.fromCharCode(10)));
 }
 function appendImage(bitmap){
   const c = document.createElement("canvas");
@@ -336,11 +350,11 @@ function appendImage(bitmap){
 }
 
 async function runCode(code, opts = {}){
-  const { silent = false, log = true } = opts;
+  const { silent = false, log = true, fromScript = false } = opts;
   code = code.trim();
   if (!code || !rReady) return null;
   if (!silent && running) return null; // a command is already in flight
-  if (!silent) { els.cIn.value = ""; appendEcho(code); setRunning(true); setStatus("running", "Kör …"); }
+  if (!silent) { if (!fromScript) els.cIn.value = ""; appendEcho(code, fromScript); setRunning(true); setStatus("running", "Kör …"); }
   let res = null;
   try {
     res = await shelter.captureR(code, {
@@ -382,6 +396,26 @@ function downloadText(filename, text){
 }
 
 els.cRun.addEventListener("click", () => runCode(els.cIn.value));
+
+// Skriptrutan: kör markerad text, annars raden där markören står (som RStudio).
+function runFromScript(){
+  const ta = els.sIn;
+  let text = ta.value.slice(ta.selectionStart, ta.selectionEnd);
+  if (!text.trim()){
+    const pos = ta.selectionStart;
+    const start = ta.value.lastIndexOf("\n", pos - 1) + 1;
+    let end = ta.value.indexOf("\n", pos);
+    if (end === -1) end = ta.value.length;
+    text = ta.value.slice(start, end);
+  }
+  runCode(text, { fromScript: true });
+}
+els.sRun.addEventListener("click", runFromScript);
+els.sIn.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && (e.ctrlKey || e.metaKey)){ e.preventDefault(); if (!running) runFromScript(); }
+});
+els.sIn.value = (state && state.script) || "";
+els.sIn.addEventListener("input", () => { state.script = els.sIn.value; saveState(); });
 els.cIn.addEventListener("keydown", (e) => {
   if (e.key === "Enter" && !e.shiftKey && !running){ e.preventDefault(); runCode(els.cIn.value); }
 });
@@ -422,14 +456,6 @@ async function initWebR(){
       "Type 'demo()' for some demos, 'help()' for on-line help, or\n" +
       "'help.start()' for an HTML browser interface to help.\n" +
       "Type 'q()' to quit R."
-    );
-    appendLine(
-      "[ Den här webbsidan har satt options(max.print = 3000) — lägre än R:s " +
-      "vanliga standardvärde 99999 — eftersom webbläsaren (inte R) får problem " +
-      "om den ska rita upp väldigt stora utskrifter på en gång. På din egen " +
-      "dator (t.ex. R från cran.r-project.org) ligger gränsen alltså mycket " +
-      "högre som standard. ]",
-      "line-note"
     );
     rReady = true;
     setStatus("ready", "R redo.");
