@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Analytikeruppdraget — Spel 1</title>
+<title>Analytikeruppdraget — Inlämningsuppgift 1</title>
 <!-- Utan detta skript kör webR i ett nedskalat läge på GitHub Pages (som
      inte går att sätta egna HTTP-headers på) och lokalt (samma begränsning
      med "python -m http.server"). Skriptet simulerar de headers (COOP/COEP)
@@ -13,6 +13,8 @@
      coi-serviceworker.js. (Obs: webR:s inbyggda avbryt-funktion är inte
      tillförlitlig även med detta på plats — se den bort medvetet.) -->
 <script src="coi-serviceworker.js"></script>
+<script src="jszip.min.js"></script>
+<script src="jspdf.umd.min.js"></script>
 <style>
 :root{
   --ink:#1b2430; --ink-soft:#55606d; --ink-faint:#8b95a1;
@@ -27,7 +29,7 @@
 *{box-sizing:border-box;}
 html,body{height:100%;margin:0;}
 body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.55;overflow:hidden;}
-h1{font-size:1.35rem;margin:0 0 4px;}
+h1{font-size:1.15rem;margin:0 0 4px;}
 h2{font-size:1.05rem;margin:0 0 8px;}
 h3{font-size:0.95rem;margin:14px 0 6px;}
 p{margin:0 0 10px;}
@@ -58,7 +60,9 @@ textarea.freetext{width:100%;min-height:70px;font-family:var(--sans);font-size:0
 
 /* ---- shell ---- */
 .shell{height:100vh;max-width:1900px;margin:0 auto;display:flex;flex-direction:column;overflow:hidden;}
-.topbar{flex:0 0 auto;padding:18px clamp(14px,3vw,34px) 10px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;}
+.topbar{flex:0 0 auto;padding:8px clamp(14px,3vw,34px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px 18px;flex-wrap:wrap;}
+.topbar h1{margin:0;}
+.topbar .badge{margin-bottom:0;}
 .topbar .meta{font-family:var(--mono);font-size:12px;color:var(--ink-soft);}
 .badge{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:999px;margin-bottom:6px;}
 .body{flex:1 1 auto;min-height:0;display:flex;gap:20px;padding:0 clamp(14px,3vw,34px) 18px;}
@@ -94,6 +98,20 @@ textarea.freetext{width:100%;min-height:70px;font-family:var(--sans);font-size:0
 .c-out{flex:1 1 auto;font-family:var(--mono);font-size:13px;line-height:1.35;color:#000;background:#fff;padding:6px 8px 0;overflow-y:auto;white-space:pre-wrap;}
 .line-err{color:#cc0000;}
 .c-plot{display:block;margin:6px 0;max-width:100%;background:#fff;border:1px solid #ccc;}
+.help-backdrop{position:fixed;inset:0;background:rgba(20,26,34,.45);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;}
+.help-box{position:relative;background:#fff;border-radius:10px;max-width:640px;max-height:85vh;overflow:auto;padding:22px 28px 24px;box-shadow:0 10px 40px rgba(0,0,0,.3);}
+.help-box h2{margin:0 0 10px;font-size:1.15rem;}
+.help-box h3{margin:16px 0 4px;font-size:0.95rem;}
+.help-box ul{margin:4px 0 0;padding-left:1.2em;font-size:0.9rem;}
+.help-box li{margin-bottom:4px;}
+.help-close{position:absolute;top:8px;right:10px;border:none;background:none;font-size:1.5rem;line-height:1;cursor:pointer;padding:4px 8px;color:var(--ink-soft);}
+.files-panel{flex:0 0 auto;max-height:140px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:6px 10px;margin-top:8px;font-size:0.82rem;background:#fafafa;}
+.files-head{font-weight:600;margin-bottom:2px;}
+.files-head .hint{font-weight:400;color:var(--ink-faint);margin-left:6px;}
+.file-item{display:flex;align-items:center;gap:6px;padding:1px 0;}
+.file-item input[type=text]{width:9em;font-size:0.82rem;padding:1px 4px;}
+.file-item .tag{color:var(--ink-faint);font-size:0.75rem;}
+.plot-add{display:block;margin:0 0 8px;padding:2px 8px;font-size:11px;font-weight:400;}
 .script-pane{flex:0 0 38%;min-height:0;display:flex;flex-direction:column;margin-bottom:10px;}
 .script-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;font-size:0.85rem;font-weight:600;}
 .script-head .hint{font-weight:400;color:var(--ink-faint);font-size:0.78rem;margin-left:8px;}
@@ -125,7 +143,7 @@ footer.done-footer{text-align:center;padding:20px 0 40px;color:var(--ink-faint);
 
 <div id="start-overlay">
   <div class="start-card">
-    <span class="badge">Spel 1 &middot; föreläsning 1</span>
+    <span class="badge">Inlämningsuppgift 1 &middot; föreläsning 1</span>
     <h1>Analytikeruppdraget</h1>
     <div class="premise">Du är nyanställd analytiker på ett opinionsinstitut. Institutet har samlat in enkätdata om svenska folkets politiska förtroende och partisympatier 2010&ndash;2021. Din uppgift: kartlägga och analysera datan, steg för steg.</div>
     <div class="field-row" style="flex-direction:column;align-items:stretch;">
@@ -139,11 +157,9 @@ footer.done-footer{text-align:center;padding:20px 0 40px;color:var(--ink-faint);
 
 <div class="shell" id="shell" hidden>
   <div class="topbar">
-    <div>
-      <span class="badge">Spel 1 &middot; föreläsning 1</span>
-      <h1>Analytikeruppdraget</h1>
-      <div class="meta">Uppdrag: <strong id="tb-name"></strong> &mdash; variabler: <strong id="tb-vars"></strong></div>
-    </div>
+    <h1>Analytikeruppdraget</h1>
+    <span class="badge">Inlämningsuppgift 1 &middot; föreläsning 1</span>
+    <div class="meta">Uppdrag: <strong id="tb-name"></strong> &middot; variabler: <strong id="tb-vars"></strong></div>
   </div>
   <div class="body">
     <div class="left" id="levels-root"></div>
@@ -152,6 +168,7 @@ footer.done-footer{text-align:center;padding:20px 0 40px;color:var(--ink-faint);
         <div class="console-header">
           <h2>R-konsol</h2>
           <div class="c-tools">
+            <button type="button" id="c-help">Hjälp</button>
             <button type="button" id="c-clear">Rensa</button>
             <button type="button" id="c-reset" title="Kör om set.seed()+simulera_data() från grunden">Börja om från grunden</button>
             <button type="button" id="c-download">Ladda ner min kod hittills</button>
@@ -172,12 +189,60 @@ footer.done-footer{text-align:center;padding:20px 0 40px;color:var(--ink-faint);
             <button type="button" id="c-run" disabled>Kör</button>
           </div>
         </div>
+        <div class="files-panel" id="files-panel">
+          <div class="files-head">Filer och bilagor<span class="hint">Bocka i det som ska med i inlämningen</span></div>
+          <div id="files-list"></div>
+        </div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
+<div class="help-backdrop" id="help-backdrop" hidden>
+  <div class="help-box" role="dialog" aria-modal="true" aria-labelledby="help-title">
+    <button type="button" class="help-close" id="help-close" aria-label="Stäng">&times;</button>
+    <h2 id="help-title">Så använder du R-rutan</h2>
+    <h3>Skript och konsol</h3>
+    <ul>
+      <li>Skriv din kod i <b>skriptrutan</b> (överst). Den körs i <b>konsolen</b> (nederst), där du ser kommandona och resultatet.</li>
+      <li>Du kan också skriva direkt i konsolen vid <code>&gt;</code> och trycka Enter.</li>
+    </ul>
+    <h3>Köra kod från skriptet</h3>
+    <ul>
+      <li><b>Markera</b> de rader du vill köra och tryck <b>Kör</b> eller <b>Ctrl+Enter</b>.</li>
+      <li>Om inget är markerat körs bara <b>raden där markören står</b>.</li>
+      <li>Ett kommando som sträcker sig över flera rader måste du markera i sin helhet.</li>
+    </ul>
+    <h3>I konsolen</h3>
+    <ul>
+      <li><b>Pil upp/ned</b> bläddrar bland dina tidigare kommandon.</li>
+      <li><b>Shift+Enter</b> ger en ny rad utan att köra.</li>
+    </ul>
+    <h3>Knapparna ovanför</h3>
+    <ul>
+      <li><b>Rensa</b> tömmer bara texten i konsolen. Din data och dina variabler finns kvar.</li>
+      <li><b>Börja om från grunden</b> läser in den ursprungliga datan igen (<code>data &lt;- simulera_data()</code>). Kolumner du lagt till i <code>data</code> försvinner.</li>
+      <li><b>Ladda ner min kod hittills</b> sparar alla kommandon du kört som en R-fil.</li>
+    </ul>
+    <h3>Paket</h3>
+    <ul>
+      <li>Paketen <code>stargazer</code> och <code>texreg</code> är redan installerade. Ladda dem som vanligt med <code>library(stargazer)</code>.</li>
+      <li>Andra paket kan <b>inte</b> installeras i den här konsolen. Alla uppgifter går att lösa med det som ingår i R från början, plus dessa två.</li>
+    </ul>
+    <h3>Tabeller, plottar och inlämning</h3>
+    <ul>
+      <li>Spara en tabell som en fil, till exempel <code>stargazer(m1, m2, type = "html", out = "tabell1.doc")</code>. Filen dyker upp i listan <b>Filer och bilagor</b> under konsolen och kan öppnas i Word.</li>
+      <li>Vid varje plot finns knappen <b>Ta med i inlämningen</b>. Bara det du själv bockar i eller lägger till följer med.</li>
+      <li>Allt du valt hamnar i en zip-fil tillsammans med PDF:en med dina svar när du är klar.</li>
+    </ul>
+    <h3>Att fortsätta en annan dag</h3>
+    <ul>
+      <li>Dina svar, ditt skript och din kod sparas i webbläsaren. Använd <b>samma dator och webbläsare</b> när du fortsätter.</li>
+    </ul>
+    <p style="font-size:0.85rem;color:var(--ink-soft);margin:14px 0 0;">Det här är vanliga R som körs i webbläsaren. Allt du lär dig här fungerar likadant i R på din egen dator.</p>
+  </div>
+</div>
 <script type="module">
 /* =====================================================================
    ANALYTIKERUPPDRAGET — SPEL 1 (testversion)
@@ -216,6 +281,7 @@ function loadState(){
 function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 
 let state = loadState();
+if (state && !state.bilagor) state.bilagor = { files: [], plots: [] };
 
 function newState(name){
   const catA = (hashString(name, "catA") % 2 === 0) ? "female" : "rural";
@@ -227,6 +293,7 @@ function newState(name){
     unlocked: 0,          // furthest reached level index
     answers: {},           // per level id
     commandLog: [],
+    bilagor: { files: [], plots: [] },
     createdAt: new Date().toISOString()
   };
 }
@@ -346,7 +413,62 @@ function appendImage(bitmap){
   c.getContext("2d").drawImage(bitmap, 0, 0);
   if (bitmap.close) bitmap.close();
   els.cOut.append(c);
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "plot-add"; b.textContent = "Ta med i inlämningen";
+  b.addEventListener("click", () => {
+    if (b.dataset.added) return;
+    b.dataset.added = "1";
+    state.bilagor.plots.push({ id: Date.now() + Math.random(), name: "Figur " + (state.bilagor.plots.length + 1), dataUrl: c.toDataURL("image/png") });
+    saveState(); renderFiles();
+    b.textContent = "Tillagd i inlämningen"; b.disabled = true;
+  });
+  els.cOut.append(b);
   scrollOut();
+}
+
+/* ---------- filer och bilagor ---------- */
+let workdir = "/home/web_user";
+let availableFiles = [];
+async function refreshFiles(){
+  try {
+    const listing = await webR.evalRString('paste(list.files(), collapse = "|")');
+    availableFiles = listing.split("|").filter(n => n && !n.startsWith(".") && /[.][A-Za-z0-9]+$/.test(n)
+      && n !== "Rplots.pdf" && !n.endsWith(".profraw"));
+  } catch(e){ availableFiles = []; }
+  renderFiles();
+}
+function renderFiles(){
+  const list = document.getElementById("files-list");
+  list.replaceChildren();
+  for (const f of availableFiles){
+    const row = document.createElement("label"); row.className = "file-item";
+    const cb = document.createElement("input"); cb.type = "checkbox";
+    cb.checked = state.bilagor.files.includes(f);
+    cb.addEventListener("change", () => {
+      state.bilagor.files = state.bilagor.files.filter(x => x !== f);
+      if (cb.checked) state.bilagor.files.push(f);
+      saveState();
+    });
+    const nm = document.createElement("span"); nm.textContent = f;
+    row.append(cb, nm); list.append(row);
+  }
+  for (const p of state.bilagor.plots){
+    const row = document.createElement("div"); row.className = "file-item";
+    const cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = true;
+    cb.addEventListener("change", () => {
+      state.bilagor.plots = state.bilagor.plots.filter(x => x.id !== p.id);
+      saveState(); renderFiles();
+    });
+    const nm = document.createElement("input"); nm.type = "text"; nm.value = p.name;
+    nm.addEventListener("input", () => { p.name = nm.value; saveState(); });
+    const ext = document.createElement("span"); ext.className = "tag"; ext.textContent = ".png (plot)";
+    row.append(cb, nm, ext); list.append(row);
+  }
+  if (!list.children.length){
+    const e = document.createElement("div"); e.className = "tag";
+    e.textContent = "Inga filer än. Filer du sparar från R och plottar du lägger till dyker upp här.";
+    list.append(e);
+  }
 }
 
 async function runCode(code, opts = {}){
@@ -354,12 +476,12 @@ async function runCode(code, opts = {}){
   code = code.trim();
   if (!code || !rReady) return null;
   if (!silent && running) return null; // a command is already in flight
-  if (!silent) { if (!fromScript) els.cIn.value = ""; appendEcho(code, fromScript); setRunning(true); setStatus("running", "Kör …"); }
+  if (!silent) { histIdx = null; if (!fromScript) els.cIn.value = ""; appendEcho(code, fromScript); setRunning(true); setStatus("running", "Kör …"); }
   let res = null;
   try {
     res = await shelter.captureR(code, {
       withAutoprint: true, captureStreams: true, captureConditions: false,
-      throwJsException: true, captureGraphics: { width: 380, height: 280, bg: "white" }
+      throwJsException: true, captureGraphics: { width: 700, height: 500, bg: "white" }
     });
     if (!silent){
       // Ingen egen avkortning här längre — R:s eget options(max.print=...),
@@ -374,6 +496,7 @@ async function runCode(code, opts = {}){
   } finally {
     try { await shelter.purge(); } catch(e){}
     if (!silent) { setRunning(false); setStatus("ready", lastReadyText || "R redo."); }
+    refreshFiles();
   }
   if (log && !code.startsWith("__internal")){
     state.commandLog.push(code);
@@ -414,6 +537,34 @@ els.sRun.addEventListener("click", runFromScript);
 els.sIn.addEventListener("keydown", (e) => {
   if (e.key === "Enter" && (e.ctrlKey || e.metaKey)){ e.preventDefault(); if (!running) runFromScript(); }
 });
+
+// Hjälpruta: stängs med kryss, klick utanför, eller Esc.
+const helpBackdrop = document.getElementById("help-backdrop");
+document.getElementById("c-help").addEventListener("click", () => { helpBackdrop.hidden = false; });
+document.getElementById("help-close").addEventListener("click", () => { helpBackdrop.hidden = true; });
+helpBackdrop.addEventListener("click", (e) => { if (e.target === helpBackdrop) helpBackdrop.hidden = true; });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") helpBackdrop.hidden = true; });
+
+// Pil upp/ned i konsolens kommandofält bläddrar i tidigare kommandon,
+// som i vanlig R. Historiken är samma logg som "Ladda ner min kod".
+let histIdx = null, histDraft = "";
+els.cIn.addEventListener("keydown", (e) => {
+  if ((e.key !== "ArrowUp" && e.key !== "ArrowDown") || e.shiftKey || e.ctrlKey || e.metaKey) return;
+  const log = state.commandLog;
+  if (!log.length) return;
+  if (e.key === "ArrowUp"){
+    e.preventDefault();
+    if (histIdx === null){ histDraft = els.cIn.value; histIdx = log.length; }
+    if (histIdx > 0){ histIdx--; els.cIn.value = log[histIdx]; }
+  } else if (histIdx !== null){
+    e.preventDefault();
+    histIdx++;
+    if (histIdx >= log.length){ histIdx = null; els.cIn.value = histDraft; }
+    else els.cIn.value = log[histIdx];
+  }
+  els.cIn.setSelectionRange(els.cIn.value.length, els.cIn.value.length);
+});
+els.cIn.addEventListener("input", () => { histIdx = null; });
 els.sIn.value = (state && state.script) || "";
 els.sIn.addEventListener("input", () => { state.script = els.sIn.value; saveState(); });
 els.cIn.addEventListener("keydown", (e) => {
@@ -424,7 +575,7 @@ els.cReset.addEventListener("click", async () => {
   await runCode("data <- simulera_data()");
 });
 els.cDownload.addEventListener("click", () => {
-  const header = "# Din kommandohistorik hittills — Analytikeruppdraget, Spel 1\n# Detta är en logg över allt du kört, inte ett facit.\n\n";
+  const header = "# Din kommandohistorik hittills — Analytikeruppdraget, Inlämningsuppgift 1\n# Detta är en logg över allt du kört, inte ett facit.\n\n";
   downloadText("min_kod_hittills.R", header + state.commandLog.join("\n"));
 });
 
@@ -443,7 +594,10 @@ async function initWebR(){
     // till skriver R ut sitt eget, riktiga meddelande ("reached 'max' /
     // getOption(\"max.print\")..."), inget vi lägger till själva.
     await webR.evalRVoid("options(width = 60, max.print = 3000)");
+    setStatus("loading", "Installerar paket (stargazer, texreg) …");
+    try { await webR.evalRVoid('webr::install(c("stargazer", "texreg"), quiet = TRUE)'); } catch(e){}
     await webR.evalRVoid(generatorCode(state.seed));
+    try { workdir = await webR.evalRString("getwd()"); } catch(e){}
     const versionString = await webR.evalRString("R.version.string");
     appendLine(
       versionString + "\n" +
@@ -529,7 +683,7 @@ const LEVELS = [
   { id: "matniva", title: "Vilka mätnivåer har dina variabler?",
     build(body, ctx){
       body.innerHTML = `
-        <p>Du har blivit tilldelad två variabler att undersöka genom hela spelet: <strong>${VARLABEL[ctx.catA]}</strong> och <strong>${VARLABEL[ctx.catB]}</strong>. Dessutom kommer du längre fram räkna på <strong>${VARLABEL.alder}</strong>.</p>
+        <p>Du har blivit tilldelad två variabler att undersöka genom hela inlämningsuppgiften: <strong>${VARLABEL[ctx.catA]}</strong> och <strong>${VARLABEL[ctx.catB]}</strong>. Dessutom kommer du längre fram räkna på <strong>${VARLABEL.alder}</strong>.</p>
         <h3>${VARLABEL[ctx.catA]}</h3>
         ${mcqField("mn-a", "Vilken mätnivå?", ["nominal","ordinal","intervall","kvot"])}
         <h3>${VARLABEL[ctx.catB]}</h3>
@@ -821,7 +975,7 @@ const LEVELS = [
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
           <button id="syn-dl-data">⬇ Ladda ner mitt dataset (csv)</button>
           <button id="syn-dl-script">⬇ Ladda ner mitt R-skript</button>
-          <button class="primary" id="syn-print">🖨 Skriv ut / spara som PDF</button>
+          <button class="primary" id="syn-zip">⬇ Ladda ner inlämning (zip)</button>
         </div>
         <div class="feedback" id="syntes-feedback"></div>
         <button class="primary" id="syntes-advance" style="margin-top:14px;">Slutför uppdraget →</button>`;
@@ -831,16 +985,71 @@ const LEVELS = [
         downloadText("survey_data_" + ctx.name.replace(/\\s+/g,"_") + ".csv", csv);
       });
       document.getElementById("syn-dl-script").addEventListener("click", () => {
-        const header = "# Analytikeruppdraget — Spel 1 — " + ctx.name + "\n# Din fullständiga kommandohistorik.\n\n";
+        const header = "# Analytikeruppdraget — Inlämningsuppgift 1 — " + ctx.name + "\n# Din fullständiga kommandohistorik.\n\n";
         downloadText("mitt_skript.R", header + state.commandLog.join("\n"));
       });
-      document.getElementById("syn-print").addEventListener("click", () => window.print());
+      document.getElementById("syn-zip").addEventListener("click", () => buildAndDownloadZip(ctx));
       document.getElementById("syntes-advance").addEventListener("click", () => {
         advance("syntes", { essay: document.getElementById("syn-essay").value }, true);
       });
     }
   },
 ];
+
+/* ---------- PDF + zip ---------- */
+function asciiSafe(t){
+  return String(t).replace(/[\u2013\u2014]/g, "-").replace(/[^\x20-\x7E\u00C0-\u00FF]/g, "");
+}
+function buildPdf(ctx){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: "mm", format: "a4" });
+  const W = 180, LM = 15; let y = 18;
+  const line = (txt, size, bold) => {
+    doc.setFont("helvetica", bold ? "bold" : "normal"); doc.setFontSize(size);
+    for (const l of doc.splitTextToSize(asciiSafe(txt), W)){
+      if (y > 280){ doc.addPage(); y = 18; }
+      doc.text(l, LM, y); y += size * 0.5;
+    }
+  };
+  line("Analytikeruppdraget - Inlämningsuppgift 1", 15, true); y += 2;
+  line("Namn: " + ctx.name, 11, false);
+  line("Tilldelade variabler: " + ctx.catA + ", " + ctx.catB + ", ålder", 11, false);
+  line("Skapad: " + new Date().toLocaleString("sv-SE"), 11, false);
+  line("Frösignatur: " + ctx.seed, 11, false); y += 4;
+  LEVELS.forEach((lv, i) => {
+    const a = ctx.answers[lv.id];
+    if (!a) return;
+    line((i + 1) + ". " + lv.title, 12, true);
+    for (const k of Object.keys(a)){
+      if (k === "essay") continue;
+      line(k + ": " + a[k], 10.5, false);
+    }
+    if (a.essay) { line("Tolkning/motivering:", 10.5, true); line(a.essay, 10.5, false); }
+    y += 3;
+  });
+  const names = [...ctx.bilagor.files, ...ctx.bilagor.plots.map(p => p.name + ".png")];
+  line("Bilagor i zip-filen:", 12, true);
+  line(names.length ? names.join(", ") : "(inga)", 10.5, false);
+  return doc;
+}
+async function buildAndDownloadZip(ctx){
+  const zip = new JSZip();
+  const safe = (t) => String(t).replace(/[^A-Za-z0-9_-]+/g, "_");
+  zip.file("inlamning_" + safe(ctx.name) + ".pdf", buildPdf(ctx).output("arraybuffer"));
+  const used = new Set();
+  const uniq = (n) => { let x = n, i = 2; while (used.has(x)) { const d = n.lastIndexOf("."); x = n.slice(0, d) + "_" + (i++) + n.slice(d); } used.add(x); return x; };
+  for (const f of ctx.bilagor.files){
+    try { zip.file("bilagor/" + uniq(f), await webR.FS.readFile(workdir + "/" + f)); } catch(e){}
+  }
+  for (const p of ctx.bilagor.plots){
+    zip.file("bilagor/" + uniq(safe(p.name) + ".png"), p.dataUrl.split(",")[1], { base64: true });
+  }
+  const blob = await zip.generateAsync({ type: "blob" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a"); a.href = url; a.download = "inlamning_" + safe(ctx.name) + ".zip";
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
+}
 
 /* ---------- accordion-motor ---------- */
 function advance(levelId, extraAnswers, isFinal){
