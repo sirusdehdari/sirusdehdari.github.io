@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analytikeruppdraget — Spel 1</title>
+<!-- Utan detta skript kör webR i ett nedskalat läge på GitHub Pages (som
+     inte går att sätta egna HTTP-headers på) och lokalt (samma begränsning
+     med "python -m http.server"). Skriptet simulerar de headers (COOP/COEP)
+     webR behöver för att köra riktigt asynkront i en egen bakgrundstråd, så
+     att sidan aldrig fryser medan R räknar. MIT-licensierat, se
+     coi-serviceworker.js. (Obs: webR:s inbyggda avbryt-funktion är inte
+     tillförlitlig även med detta på plats — se den bort medvetet.) -->
+<script src="coi-serviceworker.js"></script>
+<style>
+:root{
+  --ink:#1b2430; --ink-soft:#55606d; --ink-faint:#8b95a1;
+  --paper:#f3f4f2; --card:#ffffff; --line:#d8dce0;
+  --accent:#8a5a1e; --accent-soft:#f2e6d3;
+  --ok:#2e7d46; --ok-soft:#e3f2e6;
+  --err:#a3311a; --err-soft:#fbe6e1;
+  --lock:#aab0b8;
+  --mono:"Consolas","SFMono-Regular",Menlo,monospace;
+  --sans:"Segoe UI",system-ui,sans-serif;
+}
+*{box-sizing:border-box;}
+html,body{height:100%;margin:0;}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.55;overflow:hidden;}
+h1{font-size:1.35rem;margin:0 0 4px;}
+h2{font-size:1.05rem;margin:0 0 8px;}
+h3{font-size:0.95rem;margin:14px 0 6px;}
+p{margin:0 0 10px;}
+code{font-family:var(--mono);font-size:0.9em;background:#eceeec;padding:1px 5px;border-radius:3px;}
+a{color:var(--accent);}
+button{font-family:var(--sans);font-size:0.9rem;font-weight:600;padding:7px 14px;border-radius:5px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+button:disabled{opacity:0.45;cursor:not-allowed;}
+button.small{padding:4px 9px;font-size:0.78rem;}
+input[type=text]{width:100%;font-family:var(--sans);font-size:1rem;padding:8px 10px;border:1px solid var(--line);border-radius:5px;}
+textarea.freetext{width:100%;min-height:70px;font-family:var(--sans);font-size:0.92rem;padding:8px 10px;border:1px solid var(--line);border-radius:5px;resize:vertical;}
+.numfield{width:130px;font-family:var(--mono);font-size:0.95rem;padding:6px 8px;border:1px solid var(--line);border-radius:5px;}
+.field-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px;}
+.field-row label{font-size:0.9rem;flex:1 1 260px;}
+.pill{font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:999px;white-space:nowrap;}
+.pill.pending{background:#eef0f2;color:var(--ink-soft);}
+.pill.ok{background:var(--ok-soft);color:var(--ok);}
+.pill.bad{background:var(--err-soft);color:var(--err);}
+.mcq label{display:block;font-size:0.9rem;padding:4px 0;cursor:pointer;}
+.feedback{font-size:0.85rem;margin:6px 0;min-height:1.2em;}
+.feedback.ok{color:var(--ok);} .feedback.bad{color:var(--err);}
+
+/* ---- start overlay ---- */
+#start-overlay{position:fixed;inset:0;background:var(--paper);z-index:50;display:flex;align-items:center;justify-content:center;padding:20px;}
+.start-card{max-width:560px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:28px 32px;}
+.premise{border-left:3px solid var(--accent);background:var(--accent-soft);padding:12px 16px;border-radius:4px;margin-bottom:16px;font-size:0.93rem;}
+[hidden]{display:none!important;}
+
+/* ---- shell ---- */
+.shell{height:100vh;max-width:1500px;margin:0 auto;display:flex;flex-direction:column;overflow:hidden;}
+.topbar{flex:0 0 auto;padding:18px clamp(14px,3vw,34px) 10px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;}
+.topbar .meta{font-family:var(--mono);font-size:12px;color:var(--ink-soft);}
+.badge{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:999px;margin-bottom:6px;}
+.body{flex:1 1 auto;min-height:0;display:flex;gap:20px;padding:0 clamp(14px,3vw,34px) 18px;}
+.left{flex:1 1 auto;min-width:0;overflow-y:auto;padding-right:4px;}
+.right{flex:0 0 560px;min-height:0;display:flex;flex-direction:column;}
+.right .card{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;margin-bottom:0;}
+@media (max-width:980px){
+  body{overflow:visible;} .shell{height:auto;overflow:visible;}
+  .body{flex-direction:column;} .left{overflow-y:visible;} .right{flex:0 0 auto;height:64vh;}
+}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px 18px;margin-bottom:14px;}
+
+/* ---- console header (tool buttons live here, deliberately OUTSIDE
+   the console box below, so they never read as part of R itself) ---- */
+.console-header{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+.console-header h2{margin:0;}
+.c-tools{display:flex;gap:6px;flex-wrap:wrap;}
+.c-tools button{padding:4px 9px;font-size:12px;}
+
+/* ---- status line: plain text, OUTSIDE the console box below, same
+   reasoning as the tool buttons — never let it read as R's own voice ---- */
+.c-status-line{font-family:var(--mono);font-size:12px;color:var(--ink-soft);margin:0 0 6px;}
+.c-status-line.ready{color:var(--ok);}
+.c-status-line.error{color:var(--err);}
+
+/* ---- console: modelled on the plain R console you get from CRAN
+   (Rgui / R.app) — white background, black monospace text, no syntax
+   highlighting, red reserved for genuine R errors/warnings. Input and
+   output sit in one continuous white pane, exactly like typing at a
+   real R prompt. ---- */
+.console{display:flex;flex-direction:column;border:1px solid #8a8a8a;border-radius:0;overflow:hidden;background:#ffffff;flex:1 1 auto;min-height:0;}
+.c-out{flex:1 1 auto;font-family:var(--mono);font-size:13px;line-height:1.35;color:#000;background:#fff;padding:6px 8px 0;overflow-y:auto;white-space:pre-wrap;}
+.line-err{color:#cc0000;}
+.line-note{color:#767676;font-style:italic;}
+.c-plot{display:block;margin:6px 0;max-width:100%;background:#fff;border:1px solid #ccc;}
+.c-inrow{flex:0 0 auto;display:flex;align-items:flex-start;gap:0;background:#fff;padding:0 8px 6px;}
+.c-prompt{font-family:var(--mono);font-size:13px;color:#000;line-height:1.35;padding:1px 2px 0 0;user-select:none;}
+.c-inrow textarea{flex:1;font-family:var(--mono);font-size:13px;line-height:1.35;background:#fff;color:#000;border:none;outline:none;min-height:20px;padding:1px 0 0;resize:none;}
+.c-inrow button{flex:0 0 auto;align-self:flex-start;padding:2px 8px;font-size:11px;font-weight:400;}
+
+/* ---- accordion ---- */
+.lvl{border:1px solid var(--line);border-radius:8px;margin-bottom:10px;background:var(--card);overflow:hidden;}
+.lvl-head{display:flex;align-items:center;gap:10px;padding:12px 16px;}
+.lvl.current .lvl-head{background:var(--accent-soft);}
+.lvl.done .lvl-head{background:#f4f7f4;}
+.lvl.locked .lvl-head{color:var(--lock);}
+.lvl-num{font-family:var(--mono);font-size:12px;color:var(--ink-faint);min-width:1.6em;}
+.lvl.current .lvl-num{color:var(--accent);}
+.lvl-title{font-weight:600;flex:1;}
+.lvl-status{font-family:var(--mono);font-size:11px;color:var(--ink-faint);}
+.lvl.done .lvl-status{color:var(--ok);}
+.lvl-body{padding:4px 18px 18px;border-top:1px solid var(--line);}
+.lvl.locked .lvl-body{display:none;}
+.readonly-answer{font-family:var(--mono);font-size:0.88rem;background:#f6f7f5;border:1px solid var(--line);border-radius:4px;padding:6px 10px;display:inline-block;margin:2px 8px 2px 0;color:var(--ink-soft);}
+footer.done-footer{text-align:center;padding:20px 0 40px;color:var(--ink-faint);font-size:0.85rem;}
+</style>
+</head>
+<body>
+
+<div id="start-overlay">
+  <div class="start-card">
+    <span class="badge">Spel 1 &middot; föreläsning 1</span>
+    <h1>Analytikeruppdraget</h1>
+    <div class="premise">Du är nyanställd analytiker på ett opinionsinstitut. Institutet har samlat in enkätdata om svenska folkets politiska förtroende och partisympatier 2010&ndash;2021. Din uppgift: kartlägga och analysera datan, steg för steg.</div>
+    <div class="field-row" style="flex-direction:column;align-items:stretch;">
+      <label for="name-input" style="flex:none;font-weight:600;">Ditt namn (visas på slutrapporten, går inte att ändra sen)</label>
+      <input type="text" id="name-input" placeholder="För- och efternamn" autocomplete="off">
+    </div>
+    <p class="hint" style="font-size:0.82rem;color:var(--ink-soft);">Ditt namn avgör vilka variabler du får analysera. Samma namn ger alltid samma uppdrag.</p>
+    <button class="primary" id="start-btn">Starta uppdraget →</button>
+  </div>
+</div>
+
+<div class="shell" id="shell" hidden>
+  <div class="topbar">
+    <div>
+      <span class="badge">Spel 1 &middot; föreläsning 1</span>
+      <h1>Analytikeruppdraget</h1>
+      <div class="meta">Uppdrag: <strong id="tb-name"></strong> &mdash; variabler: <strong id="tb-vars"></strong></div>
+    </div>
+  </div>
+  <div class="body">
+    <div class="left" id="levels-root"></div>
+    <div class="right">
+      <div class="card">
+        <div class="console-header">
+          <h2>R-konsol</h2>
+          <div class="c-tools">
+            <button type="button" id="c-clear">Rensa</button>
+            <button type="button" id="c-reset" title="Kör om set.seed()+simulera_data() från grunden">Börja om från grunden</button>
+            <button type="button" id="c-download">Ladda ner min kod hittills</button>
+          </div>
+        </div>
+        <p class="c-status-line" id="c-status">Laddar R (webR) …</p>
+        <div class="console">
+          <div class="c-out" id="c-out" aria-live="polite"></div>
+          <div class="c-inrow">
+            <span class="c-prompt">&gt;</span>
+            <textarea id="c-in" rows="1" spellcheck="false" autocapitalize="off" autocorrect="off"></textarea>
+            <button type="button" id="c-run" disabled>Kör</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+/* =====================================================================
+   ANALYTIKERUPPDRAGET — SPEL 1 (testversion)
+   En sida, nivåer staplade som expanderbar accordion, en delad R-konsol.
+   Data simuleras per student i R (webR) — kalibrerad grovt mot kända
+   svenska opinionstrender 2010–2021, INTE exakt SOM-kodning.
+   ===================================================================== */
+
+const WEBR_URL = "https://webr.r-wasm.org/v0.6.0/webr.mjs";
+const STORAGE_KEY = "analytikeruppdraget_spel1_v1";
+
+/* ---------- småhjälpare ---------- */
+function hashString(s, salt){
+  let h = 2166136261 >>> 0;
+  const str = salt + "::" + s.trim().toLowerCase();
+  for (let i = 0; i < str.length; i++){
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619) >>> 0;
+  }
+  return h >>> 0;
+}
+function parseNumber(str){
+  if (str == null) return null;
+  const cleaned = String(str).trim().replace(",", ".");
+  if (cleaned === "") return null;
+  const n = Number(cleaned);
+  return Number.isFinite(n) ? n : null;
+}
+function within(student, truth, tol){ return student !== null && Math.abs(student - truth) <= tol; }
+function fmt(x, d=3){ return (Math.round(x*10**d)/10**d).toString(); }
+
+/* ---------- tillstånd ---------- */
+function loadState(){
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch(e){ return null; }
+}
+function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+let state = loadState();
+
+function newState(name){
+  const catA = (hashString(name, "catA") % 2 === 0) ? "female" : "rural";
+  const catB = (hashString(name, "catB") % 2 === 0) ? "edu3" : "trust_polit";
+  return {
+    name,
+    seed: (hashString(name, "seed") % 900000000) + 1,
+    catA, catB,
+    unlocked: 0,          // furthest reached level index
+    answers: {},           // per level id
+    commandLog: [],
+    createdAt: new Date().toISOString()
+  };
+}
+
+/* ---------- namn på variabler, mänskligt ---------- */
+const VARLABEL = {
+  female: "kön (female, 0/1)",
+  rural: "boendeort (rural, 0/1)",
+  edu3: "utbildningsnivå (edu3, 1–3)",
+  trust_polit: "politikerförtroende (trust_polit, 1–4)",
+  alder: "ålder (year − yearofbirth)"
+};
+const SCALE_ANSWER = { female: "nominal", rural: "nominal", edu3: "ordinal", trust_polit: "ordinal", alder: "kvot" };
+const CENTRAL_ANSWER = { female: "andel", rural: "andel", edu3: "median", trust_polit: "median", alder: "medelvärde" };
+
+/* ---------- R: datagenerator (byggs med studentens frö) ---------- */
+function generatorCode(seed){
+  return `
+simulera_data <- function() {
+  set.seed(${seed})
+  n <- 4000
+  year <- sample(2010:2021, n, replace = TRUE)
+  female <- sample(0:1, n, replace = TRUE, prob = c(0.48, 0.52))
+  rural  <- sample(0:1, n, replace = TRUE, prob = c(0.67, 0.33))
+  edu3   <- sample(1:3, n, replace = TRUE, prob = c(0.15, 0.45, 0.40))
+  trust_polit <- sample(1:4, n, replace = TRUE, prob = c(0.15, 0.35, 0.35, 0.15))
+  alder  <- round(pmin(pmax(rnorm(n, mean = 50, sd = 18), 18), 90))
+  yearofbirth <- year - alder
+
+  yi <- year - 2009
+  s_base  <- c(0.30,0.29,0.29,0.28,0.27,0.28,0.28,0.27,0.26,0.27,0.27,0.27)[yi]
+  m_base  <- c(0.28,0.27,0.24,0.22,0.19,0.17,0.17,0.15,0.16,0.15,0.15,0.15)[yi]
+  sd_base <- c(0.06,0.07,0.08,0.09,0.10,0.13,0.13,0.14,0.15,0.16,0.15,0.15)[yi]
+  mp_base <- c(0.07,0.07,0.06,0.06,0.07,0.06,0.05,0.05,0.045,0.04,0.04,0.04)[yi]
+  c_base  <- rep(0.07, n)
+
+  sd_mult <- ifelse(rural == 1, 1.35, 0.85) *
+             ifelse(edu3 == 1, 1.3, ifelse(edu3 == 2, 1.0, 0.55)) *
+             ifelse(female == 0, 1.2, 0.85)
+  mp_mult <- ifelse(edu3 == 3, 1.5, ifelse(edu3 == 2, 1.0, 0.6)) *
+             ifelse(rural == 1, 0.7, 1.25) *
+             ifelse(female == 1, 1.15, 0.9)
+
+  p_sd <- sd_base * sd_mult
+  p_mp <- mp_base * mp_mult
+  p_s  <- s_base
+  p_m  <- m_base
+  p_c  <- c_base
+  p_annat <- pmax(0.03, 1 - (p_s + p_m + p_sd + p_mp + p_c))
+
+  probs <- cbind(p_s, p_m, p_sd, p_mp, p_c, p_annat)
+  probs <- probs / rowSums(probs)
+  cats <- c("S","M","SD","MP","C","Annat")
+  like_party <- apply(probs, 1, function(p) sample(cats, 1, prob = p))
+
+  data.frame(year, female, rural, edu3, trust_polit, yearofbirth, like_party,
+             stringsAsFactors = FALSE)
+}
+`;
+}
+
+/* ---------- webR ---------- */
+let webR = null, shelter = null, rReady = false;
+
+const els = {
+  overlay: document.getElementById("start-overlay"),
+  nameInput: document.getElementById("name-input"),
+  startBtn: document.getElementById("start-btn"),
+  shell: document.getElementById("shell"),
+  tbName: document.getElementById("tb-name"),
+  tbVars: document.getElementById("tb-vars"),
+  levelsRoot: document.getElementById("levels-root"),
+  cStatus: document.getElementById("c-status"),
+  cOut: document.getElementById("c-out"),
+  cIn: document.getElementById("c-in"),
+  cRun: document.getElementById("c-run"),
+  cClear: document.getElementById("c-clear"),
+  cReset: document.getElementById("c-reset"),
+  cDownload: document.getElementById("c-download"),
+};
+
+let running = false;
+let lastReadyText = "";
+function setStatus(kind, text){
+  els.cStatus.className = "c-status-line" + (kind ? " " + kind : "");
+  els.cStatus.textContent = text;
+  if (kind === "ready") lastReadyText = text;
+  if (!running) els.cRun.disabled = kind !== "ready";
+}
+function setRunning(v){
+  running = v;
+  els.cRun.disabled = v || !rReady; // no interrupt support — just wait for it to finish
+}
+function scrollOut(){ els.cOut.scrollTop = els.cOut.scrollHeight; }
+// No colour distinction between input and output -- a real R console
+// doesn't have one either; only genuine R errors/warnings get "line-err".
+function appendLine(text, cls){
+  const d = document.createElement("div");
+  d.className = cls || "";
+  d.textContent = text;
+  els.cOut.append(d);
+  scrollOut();
+}
+// Echoes a typed command the way R itself does: "> " on the first line,
+// "+ " on any continuation line, in the same plain colour as everything else.
+function appendEcho(code){
+  const lines = code.split("\n");
+  appendLine(lines.map((l, i) => (i === 0 ? "> " : "+ ") + l).join("\n"));
+}
+function appendImage(bitmap){
+  const c = document.createElement("canvas");
+  c.className = "c-plot";
+  c.width = bitmap.width; c.height = bitmap.height;
+  c.getContext("2d").drawImage(bitmap, 0, 0);
+  if (bitmap.close) bitmap.close();
+  els.cOut.append(c);
+  scrollOut();
+}
+
+async function runCode(code, opts = {}){
+  const { silent = false, log = true } = opts;
+  code = code.trim();
+  if (!code || !rReady) return null;
+  if (!silent && running) return null; // a command is already in flight
+  if (!silent) { els.cIn.value = ""; appendEcho(code); setRunning(true); setStatus("running", "Kör …"); }
+  let res = null;
+  try {
+    res = await shelter.captureR(code, {
+      withAutoprint: true, captureStreams: true, captureConditions: false,
+      throwJsException: true, captureGraphics: { width: 380, height: 280, bg: "white" }
+    });
+    if (!silent){
+      // Ingen egen avkortning här längre — R:s eget options(max.print=...),
+      // satt lägre än standard vid uppstart nedan, sköter detta självt och
+      // skriver i så fall ut sitt eget, riktiga meddelande. Utdatan som
+      // faktiskt når webbläsaren är därför redan garanterat liten nog.
+      for (const item of res.output) appendLine(String(item.data), item.type === "stdout" ? "" : "line-err");
+      for (const img of res.images) appendImage(img);
+    }
+  } catch (err) {
+    if (!silent) appendLine(String(err && err.message ? err.message : err), "line-err");
+  } finally {
+    try { await shelter.purge(); } catch(e){}
+    if (!silent) { setRunning(false); setStatus("ready", lastReadyText || "R redo."); }
+  }
+  if (log && !code.startsWith("__internal")){
+    state.commandLog.push(code);
+    saveState();
+  }
+  return res;
+}
+
+async function trueNumber(rExpr){
+  return await webR.evalRNumber(rExpr);
+}
+
+function downloadText(filename, text){
+  const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
+}
+
+els.cRun.addEventListener("click", () => runCode(els.cIn.value));
+els.cIn.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey && !running){ e.preventDefault(); runCode(els.cIn.value); }
+});
+els.cClear.addEventListener("click", () => { els.cOut.replaceChildren(); });
+els.cReset.addEventListener("click", async () => {
+  await runCode("data <- simulera_data()");
+});
+els.cDownload.addEventListener("click", () => {
+  const header = "# Din kommandohistorik hittills — Analytikeruppdraget, Spel 1\n# Detta är en logg över allt du kört, inte ett facit.\n\n";
+  downloadText("min_kod_hittills.R", header + state.commandLog.join("\n"));
+});
+
+/* ---------- init / återuppta ---------- */
+async function initWebR(){
+  setStatus("loading", "Laddar R (webR, ca 30 MB) …");
+  try {
+    const { WebR, ChannelType } = await import(WEBR_URL);
+    webR = new WebR(
+      window.crossOriginIsolated ? { channelType: ChannelType.SharedArrayBuffer } : {}
+    );
+    await webR.init();
+    shelter = await new webR.Shelter();
+    // max.print är en riktig R-inställning (normalt 99999) — vi sänker den
+    // bara till ett tal som är tryggt för en webbsida att rita upp. Slår den
+    // till skriver R ut sitt eget, riktiga meddelande ("reached 'max' /
+    // getOption(\"max.print\")..."), inget vi lägger till själva.
+    await webR.evalRVoid("options(width = 60, max.print = 3000)");
+    await webR.evalRVoid(generatorCode(state.seed));
+    const versionString = await webR.evalRString("R.version.string");
+    appendLine(
+      versionString + "\n" +
+      "Copyright (C) The R Foundation for Statistical Computing\n\n" +
+      "R is free software and comes with ABSOLUTELY NO WARRANTY.\n" +
+      "You are welcome to redistribute it under certain conditions.\n" +
+      "Type 'license()' or 'licence()' for distribution details.\n\n" +
+      "R is a collaborative project with many contributors.\n" +
+      "Type 'contributors()' for more information.\n\n" +
+      "Type 'demo()' for some demos, 'help()' for on-line help, or\n" +
+      "'help.start()' for an HTML browser interface to help.\n" +
+      "Type 'q()' to quit R."
+    );
+    appendLine(
+      "[ Den här webbsidan har satt options(max.print = 3000) — lägre än R:s " +
+      "vanliga standardvärde 99999 — eftersom webbläsaren (inte R) får problem " +
+      "om den ska rita upp väldigt stora utskrifter på en gång. På din egen " +
+      "dator (t.ex. R från cran.r-project.org) ligger gränsen alltså mycket " +
+      "högre som standard. ]",
+      "line-note"
+    );
+    rReady = true;
+    setStatus("ready", "R redo.");
+
+    if (state.commandLog.length){
+      setStatus("loading", "Återställer din tidigare data och kod …");
+      for (const cmd of state.commandLog){
+        await runCode(cmd, { silent: true, log: false });
+      }
+      setStatus("ready", "R redo — din tidigare data och kod är återställda.");
+    }
+  } catch (err) {
+    setStatus("error", "R kunde inte laddas: " + String(err && err.message ? err.message : err));
+  }
+}
+
+/* =====================================================================
+   NIVÅER
+   Varje nivå: { id, title, essay(optional label), build(body), check() }
+   check() läser fält ur DOM, räknar fram facit via webR, uppdaterar
+   pills/feedback, returnerar true om nivån får låsas upp.
+   ===================================================================== */
+
+function numField(id, label, placeholder){
+  return `<div class="field-row"><label for="${id}">${label}</label>
+    <input type="text" class="numfield" id="${id}" placeholder="${placeholder||''}" autocomplete="off">
+    <span class="pill pending" id="${id}-pill">ej kontrollerat</span></div>`;
+}
+function mcqField(id, label, options){
+  const opts = options.map((o,i)=>`<label><input type="radio" name="${id}" value="${o}"> ${o}</label>`).join("");
+  return `<div style="margin-bottom:10px;"><label style="font-weight:600;font-size:0.9rem;">${label}</label>
+    <div class="mcq">${opts}</div><span class="pill pending" id="${id}-pill">ej kontrollerat</span></div>`;
+}
+function essayField(id, label){
+  return `<div style="margin-top:12px;"><label for="${id}" style="font-weight:600;font-size:0.9rem;">${label}</label>
+    <textarea class="freetext" id="${id}" placeholder="Skriv ett par meningar …"></textarea></div>`;
+}
+function setPill(id, ok){
+  const el = document.getElementById(id + "-pill");
+  el.className = "pill " + (ok ? "ok" : "bad");
+  el.textContent = ok ? "rätt" : "inte rätt än";
+}
+function mcqValue(id){
+  const el = document.querySelector(`input[name="${id}"]:checked`);
+  return el ? el.value : null;
+}
+function feedbackEl(levelId){ return document.getElementById(levelId + "-feedback"); }
+
+const LEVELS = [
+  { id: "data-in", title: "Ladda in enkätdatan",
+    build(body){
+      body.innerHTML = `
+        <p>Skriv och kör raden nedan i konsolen till höger:</p>
+        <p><code>data &lt;- simulera_data()</code></p>
+        <p class="hint" style="font-size:0.85rem;color:var(--ink-soft);">simulera_data() är redan förberedd åt dig och skapar en enkätpopulation med variablerna
+          <code>year, female, rural, edu3, trust_polit, yearofbirth, like_party</code>. Ledtråd: se avsnittet om datastruktur i
+          <a href="../../sv/L1_sv.html" target="_blank" rel="noopener">Föreläsning 1</a> om du fastnar.</p>
+        <div class="feedback" id="data-in-feedback"></div>
+        <button class="primary" id="data-in-advance">Gå vidare →</button>`;
+      document.getElementById("data-in-advance").addEventListener("click", async () => {
+        const fb = feedbackEl("data-in");
+        try {
+          const n = await trueNumber("nrow(data)");
+          if (n === 4000){ fb.className="feedback ok"; fb.textContent="Datan är inladdad ("+n+" observationer)."; advance("data-in"); }
+          else { fb.className="feedback bad"; fb.textContent="Hittade ingen \"data\" med rätt antal rader ännu — har du kört raden ovan?"; }
+        } catch(e){ fb.className="feedback bad"; fb.textContent="Kör raden ovan i konsolen först."; }
+      });
+    }
+  },
+
+  { id: "matniva", title: "Vilka mätnivåer har dina variabler?",
+    build(body, ctx){
+      body.innerHTML = `
+        <p>Du har blivit tilldelad två variabler att undersöka genom hela spelet: <strong>${VARLABEL[ctx.catA]}</strong> och <strong>${VARLABEL[ctx.catB]}</strong>. Dessutom kommer du längre fram räkna på <strong>${VARLABEL.alder}</strong>.</p>
+        <h3>${VARLABEL[ctx.catA]}</h3>
+        ${mcqField("mn-a", "Vilken mätnivå?", ["nominal","ordinal","intervall","kvot"])}
+        <h3>${VARLABEL[ctx.catB]}</h3>
+        ${mcqField("mn-b", "Vilken mätnivå?", ["nominal","ordinal","intervall","kvot"])}
+        <h3>${VARLABEL.alder}</h3>
+        ${mcqField("mn-c", "Vilken mätnivå?", ["nominal","ordinal","intervall","kvot"])}
+        ${essayField("mn-essay", "Motivera kort varför (valfritt men rekommenderat).")}
+        <div class="feedback" id="matniva-feedback"></div>
+        <button class="primary" id="matniva-advance">Kontrollera & gå vidare →</button>`;
+      document.getElementById("matniva-advance").addEventListener("click", () => {
+        const okA = mcqValue("mn-a") === SCALE_ANSWER[ctx.catA];
+        const okB = mcqValue("mn-b") === SCALE_ANSWER[ctx.catB];
+        const okC = mcqValue("mn-c") === SCALE_ANSWER.alder;
+        setPill("mn-a", okA); setPill("mn-b", okB); setPill("mn-c", okC);
+        const fb = feedbackEl("matniva");
+        if (okA && okB && okC){
+          fb.className="feedback ok"; fb.textContent="Alla tre rätt.";
+          advance("matniva", {
+            [ctx.catA]: mcqValue("mn-a"), [ctx.catB]: mcqValue("mn-b"), alder: mcqValue("mn-c"),
+            essay: document.getElementById("mn-essay").value
+          });
+        } else {
+          fb.className="feedback bad"; fb.textContent="Minst ett svar stämmer inte än — fundera på om kategorierna går att rangordna, och om avstånden mellan värden är meningsfulla.";
+        }
+      });
+    }
+  },
+
+  { id: "centralmatt", title: "Centralmått för dina variabler",
+    build(body, ctx){
+      const rows = [
+        {key:"a", varName: ctx.catA, label: VARLABEL[ctx.catA]},
+        {key:"b", varName: ctx.catB, label: VARLABEL[ctx.catB]},
+        {key:"c", varName: "alder", label: VARLABEL.alder}
+      ];
+      body.innerHTML = `<p>För var och en av dina tre variabler: välj vilket centralmått som passar, och räkna sedan ut det i R.</p>` +
+        rows.map(r => `
+          <h3>${r.label}</h3>
+          ${mcqField("cm-"+r.key+"-mcq", "Vilket mått passar bäst?", ["andel","median","medelvärde"])}
+          ${numField("cm-"+r.key+"-val", "Ditt uträknade värde:", "t.ex. 0.42")}
+        `).join("") +
+        essayField("cm-essay", "Vad säger dessa mått om gruppen ni undersöker?") +
+        `<div class="feedback" id="centralmatt-feedback"></div>
+        <button class="primary" id="centralmatt-advance">Kontrollera & gå vidare →</button>`;
+
+      document.getElementById("centralmatt-advance").addEventListener("click", async () => {
+        const fb = feedbackEl("centralmatt");
+        fb.textContent = "Kontrollerar …"; fb.className = "feedback";
+        try {
+          let allOk = true;
+          for (const r of rows){
+            const mcqOk = mcqValue("cm-"+r.key+"-mcq") === CENTRAL_ANSWER[r.varName];
+            setPill("cm-"+r.key+"-mcq", mcqOk);
+            let trueVal;
+            if (r.varName === "alder") trueVal = await trueNumber("mean(data$year - data$yearofbirth)");
+            else if (CENTRAL_ANSWER[r.varName] === "andel") trueVal = await trueNumber(`mean(data$${r.varName})`);
+            else trueVal = await trueNumber(`median(data$${r.varName})`);
+            const studentVal = parseNumber(document.getElementById("cm-"+r.key+"-val").value);
+            const valOk = within(studentVal, trueVal, r.varName==="alder" ? 0.3 : 0.01);
+            setPill("cm-"+r.key+"-val", valOk);
+            allOk = allOk && mcqOk && valOk;
+          }
+          if (allOk){
+            fb.className="feedback ok"; fb.textContent="Alla tre variabler stämmer.";
+            const vals = {};
+            for (const r of rows) vals[r.label] = document.getElementById("cm-"+r.key+"-val").value;
+            advance("centralmatt", Object.assign(vals, { essay: document.getElementById("cm-essay").value }));
+          } else {
+            fb.className="feedback bad"; fb.textContent="Något stämmer inte än — se markeringarna ovan.";
+          }
+        } catch(e){
+          fb.className="feedback bad"; fb.textContent="Kunde inte kontrollera — har du kört \"data <- simulera_data()\" i konsolen (nivå 1)?";
+        }
+      });
+    }
+  },
+
+  { id: "nya-variabler", title: "Skapa nya variabler",
+    build(body){
+      body.innerHTML = `
+        <p>Skapa i R: (a) en åldersvariabel = år &minus; födelseår, (b) en indikator för högre utbildning (<code>edu3 == 3</code>), (c) en indikator för SD-sympati och (d) en för MP-sympati, båda utifrån <code>like_party</code>.</p>
+        ${numField("nv-alder", "Medelålder i hela datan:", "t.ex. 49.3")}
+        ${numField("nv-hogutb", "Andel med högre utbildning:", "t.ex. 0.40")}
+        ${numField("nv-sd", "Andel SD-sympatisörer (hela datan):", "t.ex. 0.12")}
+        ${numField("nv-mp", "Andel MP-sympatisörer (hela datan):", "t.ex. 0.05")}
+        <div class="feedback" id="nya-variabler-feedback"></div>
+        <button class="primary" id="nya-variabler-advance">Kontrollera & gå vidare →</button>`;
+      document.getElementById("nya-variabler-advance").addEventListener("click", async () => {
+        const fb = feedbackEl("nya-variabler");
+        fb.textContent="Kontrollerar …"; fb.className="feedback";
+        try {
+          const checks = [
+            ["nv-alder", "mean(data$year - data$yearofbirth)", 0.3],
+            ["nv-hogutb", "mean(data$edu3 == 3)", 0.01],
+            ["nv-sd", 'mean(data$like_party == "SD")', 0.01],
+            ["nv-mp", 'mean(data$like_party == "MP")', 0.01],
+          ];
+          let allOk = true;
+          for (const [id, expr, tol] of checks){
+            const truth = await trueNumber(expr);
+            const ok = within(parseNumber(document.getElementById(id).value), truth, tol);
+            setPill(id, ok); allOk = allOk && ok;
+          }
+          if (allOk){
+            fb.className="feedback ok"; fb.textContent="Alla fyra variabler stämmer.";
+            advance("nya-variabler", {
+              "medelålder": document.getElementById("nv-alder").value,
+              "andel högutb.": document.getElementById("nv-hogutb").value,
+              "andel SD": document.getElementById("nv-sd").value,
+              "andel MP": document.getElementById("nv-mp").value
+            });
+          }
+          else { fb.className="feedback bad"; fb.textContent="Något stämmer inte än — kontrollera dina R-kommandon."; }
+        } catch(e){ fb.className="feedback bad"; fb.textContent="Kunde inte kontrollera — har du laddat in datan (nivå 1)?"; }
+      });
+    }
+  },
+
+  { id: "sd-mp-2018", title: "SD och MP år 2018",
+    build(body){
+      body.innerHTML = `
+        <p>Beräkna andelen SD- och MP-sympatisörer bland dem som svarade år 2018.</p>
+        ${numField("s18-sd", "Andel SD, år 2018:", "t.ex. 0.15")}
+        ${numField("s18-mp", "Andel MP, år 2018:", "t.ex. 0.04")}
+        <p class="hint" style="font-size:0.85rem;color:var(--ink-soft);">SD fick 17.5&nbsp;% och MP fick 4.4&nbsp;% i det riktiga riksdagsvalet 2018.</p>
+        ${essayField("s18-essay", "Skiljer sig dina siffror från det riktiga valresultatet? Vad kan förklara det (urval, mätfel, skillnad mellan sympati och faktisk röst, m.m.)?")}
+        <div class="feedback" id="sd-mp-2018-feedback"></div>
+        <button class="primary" id="sd-mp-2018-advance">Kontrollera & gå vidare →</button>`;
+      document.getElementById("sd-mp-2018-advance").addEventListener("click", async () => {
+        const fb = feedbackEl("sd-mp-2018");
+        fb.textContent="Kontrollerar …"; fb.className="feedback";
+        try {
+          const truthSd = await trueNumber('mean(data$like_party[data$year == 2018] == "SD")');
+          const truthMp = await trueNumber('mean(data$like_party[data$year == 2018] == "MP")');
+          const okSd = within(parseNumber(document.getElementById("s18-sd").value), truthSd, 0.02);
+          const okMp = within(parseNumber(document.getElementById("s18-mp").value), truthMp, 0.02);
+          setPill("s18-sd", okSd); setPill("s18-mp", okMp);
+          if (okSd && okMp){
+            fb.className="feedback ok"; fb.textContent="Båda stämmer.";
+            advance("sd-mp-2018", {
+              "andel SD 2018": document.getElementById("s18-sd").value,
+              "andel MP 2018": document.getElementById("s18-mp").value,
+              essay: document.getElementById("s18-essay").value
+            });
+          }
+          else { fb.className="feedback bad"; fb.textContent="Kom ihåg att filtrera på year == 2018 innan du räknar andelen."; }
+        } catch(e){ fb.className="feedback bad"; fb.textContent="Kunde inte kontrollera — har du laddat in datan (nivå 1)?"; }
+      });
+    }
+  },
+
+  { id: "grupper", title: "SD-sympati uppdelat på kön och boendeort",
+    build(body){
+      body.innerHTML = `
+        <p>Beräkna andelen SD-sympatisörer separat för män/kvinnor och för landsbygd/stad (alla år, 2010&ndash;2021).</p>
+        ${numField("gr-man", "Andel SD bland män (female == 0):", "")}
+        ${numField("gr-kvinna", "Andel SD bland kvinnor (female == 1):", "")}
+        ${numField("gr-land", "Andel SD på landsbygden (rural == 1):", "")}
+        ${numField("gr-stad", "Andel SD i staden (rural == 0):", "")}
+        ${essayField("gr-essay", "Skiljer sig grupperna åt? Vad skulle kunna förklara skillnaden?")}
+        <div class="feedback" id="grupper-feedback"></div>
+        <button class="primary" id="grupper-advance">Kontrollera & gå vidare →</button>`;
+      document.getElementById("grupper-advance").addEventListener("click", async () => {
+        const fb = feedbackEl("grupper");
+        fb.textContent="Kontrollerar …"; fb.className="feedback";
+        try {
+          const checks = [
+            ["gr-man", 'mean(data$like_party[data$female == 0] == "SD")'],
+            ["gr-kvinna", 'mean(data$like_party[data$female == 1] == "SD")'],
+            ["gr-land", 'mean(data$like_party[data$rural == 1] == "SD")'],
+            ["gr-stad", 'mean(data$like_party[data$rural == 0] == "SD")'],
+          ];
+          let allOk = true;
+          for (const [id, expr] of checks){
+            const truth = await trueNumber(expr);
+            const ok = within(parseNumber(document.getElementById(id).value), truth, 0.02);
+            setPill(id, ok); allOk = allOk && ok;
+          }
+          if (allOk){
+            fb.className="feedback ok"; fb.textContent="Alla fyra stämmer.";
+            advance("grupper", {
+              "SD bland män": document.getElementById("gr-man").value,
+              "SD bland kvinnor": document.getElementById("gr-kvinna").value,
+              "SD på landsbygd": document.getElementById("gr-land").value,
+              "SD i stad": document.getElementById("gr-stad").value,
+              essay: document.getElementById("gr-essay").value
+            });
+          }
+          else { fb.className="feedback bad"; fb.textContent="Något stämmer inte än."; }
+        } catch(e){ fb.className="feedback bad"; fb.textContent="Kunde inte kontrollera — har du laddat in datan (nivå 1)?"; }
+      });
+    }
+  },
+
+  { id: "urval10", title: "Ett 10 %-urval av 2018 års svar",
+    build(body){
+      body.innerHTML = `
+        <p>Filtrera fram bara år 2018, dra sedan ett slumpmässigt urval på 10&nbsp;% av dessa observationer. Räkna ut andelen SD-sympatisörer i ditt urval, och konstruera ett 95&nbsp;% konfidensintervall.</p>
+        ${numField("u10-n", "Hur många observationer hamnade i ditt urval?", "")}
+        ${numField("u10-p", "Andel SD-sympatisörer i urvalet:", "")}
+        ${numField("u10-lo", "Konfidensintervallets nedre gräns:", "")}
+        ${numField("u10-hi", "Konfidensintervallets övre gräns:", "")}
+        ${mcqField("u10-covers", "Täcker ditt intervall andelen du räknade ut för hela 2018 (nivå 5)?", ["ja","nej"])}
+        <div class="feedback" id="urval10-feedback"></div>
+        <button class="primary" id="urval10-advance">Kontrollera & gå vidare →</button>`;
+      document.getElementById("urval10-advance").addEventListener("click", async () => {
+        const fb = feedbackEl("urval10");
+        fb.textContent="Kontrollerar …"; fb.className="feedback";
+        try {
+          const n2018 = await trueNumber("sum(data$year == 2018)");
+          const expectedN = Math.round(n2018 * 0.1);
+          const trueP2018 = await trueNumber('mean(data$like_party[data$year == 2018] == "SD")');
+          const nStud = parseNumber(document.getElementById("u10-n").value);
+          const pStud = parseNumber(document.getElementById("u10-p").value);
+          const lo = parseNumber(document.getElementById("u10-lo").value);
+          const hi = parseNumber(document.getElementById("u10-hi").value);
+          const se = Math.sqrt(trueP2018 * (1 - trueP2018) / expectedN);
+
+          const okN = nStud !== null && Math.abs(nStud - expectedN) <= 2;
+          const okP = pStud !== null && Math.abs(pStud - trueP2018) <= 4 * se;
+          const okInterval = lo !== null && hi !== null && lo < hi && pStud !== null && lo <= pStud && pStud <= hi;
+          const actuallyCovers = lo !== null && hi !== null && lo <= trueP2018 && trueP2018 <= hi;
+          const okMcq = mcqValue("u10-covers") === (actuallyCovers ? "ja" : "nej");
+
+          setPill("u10-n", okN); setPill("u10-p", okP);
+          setPill("u10-lo", okInterval); setPill("u10-hi", okInterval); setPill("u10-covers", okMcq);
+
+          if (okN && okP && okInterval && okMcq){
+            fb.className="feedback ok"; fb.textContent="Ser bra ut.";
+            advance("urval10", {
+              "urvalsstorlek": document.getElementById("u10-n").value,
+              "andel i urvalet": document.getElementById("u10-p").value,
+              "KI": document.getElementById("u10-lo").value + " – " + document.getElementById("u10-hi").value,
+              "täcker 2018-andelen": mcqValue("u10-covers")
+            });
+          } else {
+            fb.className="feedback bad";
+            fb.textContent = `Något stämmer inte än. Förväntat urvalsstorlek ≈ ${expectedN} (10 % av ${n2018} st. från 2018). Eftersom det är ett slumpmässigt urval förväntas din andel variera runt det sanna värdet — men inte hur mycket som helst.`;
+          }
+        } catch(e){ fb.className="feedback bad"; fb.textContent="Kunde inte kontrollera — har du laddat in datan (nivå 1)?"; }
+      });
+    }
+  },
+
+  { id: "urval50", title: "Extra: ett 50 %-urval av 2018 års svar", essayOnly:false,
+    build(body){
+      body.innerHTML = `
+        <p>Upprepa övningen från förra nivån, men dra nu ett urval på 50&nbsp;% av 2018 års observationer istället för 10&nbsp;%.</p>
+        ${numField("u50-p", "Andel SD-sympatisörer i det större urvalet:", "")}
+        ${numField("u50-lo", "Konfidensintervallets nedre gräns:", "")}
+        ${numField("u50-hi", "Konfidensintervallets övre gräns:", "")}
+        ${essayField("u50-essay", "Blev intervallet smalare eller bredare än med 10 %-urvalet? Ligger skattningen närmare det du räknade ut för hela 2018 (nivå 5)? Varför blir det så?")}
+        <div class="feedback" id="urval50-feedback"></div>
+        <button class="primary" id="urval50-advance">Kontrollera & gå vidare →</button>`;
+      document.getElementById("urval50-advance").addEventListener("click", async () => {
+        const fb = feedbackEl("urval50");
+        fb.textContent="Kontrollerar …"; fb.className="feedback";
+        try {
+          const n2018 = await trueNumber("sum(data$year == 2018)");
+          const expectedN = Math.round(n2018 * 0.5);
+          const trueP2018 = await trueNumber('mean(data$like_party[data$year == 2018] == "SD")');
+          const se = Math.sqrt(trueP2018 * (1 - trueP2018) / expectedN);
+          const pStud = parseNumber(document.getElementById("u50-p").value);
+          const lo = parseNumber(document.getElementById("u50-lo").value);
+          const hi = parseNumber(document.getElementById("u50-hi").value);
+
+          const okP = pStud !== null && Math.abs(pStud - trueP2018) <= 4 * se;
+          const okInterval = lo !== null && hi !== null && lo < hi && lo <= pStud && pStud <= hi;
+          setPill("u50-p", okP); setPill("u50-lo", okInterval); setPill("u50-hi", okInterval);
+
+          if (okP && okInterval){
+            fb.className="feedback ok"; fb.textContent="Ser bra ut.";
+            advance("urval50", {
+              "andel i urvalet": document.getElementById("u50-p").value,
+              "KI": document.getElementById("u50-lo").value + " – " + document.getElementById("u50-hi").value,
+              essay: document.getElementById("u50-essay").value
+            });
+          }
+          else { fb.className="feedback bad"; fb.textContent="Något stämmer inte än."; }
+        } catch(e){ fb.className="feedback bad"; fb.textContent="Kunde inte kontrollera — har du laddat in datan (nivå 1)?"; }
+      });
+    }
+  },
+
+  { id: "syntes", title: "Syntes & sammanställning",
+    build(body, ctx){
+      body.innerHTML = `
+        ${essayField("syn-essay", "Sammanfatta vad du lärt dig om urvalet du undersökt — dina variabler, partisympatier, och vad stickprovsövningarna visade om osäkerhet i skattningar.")}
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+          <button id="syn-dl-data">⬇ Ladda ner mitt dataset (csv)</button>
+          <button id="syn-dl-script">⬇ Ladda ner mitt R-skript</button>
+          <button class="primary" id="syn-print">🖨 Skriv ut / spara som PDF</button>
+        </div>
+        <div class="feedback" id="syntes-feedback"></div>
+        <button class="primary" id="syntes-advance" style="margin-top:14px;">Slutför uppdraget →</button>`;
+
+      document.getElementById("syn-dl-data").addEventListener("click", async () => {
+        const csv = await webR.evalRString('paste(capture.output(write.csv(data, row.names = FALSE)), collapse = "\\n")');
+        downloadText("survey_data_" + ctx.name.replace(/\\s+/g,"_") + ".csv", csv);
+      });
+      document.getElementById("syn-dl-script").addEventListener("click", () => {
+        const header = "# Analytikeruppdraget — Spel 1 — " + ctx.name + "\n# Din fullständiga kommandohistorik.\n\n";
+        downloadText("mitt_skript.R", header + state.commandLog.join("\n"));
+      });
+      document.getElementById("syn-print").addEventListener("click", () => window.print());
+      document.getElementById("syntes-advance").addEventListener("click", () => {
+        advance("syntes", { essay: document.getElementById("syn-essay").value }, true);
+      });
+    }
+  },
+];
+
+/* ---------- accordion-motor ---------- */
+function advance(levelId, extraAnswers, isFinal){
+  state.answers[levelId] = Object.assign({}, state.answers[levelId], extraAnswers || {});
+  const idx = LEVELS.findIndex(l => l.id === levelId);
+  if (idx === state.unlocked && !isFinal) state.unlocked = idx + 1;
+  if (isFinal) state.unlocked = LEVELS.length;
+  saveState();
+  renderLevels();
+}
+
+function renderReadonlySummary(level, container){
+  const a = state.answers[level.id] || {};
+  const bits = Object.keys(a).filter(k => k !== "essay").map(k => `<span class="readonly-answer">${k}: ${a[k]}</span>`);
+  if (bits.length) container.innerHTML += `<p>${bits.join("")}</p>`;
+  if (a.essay !== undefined){
+    container.innerHTML += `<div style="margin-top:8px;"><label style="font-weight:600;font-size:0.9rem;">Din motivering/tolkning (redigerbar):</label>
+      <textarea class="freetext" id="${level.id}-reopen-essay">${a.essay || ""}</textarea></div>`;
+    setTimeout(() => {
+      const ta = document.getElementById(level.id + "-reopen-essay");
+      if (ta) ta.addEventListener("change", () => {
+        state.answers[level.id].essay = ta.value; saveState();
+      });
+    }, 0);
+  }
+}
+
+function renderLevels(){
+  els.levelsRoot.innerHTML = "";
+  LEVELS.forEach((level, idx) => {
+    const isDone = idx < state.unlocked;
+    const isCurrent = idx === state.unlocked;
+    const isLocked = idx > state.unlocked;
+    const sec = document.createElement("section");
+    sec.className = "lvl " + (isDone ? "done" : isCurrent ? "current" : "locked");
+    const head = document.createElement("div");
+    head.className = "lvl-head";
+    head.innerHTML = `<span class="lvl-num">${idx+1}</span><span class="lvl-title">${level.title}</span>
+      <span class="lvl-status">${isDone ? "✓ klar" : isLocked ? "låst" : ""}</span>`;
+    sec.append(head);
+    const body = document.createElement("div");
+    body.className = "lvl-body";
+    sec.append(body);
+    els.levelsRoot.append(sec);
+    // sec/body must already be attached to the live document before build()
+    // runs, since build() looks up its own just-created elements by id.
+    if (!isLocked){
+      if (isDone){
+        renderReadonlySummary(level, body);
+        const note = document.createElement("p");
+        note.style.cssText = "font-size:0.82rem;color:var(--ink-faint);";
+        note.textContent = "Redan godkänd — svaren ovan är låsta, men din motivering går att redigera.";
+        body.append(note);
+      } else {
+        level.build(body, state);
+      }
+    }
+  });
+  if (state.unlocked >= LEVELS.length){
+    const f = document.createElement("footer");
+    f.className = "done-footer";
+    f.textContent = "Uppdraget slutfört. Bra jobbat!";
+    els.levelsRoot.append(f);
+  }
+}
+
+/* ---------- start ---------- */
+function beginGame(){
+  els.overlay.hidden = true;
+  els.shell.hidden = false;
+  els.tbName.textContent = state.name;
+  els.tbVars.textContent = `${state.catA}, ${state.catB}, ålder`;
+  renderLevels();
+  initWebR();
+}
+
+els.startBtn.addEventListener("click", () => {
+  const name = els.nameInput.value.trim();
+  if (!name){ alert("Skriv in ett namn först."); return; }
+  state = newState(name);
+  saveState();
+  beginGame();
+});
+
+if (state && state.name){
+  beginGame();
+}
+</script>
+</body>
+</html>
