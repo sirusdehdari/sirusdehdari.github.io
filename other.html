@@ -145,6 +145,27 @@
       font-size: .85rem;
       color: var(--text-light);
     }
+    .link-card-next {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 2px 8px;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--gray-200);
+      font-size: .88rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .link-card-next[hidden] { display: none; }
+    .link-card-next-label {
+      flex-shrink: 0;
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
     .badge-wip {
       display: inline-block;
       font-size: .72rem;
@@ -196,6 +217,29 @@
   <!-- ===== LINKS ===== -->
   <section class="section">
     <div class="container">
+      <!-- ===== SEMINAR SERIES ===== -->
+      <div class="links-section">
+        <div class="links-section-heading reveal">
+          <h2>Seminar Series</h2>
+          <p>Research seminars I co-organize at Stockholm University.</p>
+        </div>
+
+      <!-- ===== Comparative Politics Seminar ===== -->
+        <a href="https://comparative-politics-seminar.github.io/" target="_blank" rel="noopener noreferrer" class="link-card reveal">
+          <div class="link-card-icon">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-presentation-icon lucide-presentation"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
+          </div>
+          <div class="link-card-body">
+            <p class="link-card-title">Comparative Politics Seminar</p>
+            <p class="link-card-desc">A research seminar series at the Department of Political Science, Stockholm University, which I organize together with Jan Teorell. Researchers present ongoing work in comparative politics, political economy and related fields. See the current program, upcoming speakers and all previous seminars.</p>
+            <p class="link-card-next" id="cpsNext" hidden></p>
+          </div>
+          <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+      </div>
+
       <!-- ===== SCHOLARLY RESOURCES ===== -->
       <div class="links-section">
         <div class="links-section-heading reveal">
@@ -313,5 +357,30 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script>
+    // Shows the next seminar on the Comparative Politics Seminar card, using the program the
+    // seminar site publishes (updated daily from its Google Calendar). Stays hidden if unavailable.
+    (function () {
+      var data = document.createElement('script');
+      data.src = 'https://comparative-politics-seminar.github.io/data/seminars.js';
+      data.onload = function () {
+        var program = window.SEMINAR_DATA;
+        if (!program) return;
+        var today = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Stockholm' }).format(new Date());
+        var next = program.seminars.find(function (s) { return s.date >= today && !s.cancelled && !s.speakerTBA; });
+        if (!next) return;
+        var day = new Date(next.date + 'T12:00:00Z').toLocaleDateString('en-GB', { timeZone: 'UTC', weekday: 'long', day: 'numeric', month: 'long' });
+        var names = next.people.map(function (p) { return p.name; }).join(' & ');
+        var affs = next.people.map(function (p) { return p.affiliation; }).filter(function (a, i, all) { return a && all.indexOf(a) === i; });
+        var line = document.getElementById('cpsNext');
+        var label = document.createElement('span');
+        label.className = 'link-card-next-label';
+        label.textContent = next.date === today ? 'Today' : 'Next';
+        line.append(label, document.createTextNode(day + ' — ' + names + (affs.length ? ' (' + affs.join(', ') + ')' : '')));
+        line.hidden = false;
+      };
+      document.body.appendChild(data);
+    })();
+  </script>
 </body>
 </html>
