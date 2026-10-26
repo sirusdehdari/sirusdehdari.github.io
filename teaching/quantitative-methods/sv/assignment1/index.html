@@ -178,7 +178,7 @@ footer.done-footer{text-align:center;padding:20px 0 40px;color:var(--ink-faint);
   <div class="topbar">
     <h1>Analytikeruppdraget</h1>
     <span class="badge">Inlämningsuppgift 1</span>
-    <div class="meta">Uppdrag: <strong id="tb-name"></strong> &middot; variabler: <strong id="tb-vars"></strong></div>
+    <div class="meta">Uppdrag: <strong id="tb-name"></strong></div>
     <div class="tb-actions">
       <button type="button" id="tb-codebook">Kodbok</button>
       <button type="button" id="tb-reset" class="small">Starta om hela uppgiften</button>
@@ -537,7 +537,6 @@ const els = {
   startBtn: document.getElementById("start-btn"),
   shell: document.getElementById("shell"),
   tbName: document.getElementById("tb-name"),
-  tbVars: document.getElementById("tb-vars"),
   levelsRoot: document.getElementById("levels-root"),
   cStatus: document.getElementById("c-status"),
   cOut: document.getElementById("c-out"),
@@ -1591,7 +1590,6 @@ function beginGame(){
   els.overlay.hidden = true;
   els.shell.hidden = false;
   els.tbName.textContent = state.name;
-  els.tbVars.textContent = `${state.catA}, ${state.catB}, income`;
   renderLevels();
   scrollToCurrent();
   initWebR();
