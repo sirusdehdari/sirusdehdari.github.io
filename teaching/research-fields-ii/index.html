@@ -50,22 +50,100 @@
       max-width: 620px;
       line-height: 1.65;
     }
-    .empty-state {
-      background: var(--gray-50);
-      border: 1px dashed var(--gray-200);
-      border-radius: var(--radius-lg);
-      padding: 48px 36px;
-      text-align: center;
+    .links-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
-    .empty-state p {
-      color: var(--text-light);
+    .link-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 32px 36px;
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+      transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
+      position: relative;
+      text-decoration: none;
+    }
+    .link-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+      background: var(--gold);
+      border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+    .link-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+      border-color: var(--gray-200);
+    }
+    .link-card:hover::before {
+      opacity: 1;
+    }
+    .link-card-icon {
+      flex-shrink: 0;
+      width: 48px;
+      height: 48px;
+      background: var(--gray-100);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--navy);
+      margin-top: 2px;
+    }
+    .link-card-body {
+      flex: 1;
+    }
+    .link-card-title {
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+    .link-card-desc {
       font-size: .95rem;
-      max-width: 480px;
-      margin: 0 auto;
+      color: var(--text-light);
       line-height: 1.65;
     }
-    .empty-state a {
+    .link-card-arrow {
+      flex-shrink: 0;
       color: var(--gold);
+      margin-top: 4px;
+      transition: transform var(--transition);
+    }
+    .link-card:hover .link-card-arrow {
+      transform: translateX(4px);
+    }
+    .links-section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .links-section + .links-section {
+      margin-top: 56px;
+    }
+    .links-section-heading {
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--gray-200);
+    }
+    .links-section-heading h2 {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+    .links-section-heading p {
+      font-size: .85rem;
+      color: var(--text-light);
     }
   </style>
 </head>
@@ -96,7 +174,7 @@
       <div class="page-hero-inner fade-up">
         <span class="page-eyebrow">PhD Course &middot; Department of Political Science</span>
         <h1 class="page-title">Research Fields II</h1>
-        <p class="page-subtitle">The follow-up seminar to <a href="../research-fields-i/index.html">Research Fields I</a>, focused on turning an annotated bibliography into a full literature review for your dissertation research plan.</p>
+        <p class="page-subtitle">The follow-up seminar to <a href="../research-fields-i/index.html">Research Fields I</a>, focused on turning an annotated bibliography into a literature review for your dissertation plan. Syllabus and seminar slides below.</p>
       </div>
     </div>
   </section>
@@ -104,8 +182,42 @@
   <!-- ===== MATERIALS ===== -->
   <section class="section">
     <div class="container">
-      <div class="empty-state reveal">
-        <p>Course materials for Research Fields II will be posted here closer to the course start date.</p>
+
+      <!-- ===== COURSE MATERIALS ===== -->
+      <div class="links-section">
+        <div class="links-section-heading reveal">
+          <h2>Course Materials</h2>
+          <p>Syllabus and seminar slides.</p>
+        </div>
+
+        <!-- ===== Syllabus ===== -->
+        <a href="syllabus.html" class="link-card reveal">
+          <div class="link-card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+          </div>
+          <div class="link-card-body">
+            <p class="link-card-title">Syllabus</p>
+            <p class="link-card-desc">Course content, learning outcomes, examination requirements, and the full seminar schedule.</p>
+          </div>
+          <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+
+        <!-- ===== Seminar 1 slides ===== -->
+        <a href="seminar1.html" class="link-card reveal">
+          <div class="link-card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
+          </div>
+          <div class="link-card-body">
+            <p class="link-card-title">Seminar 1 — From Annotated Bibliography to Literature Review</p>
+            <p class="link-card-desc">Course introduction: what a literature review should do, how to structure it, theory vs. previous research, and how to get from a gap to a research question.</p>
+          </div>
+          <svg class="link-card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+
       </div>
     </div>
   </section>
