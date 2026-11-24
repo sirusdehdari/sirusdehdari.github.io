@@ -1,0 +1,159 @@
+/* Bilderna i R-workshopparna. Grunden är föreläsningarnas styles.css
+   (Slides/Swedish/styles.css): samma textstorlek, samma rubriker och samma sätt att låta
+   innehållet fylla bilden. R-panelens utseende står i rpanel.css. */
+
+.reveal {
+  font-size: 30px;
+}
+
+.reveal h2 {
+  font-size: 1.4em;
+  margin-bottom: 0.4em;
+}
+
+/* Varje bild är en kolumn med rubriken överst (som i föreläsningarna). */
+.reveal .slides section {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: flex-start;
+  row-gap: 0.45em;
+  padding-top: 0.6em;
+  height: 100%;
+}
+
+.reveal .slides section > h1,
+.reveal .slides section > h2,
+.reveal .slides section > h3 {
+  flex: 0 0 auto;
+}
+
+/* Den lediga höjden under rubriken fördelas jämnt mellan styckena, kodrutorna och
+   tabellerna, så att innehållet sprids över hela bilden. Punktlistor sträcks ut som i
+   föreläsningarna. */
+.reveal .slides section:not(#title-slide) > *:not(h1):not(h2):not(h3):not(aside):not(script) {
+  flex: 0 0 auto;
+  margin-top: auto;
+  margin-bottom: 0;
+}
+.reveal .slides section:not(#title-slide)::after {
+  content: "";
+  flex: 0 0 0;
+  margin-top: auto;
+}
+
+.reveal .slides section > ul,
+.reveal .slides section > ol {
+  flex: 1 1 auto !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+.reveal .slides section > ul > li,
+.reveal .slides section > ol > li {
+  margin: 0;
+}
+
+.reveal .slides section p {
+  line-height: 1.35;
+}
+
+/* Kodrutor: större kod än i föreläsningarna, eftersom koden är huvudsaken här. */
+.reveal div.sourceCode,
+.reveal pre {
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+.reveal .slides pre {
+  font-size: 0.66em;
+  line-height: 1.4;
+}
+.reveal .slides pre code {
+  max-height: 440px;
+  padding: 0.35em 0.5em;
+}
+
+/* Tabeller */
+.reveal table {
+  font-size: 0.7em;
+  margin-left: auto;
+  margin-right: auto;
+}
+.reveal table th,
+.reveal table td {
+  padding: 0.25em 0.7em;
+}
+
+/* Mindre text för kortare tillägg och tips */
+.reveal .small {
+  font-size: 0.8em;
+}
+
+/* Länk som laddar ner en datafil */
+.reveal a.data-link {
+  display: inline-block;
+  padding: 0.15em 0.6em;
+  border: 1px solid #b9c1ca;
+  border-radius: 0.3em;
+  background: #f5f7f9;
+  font-size: 0.85em;
+  text-decoration: none;
+}
+.reveal a.data-link:hover {
+  background: #e7edf4;
+}
+
+/* Skärmbilden av RStudio med numrerade rutor */
+.reveal .rs-shot {
+  position: relative;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+.reveal .rs-shot p {
+  margin: 0;
+  line-height: 0;
+}
+.reveal .rs-shot img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 440px;
+  margin: 0;
+  border: 1px solid #c3c9d0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+}
+.reveal .rs-badge {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 1.45em;
+  height: 1.45em;
+  border-radius: 50%;
+  background: #c2410c;
+  color: #fff;
+  font-size: 0.9em;
+  font-weight: 700;
+  line-height: 1.45em;
+  text-align: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+.reveal .rs-legend {
+  font-size: 0.75em;
+  text-align: center;
+}
+.reveal .rs-num {
+  display: inline-block;
+  width: 1.35em;
+  height: 1.35em;
+  margin-right: 0.25em;
+  border-radius: 50%;
+  background: #c2410c;
+  color: #fff;
+  font-size: 0.8em;
+  font-weight: 700;
+  line-height: 1.35em;
+  text-align: center;
+  vertical-align: 0.1em;
+}

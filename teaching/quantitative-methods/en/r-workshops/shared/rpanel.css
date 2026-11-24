@@ -1,0 +1,752 @@
+/* R-panelen till höger om bilderna (se rpanel.js). Utseendet följer RStudio och
+   inlämningsspelets konsol: vit konsol, svart text, kommandon i blått och rött bara för fel. */
+
+:root {
+  --rp-w: 42vw;
+}
+
+/* Bildspelet krymper så att det får plats bredvid panelen. */
+html.rp-open:not(.rp-narrow) .reveal {
+  width: calc(100vw - var(--rp-w)) !important;
+}
+html.rp-dragging,
+html.rp-dragging * {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+.rp {
+  --rp-mono: Consolas, 'SFMono-Regular', Menlo, Monaco, 'Liberation Mono', monospace;
+  --rp-sans: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--rp-w);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 6px 6px 6px 12px;
+  background: #e3e6ea;
+  border-left: 1px solid #c9ced5;
+  color: #1b2430;
+  font-family: var(--rp-sans);
+  font-size: 13px;
+  line-height: 1.4;
+  text-align: left;
+  letter-spacing: normal;
+}
+html:not(.rp-open) .rp {
+  display: none;
+}
+.rp *,
+.rp *::before,
+.rp *::after {
+  box-sizing: border-box;
+}
+.rp [hidden] {
+  display: none !important;
+}
+.rp button {
+  font-family: inherit;
+}
+
+/* Handtaget i vänsterkanten: dra för att ändra panelens bredd. */
+.rp-grip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 10px;
+  cursor: col-resize;
+  touch-action: none;
+}
+.rp-grip::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 50%;
+  width: 2px;
+  height: 44px;
+  margin-top: -22px;
+  border-radius: 1px;
+  background: #aab1ba;
+}
+
+/* Översta raden: status och knappar */
+.rp-top {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 0 6px 0;
+  min-height: 34px;
+}
+.rp-logo {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #276dc3;
+  color: #fff;
+  font: 700 13px/22px Arial, Helvetica, sans-serif;
+  text-align: center;
+}
+.rp-status {
+  font-family: var(--rp-mono);
+  font-size: 12px;
+  color: #55606d;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rp-status.ready { color: #2e7d46; }
+.rp-status.error { color: #a3311a; white-space: normal; }
+.rp-status.running { color: #1d4ed8; }
+.rp-status.loading::after,
+.rp-status.running::after {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-left: 6px;
+  border: 2px solid #9aa3ad;
+  border-top-color: transparent;
+  border-radius: 50%;
+  vertical-align: -1px;
+  animation: rp-spin 0.8s linear infinite;
+}
+@keyframes rp-spin { to { transform: rotate(360deg); } }
+.rp-fill {
+  flex: 1 1 auto;
+}
+
+/* Rutorna */
+.rp-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.rp-pane {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #c3c9d0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.rp-split {
+  flex: 0 0 7px;
+  cursor: row-resize;
+  touch-action: none;
+}
+.rp-tabs {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: stretch;
+  min-height: 29px;
+  background: #eef0f3;
+  border-bottom: 1px solid #d3d8de;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+.rp-tab {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  padding: 4px 12px;
+  border: 0;
+  border-right: 1px solid #dde1e6;
+  border-radius: 0;
+  background: transparent;
+  color: #3a4450;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.rp-tab:hover {
+  background: #f6f7f9;
+}
+.rp-tab.active {
+  background: #fff;
+  color: #1b2430;
+  box-shadow: inset 0 2px 0 #4b8fd9;
+}
+span.rp-tab {
+  cursor: default;
+}
+.rp-tab svg {
+  width: 15px;
+  height: 15px;
+}
+.rp-tabx {
+  display: inline-flex;
+  margin-left: 2px;
+  border-radius: 3px;
+}
+.rp-tabx:hover {
+  background: #e1e5ea;
+}
+.rp-tabx svg {
+  width: 13px;
+  height: 13px;
+}
+.rp-rinfo {
+  align-self: center;
+  padding: 0 8px;
+  font-size: 12px;
+  color: #55606d;
+  white-space: nowrap;
+}
+.rp-tabs .rp-tb {
+  align-self: center;
+  margin-right: 4px;
+}
+
+/* Verktygsrader (Run, Source, Zoom, Export ...) */
+.rp-bar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 30px;
+  padding: 2px 5px;
+  background: #fafbfc;
+  border-bottom: 1px solid #e3e6ea;
+}
+.rp-tb {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 25px;
+  margin: 0;
+  padding: 2px 6px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: transparent;
+  color: #1b2430;
+  font-size: 12.5px;
+  line-height: 1.2;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.rp-tb:hover:not(:disabled) {
+  background: #e7edf4;
+  border-color: #cdd5de;
+}
+.rp-tb:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.rp-tb svg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+}
+.rp-crumb {
+  margin-left: 6px;
+  font-size: 12px;
+  color: #3a4450;
+}
+.rp-crumb-row {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  padding: 3px 8px;
+  border-bottom: 1px solid #eceff2;
+}
+.rp-crumb-row svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Skriptet: radnummer, färgad kod och en genomskinlig textruta ovanpå */
+.rp-editor {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  font-family: var(--rp-mono);
+  font-size: 13px;
+  line-height: 18px;
+}
+.rp-gutter {
+  flex: 0 0 auto;
+  min-width: 34px;
+  padding: 4px 6px 4px 4px;
+  overflow: hidden;
+  border-right: 1px solid #eef0f2;
+  color: #a0a8b2;
+  text-align: right;
+  white-space: pre;
+  user-select: none;
+}
+.rp-codewrap {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.rp-hl,
+.rp-ta {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 4px 8px;
+  border: 0;
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: 0;
+  white-space: pre;
+  tab-size: 2;
+  overflow: auto;
+}
+.rp-hl {
+  overflow: hidden;
+  color: #000;
+  background: #fff;
+  pointer-events: none;
+}
+.rp-ta {
+  color: transparent;
+  caret-color: #000;
+  background: transparent;
+  resize: none;
+  outline: none;
+}
+.rp-ta::placeholder {
+  color: #8b95a1;
+}
+.rp-ta:placeholder-shown {
+  white-space: pre-wrap;
+  overflow: hidden;
+}
+.rp-ta::selection {
+  color: transparent;
+  background: rgba(64, 140, 255, 0.28);
+}
+.rp-hl .c { color: #4c886b; }
+.rp-hl .s { color: #036a07; }
+.rp-hl .n { color: #0000cd; }
+.rp-hl .k { color: #0000ff; }
+.rp-hl .o { color: #687687; }
+
+/* Konsolen */
+.rp-conbox {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.rp-out {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: 4px 8px;
+  color: #000;
+  font-family: var(--rp-mono);
+  font-size: 13px;
+  line-height: 1.35;
+}
+.rp-l {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: var(--rp-mono);
+}
+.rp-l.in { color: #0000ff; }
+.rp-l.err { color: #c00000; }
+.rp-l.info { color: #55606d; }
+.rp-inrow {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 4px 6px 4px 8px;
+  border-top: 1px solid #d3d8de;
+}
+.rp-prompt {
+  padding-top: 2px;
+  color: #0000ff;
+  font-family: var(--rp-mono);
+  font-size: 13px;
+  line-height: 1.35;
+  user-select: none;
+}
+.rp-in {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 20px;
+  max-height: 160px;
+  margin: 0;
+  padding: 2px 0 0;
+  border: 0;
+  outline: none;
+  resize: none;
+  overflow: auto;
+  background: transparent;
+  color: #0000ff;
+  font-family: var(--rp-mono);
+  font-size: 13px;
+  line-height: 1.35;
+}
+.rp-inrun {
+  flex: 0 0 auto;
+  padding: 2px 9px;
+  border: 1px solid #b9c1ca;
+  border-radius: 4px;
+  background: #f6f7f9;
+  color: #1b2430;
+  font-size: 12px;
+  cursor: pointer;
+}
+.rp-inrun:hover {
+  background: #e7edf4;
+}
+
+/* Environment, Plots, Files, Help */
+.rp-tbody {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.rp-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+.rp-empty {
+  padding: 10px 12px;
+  color: #8b95a1;
+  font-size: 12.5px;
+  white-space: pre-wrap;
+}
+.rp-envsec {
+  padding: 3px 8px;
+  background: #f3f5f7;
+  border-bottom: 1px solid #e6e9ed;
+  color: #3a4450;
+  font-size: 12px;
+  font-weight: 600;
+}
+.rp-envrow {
+  display: grid;
+  grid-template-columns: 18px minmax(60px, 34%) minmax(0, 1fr) 20px;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 6px;
+  border-bottom: 1px solid #f0f2f4;
+  font-family: var(--rp-mono);
+  font-size: 12.5px;
+}
+.rp-envrow .nm,
+.rp-envrow .ds {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rp-envrow.data {
+  cursor: pointer;
+}
+.rp-envrow.data:hover {
+  background: #eef4fb;
+}
+.rp-exp,
+.rp-grid {
+  display: inline-flex;
+}
+.rp-exp svg,
+.rp-grid svg {
+  width: 15px;
+  height: 15px;
+}
+.rp-envstr {
+  padding: 2px 8px 5px 30px;
+  border-bottom: 1px solid #f0f2f4;
+  color: #3a4450;
+  font-family: var(--rp-mono);
+  font-size: 12px;
+  white-space: pre;
+  overflow-x: auto;
+}
+.rp-plotarea {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  overflow: hidden;
+  background: #fff;
+}
+.rp-plotarea canvas {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+}
+.rp-ftable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+.rp-ftable th {
+  position: sticky;
+  top: 0;
+  padding: 3px 6px;
+  background: #f3f5f7;
+  border-bottom: 1px solid #e3e6ea;
+  color: #3a4450;
+  font-weight: 600;
+  text-align: left;
+}
+.rp-ftable td {
+  padding: 2px 6px;
+  border-bottom: 1px solid #f0f2f4;
+  white-space: nowrap;
+}
+.rp-ftable td.ic svg {
+  width: 15px;
+  height: 15px;
+  vertical-align: -3px;
+}
+.rp-ftable th.ic,
+.rp-ftable td.ic {
+  width: 22px;
+}
+.rp-ftable td.sz,
+.rp-ftable td.mt {
+  color: #55606d;
+}
+.rp-ftable td.act {
+  width: 30px;
+  text-align: right;
+}
+.rp-ftable a {
+  color: #1a4f8a;
+  text-decoration: none;
+}
+.rp-ftable a:hover {
+  text-decoration: underline;
+}
+.rp-helpsearch {
+  width: 12em;
+  max-width: 60%;
+  padding: 2px 6px;
+  border: 1px solid #c3c9d0;
+  border-radius: 3px;
+  font: inherit;
+  font-size: 12.5px;
+}
+.rp-help {
+  padding: 6px 14px 14px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #1b2430;
+}
+.rp-help h2 {
+  margin: 8px 0 6px;
+  font-size: 17px;
+  font-weight: 600;
+}
+.rp-help h3 {
+  margin: 12px 0 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2c3e57;
+}
+.rp-help p {
+  margin: 4px 0 8px;
+}
+.rp-help pre {
+  margin: 4px 0 8px;
+  padding: 6px 8px;
+  background: #f6f8fa;
+  border-radius: 3px;
+  font-family: var(--rp-mono);
+  font-size: 12.5px;
+  white-space: pre-wrap;
+}
+.rp-help code {
+  font-family: var(--rp-mono);
+  font-size: 12.5px;
+}
+.rp-help table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.rp-help td {
+  padding: 2px 6px;
+  vertical-align: top;
+}
+.rp-help hr {
+  border: 0;
+  border-top: 1px solid #e3e6ea;
+}
+
+/* Dataflikar (View) i Source */
+.rp-viewerbox {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.rp-viewer {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.rp-vscroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+.rp-vtable {
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+.rp-vtable th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 3px 9px;
+  background: #f3f5f7;
+  border: 1px solid #dfe3e8;
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+}
+.rp-vtable td {
+  padding: 2px 9px;
+  border: 1px solid #eceff2;
+  white-space: nowrap;
+}
+.rp-vtable .num {
+  text-align: right;
+}
+.rp-vtable td.rn {
+  background: #fafbfc;
+  color: #8b95a1;
+  text-align: right;
+}
+.rp-vtable td.na {
+  color: #9aa3ad;
+  font-style: italic;
+}
+.rp-vfoot {
+  flex: 0 0 auto;
+  padding: 3px 8px;
+  border-top: 1px solid #e3e6ea;
+  background: #fafbfc;
+  color: #55606d;
+  font-size: 12px;
+}
+
+/* Knappen som visar panelen igen när den är dold */
+.rp-openbtn {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  z-index: 41;
+  transform: translateY(-50%);
+  display: none;
+  width: 30px;
+  height: 64px;
+  padding: 0;
+  border: 1px solid #c3c9d0;
+  border-right: 0;
+  border-radius: 8px 0 0 8px;
+  background: #276dc3;
+  color: #fff;
+  font: 700 15px Arial, Helvetica, sans-serif;
+  cursor: pointer;
+  box-shadow: -1px 1px 4px rgba(0, 0, 0, 0.15);
+}
+html:not(.rp-open) .rp-openbtn {
+  display: block;
+}
+
+/* Run-knappen på kodrutorna i bilderna */
+.reveal .rp-hasrun {
+  position: relative;
+}
+.reveal .rp-runblock {
+  position: absolute;
+  top: 0.35em;
+  right: 2.9em;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  padding: 0.2em 0.55em;
+  border: 1px solid #b9c1ca;
+  border-radius: 0.3em;
+  background: rgba(255, 255, 255, 0.92);
+  color: #1b2430;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 0.5em;
+  line-height: 1.2;
+  cursor: pointer;
+}
+.reveal .rp-runblock:hover {
+  background: #eaf5ec;
+  border-color: #3a9d48;
+}
+.reveal .rp-runblock svg {
+  width: 1.2em;
+  height: 1.2em;
+}
+.reveal .rp-ran pre {
+  box-shadow: 0 0 0 2px #3a9d48;
+  transition: box-shadow 0.2s;
+}
+
+/* Smal skärm (mobil): panelen läggs över bilderna när den visas. */
+@media (max-width: 799px) {
+  .rp {
+    width: 100%;
+    z-index: 1000;
+    padding-left: 6px;
+  }
+  .rp-grip {
+    display: none;
+  }
+}
+/* Pekskärm: större text i skrivrutorna så att iPad/iPhone inte zoomar in. */
+@media (pointer: coarse) {
+  .rp-editor {
+    font-size: 16px;
+    line-height: 22px;
+  }
+  .rp-in,
+  .rp-prompt {
+    font-size: 16px;
+  }
+  .rp-tb {
+    min-height: 32px;
+  }
+}
+@media print {
+  .rp,
+  .rp-openbtn {
+    display: none !important;
+  }
+  html.rp-open .reveal {
+    width: 100% !important;
+  }
+}
